@@ -9,9 +9,32 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
-        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="RecentAssessmentView" customModule="myPredictedGrade" customModuleProvider="target">
+            <connections>
+                <outlet property="asssessmentTitleLabel" destination="q8T-dI-1n8" id="xFO-75-l3B"/>
+                <outlet property="bodyMiddleView" destination="lSs-75-cje" id="zpZ-PX-Gvl"/>
+                <outlet property="bodyView" destination="9RJ-Ik-sMr" id="AYv-WC-vVZ"/>
+                <outlet property="criteriaStackView" destination="Qbe-iz-Nkz" id="Rdn-hc-57M"/>
+                <outlet property="criterionAMarkLabel" destination="snl-Rv-cmX" id="cwc-4Z-gSH"/>
+                <outlet property="criterionBMarkLabel" destination="Lfg-hb-l9p" id="e3q-nq-GaU"/>
+                <outlet property="criterionCMarkLabel" destination="Bck-sh-V0h" id="KrT-TY-iSq"/>
+                <outlet property="criterionDMarkLabel" destination="Hal-lN-Twg" id="M5s-ZR-HQh"/>
+                <outlet property="dateLabel" destination="f3u-RE-zZW" id="hb7-yY-RvT"/>
+                <outlet property="headerView" destination="rHr-ir-eJ6" id="WOI-cb-0sT"/>
+                <outlet property="mainView" destination="iN0-l3-epB" id="Tx4-4i-y2u"/>
+                <outlet property="markStackView" destination="qWw-Y2-XJY" id="str-Ue-Hlk"/>
+                <outlet property="marksLabel" destination="mKo-7k-1p3" id="VzO-Xq-kp5"/>
+                <outlet property="marksTitleLabel" destination="am4-7z-d0U" id="AM6-Zc-DJv"/>
+                <outlet property="overallGradeLabel" destination="jb8-x2-1v4" id="xIX-kn-Mhm"/>
+                <outlet property="overallGradeTitleLabel" destination="Bk6-6K-rIs" id="Ka4-rB-bEu"/>
+                <outlet property="parentStackView" destination="4B1-kV-UFR" id="8LZ-Lm-MMV"/>
+                <outlet property="percentageLabel" destination="pGx-Zc-VWW" id="9MP-eO-BMi"/>
+                <outlet property="percentageTitleLabel" destination="Gca-Ub-H1Z" id="hmA-Lu-zJQ"/>
+                <outlet property="subjectLabel" destination="huc-I4-nlU" id="CTM-4v-n7X"/>
+            </connections>
+        </placeholder>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
-        <view contentMode="scaleToFill" id="iN0-l3-epB" customClass="RecentAssessmentView" customModule="myPredictedGrade" customModuleProvider="target">
+        <view contentMode="scaleToFill" id="iN0-l3-epB">
             <rect key="frame" x="0.0" y="0.0" width="375" height="202"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
@@ -193,7 +216,7 @@
                         <constraint firstAttribute="trailing" secondItem="Bk6-6K-rIs" secondAttribute="trailing" constant="30" id="OjK-G3-gPD"/>
                         <constraint firstItem="Bk6-6K-rIs" firstAttribute="top" secondItem="lSs-75-cje" secondAttribute="top" id="Xeu-9g-CME"/>
                         <constraint firstItem="jb8-x2-1v4" firstAttribute="centerX" secondItem="Bk6-6K-rIs" secondAttribute="centerX" id="d3i-FS-hii"/>
-                        <constraint firstAttribute="height" constant="123" id="dYE-3Q-NwP"/>
+                        <constraint firstAttribute="height" priority="999" constant="123" id="dYE-3Q-NwP"/>
                         <constraint firstItem="jb8-x2-1v4" firstAttribute="top" secondItem="Bk6-6K-rIs" secondAttribute="bottom" id="kTm-OR-C5O"/>
                         <constraint firstItem="Bk6-6K-rIs" firstAttribute="top" secondItem="am4-7z-d0U" secondAttribute="top" id="lgS-qa-1fo"/>
                         <constraint firstItem="am4-7z-d0U" firstAttribute="leading" secondItem="mKo-7k-1p3" secondAttribute="leading" id="r6Z-32-W8g"/>
@@ -214,27 +237,6 @@
                 <constraint firstItem="9RJ-Ik-sMr" firstAttribute="top" secondItem="rHr-ir-eJ6" secondAttribute="bottom" id="tKq-QU-0gS"/>
             </constraints>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
-            <connections>
-                <outlet property="asssessmentTitleLabel" destination="q8T-dI-1n8" id="8Zt-E1-8YS"/>
-                <outlet property="bodyMiddleView" destination="lSs-75-cje" id="hMB-Sw-a65"/>
-                <outlet property="bodyView" destination="9RJ-Ik-sMr" id="1sN-Xp-ziR"/>
-                <outlet property="criteriaStackView" destination="Qbe-iz-Nkz" id="N9Z-vZ-1fg"/>
-                <outlet property="criterionAMarkLabel" destination="snl-Rv-cmX" id="JfA-Zm-k2j"/>
-                <outlet property="criterionBMarkLabel" destination="Lfg-hb-l9p" id="wN3-zV-xEz"/>
-                <outlet property="criterionCMarkLabel" destination="Bck-sh-V0h" id="OGm-pp-Ckp"/>
-                <outlet property="criterionDMarkLabel" destination="Hal-lN-Twg" id="QPp-7S-kQ2"/>
-                <outlet property="dateLabel" destination="f3u-RE-zZW" id="AtT-rm-pfM"/>
-                <outlet property="headerView" destination="rHr-ir-eJ6" id="jg2-aU-d65"/>
-                <outlet property="markStackView" destination="qWw-Y2-XJY" id="7SP-bP-EsF"/>
-                <outlet property="marksLabel" destination="mKo-7k-1p3" id="PNE-SA-qbX"/>
-                <outlet property="marksTitleLabel" destination="am4-7z-d0U" id="GoU-7s-RTm"/>
-                <outlet property="overallGradeLabel" destination="jb8-x2-1v4" id="d6d-aG-PAG"/>
-                <outlet property="overallGradeTitleLabel" destination="Bk6-6K-rIs" id="Q3E-xD-bOG"/>
-                <outlet property="parentStackView" destination="4B1-kV-UFR" id="UhR-Wz-1MW"/>
-                <outlet property="percentageLabel" destination="pGx-Zc-VWW" id="z8E-kd-cfL"/>
-                <outlet property="percentageTitleLabel" destination="Gca-Ub-H1Z" id="FhD-PD-2ct"/>
-                <outlet property="subjectLabel" destination="huc-I4-nlU" id="i2b-BM-GPk"/>
-            </connections>
             <point key="canvasLocation" x="-156.5" y="-16"/>
         </view>
     </objects>

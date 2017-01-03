@@ -9,60 +9,9 @@
 import Foundation
 import UIKit
 
-enum Subject: String {
-    //start of group 1: language and literature
-    case EnglishALit = "English A Literature"
-    case EnglishALangLit = "English A Language and Literature"
-    case ChineseALit = "Chinese A Literature"
-    case ChineseALangLit = "Chinese A Language and Literature"
-    
-    //start of group 2: language acquisition
-    case SpanishAb = "Spanish Ab Initio"
-    case SpanishB = "Spanish B"
-    case ChineseAb = "Chinese Ab Initio"
-    case ChineseB = "Chinese B"
-    case FrenchAb = "French Ab Initio"
-    case FrenchB = "French B"
-    
-    //start of group 3: individuals and socities
-    case BusinessManagement = "Business Management"
-    case Economics = "Economics"
-    case Geography = "Geography"
-    case History = "History"
-    case InformationTechonologyinaGlobalSociety = "Information Technology in a Global Society"
-    case Philosophy = "Philosophy"
-    case Psychology = "Psychology"
-    case SocialandCulturalAnthropology = "Social and Cultural Anthropology"
-    case WorldReligions = "World Religions"
-    case GlobalPolitics = "Global Politics"
-    
-    //start of group 4: science
-    case Biology = "Biology"
-    case Chemistry = "Chemistry"
-    case ComputerScience = "Computer Science"
-    case DesignTechnology = "Design Technology"
-    case EnvironmentalSystemsandSocities = "Environmental Systems and Societies"
-    case Physics = "Physics"
-    case SportsExcerciseandHealthScience = "Sports Excercise and Health Science"
-    
-    //start of group 5: mathematics
-    case MathematicsStudies = "Mathematics Studies"
-    case Mathematics = "Mathematics"
-    case FurtherMathematics = "Further Mathematics"
-    
-    //start of group 6: arts
-    case Dance = "Dance"
-    case Film = "Film"
-    case Music = "Music"
-    case Theatre = "Theatre"
-    case VisualArts = "Visual Arts"
-    
-    //others
-    case TheoryofKnowledge = "Theory of Knowledge"
-    
-}
-
 class RecentAssessmentView: UIView {
+    
+    @IBOutlet var mainView: RecentAssessmentView!
     
     //UI members
     @IBOutlet weak var headerView: UIView! //parent view of titleLabel, subjectLabel, and dateLabel
@@ -98,33 +47,56 @@ class RecentAssessmentView: UIView {
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         
+        Bundle.main.loadNibNamed("RecentAssessmentView", owner: self, options: nil)
+        self.addSubview(self.mainView)
     }
     
     func updateLabels(assessment: Assessment){
         
         asssessmentTitleLabel.text = assessment.assessmentTitle
-        subjectLabel.text = assessment.subject.rawValue
+        subjectLabel.text = assessment.subject.0.rawValue
         
         //converting date to appropriate format
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "EEE, dd MMM yyyy"
         var string = dateFormatter.string(from: assessment.date)
-        string = string.insert(string: daySuffix(from: assessment.date), ind: 8)
+        print(assessment.date)
+        print(string)
+        string = string.insert(string: daySuffix(from: assessment.date), ind: 7)
+        if string[5] == "0" {
+            string.remove(at: string.characters.index(of: "0")!)
+        }
+        
         dateLabel.text = string
         
         marksLabel.text = "\(assessment.marksReceived) / \(assessment.marksAvailable)"
         
+        //below consists of number formatting for the percentage label
+        let numberFormatter = NumberFormatter()
+        numberFormatter.numberStyle = .percent
+        let numberDouble: Double = Double(assessment.marksReceived) / Double(assessment.marksAvailable)
+        let number = NSDecimalNumber(decimal: Decimal(numberDouble))
+        percentageLabel.text = numberFormatter.string(from: number)
+        
         if let criteriaA = assessment.criteriaA {
             criterionAMarkLabel.text = String(criteriaA)
+        } else {
+            criterionAMarkLabel.text = "~"
         }
         if let criteriaB = assessment.criteriaB {
             criterionBMarkLabel.text = String(criteriaB)
+        } else {
+            criterionBMarkLabel.text = "~"
         }
         if let criteriaC = assessment.criteriaC {
             criterionCMarkLabel.text = String(criteriaC)
+        } else {
+            criterionCMarkLabel.text = "~"
         }
         if let criteriaD = assessment.criteriaD {
             criterionDMarkLabel.text = String(criteriaD)
+        } else {
+            criterionDMarkLabel.text = "~"
         }
         
     }

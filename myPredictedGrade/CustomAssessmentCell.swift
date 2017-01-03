@@ -11,6 +11,14 @@ import UIKit
 
 class CustomAssessmentCell: UITableViewCell {
     
+    //@IBOutlet var mainCell: CustomAssessmentCell!
     @IBOutlet weak var recentAssessmentView: RecentAssessmentView!
+    
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+        
+        Bundle.main.loadNibNamed("CustomAssessmentCell", owner: self, options: nil)
+        //self.addSubview(mainCell)
+    }
     
 }

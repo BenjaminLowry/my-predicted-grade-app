@@ -11,11 +11,13 @@ import Foundation
 class Assessment: NSObject, NSCoding {
     
     var assessmentTitle: String
-    var subject: Subject
+    var subject: (Subject, Bool)
     var date: Date
     
     var marksAvailable: Int
     var marksReceived: Int
+    
+    var percentageMarksObtained: Double
     
     var overallGrade: Int = 0
     
@@ -24,23 +26,27 @@ class Assessment: NSObject, NSCoding {
     var criteriaC: Int?
     var criteriaD: Int?
     
-    init (assessmentTitle: String, subject: Subject, date: Date, marksAvailable: Int, marksReceived: Int){
+    init (assessmentTitle: String, subject: Subject, subjectIsHL: Bool, date: Date, marksAvailable: Int, marksReceived: Int){
         self.assessmentTitle = assessmentTitle
-        self.subject = subject
+        self.subject = (subject, subjectIsHL)
         self.date = date
         
         self.marksAvailable = marksAvailable
         self.marksReceived = marksReceived
+        
+        percentageMarksObtained = Double(marksReceived) / Double(marksAvailable) * 100
     }
     
     //DEVELOPMENT: need more of these for every combinations of criterias assessed?
-    init (assessmentTitle: String, subject: Subject, date: Date, marksAvailable: Int, marksReceived: Int, criteriaA: Int, criteriaB: Int, criteriaC: Int, criteriaD: Int){
+    init (assessmentTitle: String, subject: Subject, subjectIsHL: Bool, date: Date, marksAvailable: Int, marksReceived: Int, criteriaA: Int, criteriaB: Int, criteriaC: Int, criteriaD: Int){
         self.assessmentTitle = assessmentTitle
-        self.subject = subject
+        self.subject = (subject, subjectIsHL)
         self.date = date
         
         self.marksAvailable = marksAvailable
         self.marksReceived = marksReceived
+        
+        percentageMarksObtained = Double(marksReceived) / Double(marksAvailable) * 100
         
         self.criteriaA = criteriaA
         self.criteriaB = criteriaB
@@ -50,11 +56,15 @@ class Assessment: NSObject, NSCoding {
     
     required init?(coder aDecoder: NSCoder) {
         assessmentTitle = aDecoder.decodeObject(forKey: "AssessmentTitle") as! String
-        subject = aDecoder.decodeObject(forKey: "Subject") as! Subject
+        subject = aDecoder.decodeObject(forKey: "Subject") as! (Subject, Bool)
         date = aDecoder.decodeObject(forKey: "Date") as! Date
         
         marksAvailable = aDecoder.decodeInteger(forKey: "MarksAvailable")
         marksReceived = aDecoder.decodeInteger(forKey: "MarksReceived")
+        
+        percentageMarksObtained = Double(marksReceived) / Double(marksAvailable) * 100
+        
+        overallGrade = aDecoder.decodeInteger(forKey: "OverallGrade")
         
         if let criteriaA = aDecoder.decodeInteger(forKey: "CriteriaA") as Int? {
             self.criteriaA = criteriaA
@@ -69,15 +79,59 @@ class Assessment: NSObject, NSCoding {
             self.criteriaD = criteriaD
         }
         
-        overallGrade = aDecoder.decodeInteger(forKey: "OverallGrade")
-        
     }
     
-    func calculateOverallGrade() -> Int {
+    func calculateOverallGrade() {
         
-        //THIS IS WHERE I WILL CORRESPOND THE DATE WITH THE BOUNDARIES
+        let percent: Int = lround(self.percentageMarksObtained)
         
-        return 5 //THIS IS IS A TEMPORARY MEASURE
+        var hlString = ""
+        if subject.1 == true {
+            hlString = " HL"
+        } else {
+            hlString = " SL"
+        }
+        
+        typealias JSONDictionary = [String: Any]
+        
+        if let url = Bundle.main.url(forResource: "gradeBoundaries", withExtension: "json") { //find the url of the JSON
+            do {
+                
+                let jsonData = try Data(contentsOf: url) //get the data for the JSON
+                
+                if let jsonResult: JSONDictionary = try JSONSerialization.jsonObject(with: jsonData, options: []) as? JSONDictionary { //the whole JSON
+                    
+                    let subjects: [JSONDictionary] = jsonResult["Subjects"] as! [JSONDictionary] //list of subjects (which are dictionaries)
+                    
+                    for subject in subjects { //iterate through the subjects
+                        
+                        let title: String = subject["Title"] as! String //get subject title
+                        
+                        if title == self.subject.0.rawValue + hlString { //see if the subject title matches the subject of the assessment
+                            
+                            let gradeBoundaries: JSONDictionary = subject["Boundaries"] as! JSONDictionary //get dictionary of grade boundaries
+                            
+                            for key in gradeBoundaries.keys { //iterate through the keys
+                                var value: [Int] = gradeBoundaries[key] as! [Int] //get the value of the dictionary for the current key
+                                if percent <= value[1] && percent >= value[0] { //if the percentage from the assessment falls between the bounds
+                                    overallGrade = Int(key)! //set the overall grade to the current key
+                                }
+                            }
+                            
+                            
+                        }
+                        
+                    }
+                    
+                    
+                    
+                    
+                    
+                }
+            } catch {
+                print(error)
+            }
+        }
         
     }
     
