@@ -99,6 +99,9 @@ class RecentAssessmentView: UIView {
             criterionDMarkLabel.text = "~"
         }
         
+        assessment.calculateOverallGrade()
+        overallGradeLabel.text = String(assessment.overallGrade)
+        
     }
     
     func daySuffix(from date: Date) -> String {
