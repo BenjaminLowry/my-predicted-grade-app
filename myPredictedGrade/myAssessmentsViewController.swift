@@ -41,6 +41,8 @@ class myAssessmentsViewController: UIViewController, UIPickerViewDelegate, UIPic
         bodyTableView.delegate = self
         bodyTableView.dataSource = self
         
+        setupPickerViews()
+        
     
 
         //test of tableview system
@@ -63,8 +65,7 @@ class myAssessmentsViewController: UIViewController, UIPickerViewDelegate, UIPic
  
 
         
-        //this sorts the assessments in terms of most recent date
-        sortedContentList = allAssessments.sorted { $0.date > $1.date }
+        
         
         //this sorts the assessments in terms of oldest date
         //sortedContentList = allAssessments.sorted { $0.date < $1.date }
@@ -178,10 +179,12 @@ class myAssessmentsViewController: UIViewController, UIPickerViewDelegate, UIPic
     
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         
-        if pickerView.tag == 1 {
+        if pickerView.tag == 1 { //Content selection pickerview
+            
             contentSelectionTextField.text = contentSelectionOptions[row]
-        } else if pickerView.tag == 2 {
+        } else if pickerView.tag == 2 { //Ordering pickerview
             contentOrderingTextField.text = contentOrderingOptions[row]
+            
         }
         
     }
@@ -204,6 +207,26 @@ class myAssessmentsViewController: UIViewController, UIPickerViewDelegate, UIPic
     }
     func donePressedContentOrderingPickerView(){
         contentOrderingTextField.resignFirstResponder()
+        if contentOrderingTextField.text == "Most Recent" {
+            sortedContentList = allAssessments.sorted { $0.date > $1.date }
+            bodyTableView.reloadSections(NSIndexSet(index: 0) as IndexSet, with: UITableViewRowAnimation.automatic)
+        } else if contentOrderingTextField.text == "Oldest" {
+            sortedContentList = allAssessments.sorted { $0.date < $1.date }
+            bodyTableView.reloadSections(NSIndexSet(index: 0) as IndexSet, with: UITableViewRowAnimation.automatic)
+        } else if contentOrderingTextField.text == "Subject" {
+            sortedContentList = allAssessments.sorted { $0.subject.0.sortIndex > $1.subject.0.sortIndex }
+            bodyTableView.reloadSections(NSIndexSet(index: 0) as IndexSet, with: UITableViewRowAnimation.automatic)
+        } else if contentOrderingTextField.text == "Overall Grade" {
+            sortedContentList = allAssessments.sorted { $0.overallGrade > $1.overallGrade }
+            bodyTableView.reloadSections(NSIndexSet(index: 0) as IndexSet, with: UITableViewRowAnimation.automatic)
+        } else if contentOrderingTextField.text == "Percentage Marks" {
+            sortedContentList = allAssessments.sorted { $0.percentageMarksObtained > $1.percentageMarksObtained }
+            bodyTableView.reloadSections(NSIndexSet(index: 0) as IndexSet, with: UITableViewRowAnimation.automatic)
+        } else if contentOrderingTextField.text == "Title" {
+            sortedContentList = allAssessments.sorted { $0.assessmentTitle < $1.assessmentTitle }
+            bodyTableView.reloadSections(NSIndexSet(index: 0) as IndexSet, with: UITableViewRowAnimation.automatic)
+        }
+        
     }
     
     func clearPressedContentSelectionPickerView(){
