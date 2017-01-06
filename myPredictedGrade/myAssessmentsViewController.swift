@@ -16,6 +16,7 @@ class myAssessmentsViewController: UIViewController, UIPickerViewDelegate, UIPic
     @IBOutlet weak var bodyTableView: UITableView!
     @IBOutlet weak var contentView: UIView!
     
+    @IBOutlet weak var contentSelectionView: UIView!
     @IBOutlet weak var contentSelectionTextField: UITextField!
     @IBOutlet weak var contentOrderingTextField: UITextField!
     
@@ -38,12 +39,22 @@ class myAssessmentsViewController: UIViewController, UIPickerViewDelegate, UIPic
         separatorView.layer.shadowRadius = 7
         separatorView.layer.shadowOpacity = 1.0
         
+        headerView.layer.borderColor = UIColor.black.cgColor
+        headerView.layer.borderWidth = 1.0
+        headerView.layer.shadowColor = UIColor.black.cgColor
+        headerView.layer.shadowRadius = 8.0
+        headerView.layer.shadowOpacity = 1.0
+        
+        //contentSelectionView.layer.borderWidth = 0.5
+        //contentSelectionView.layer.borderColor = UIColor.black.cgColor
+        
+        
         bodyTableView.delegate = self
         bodyTableView.dataSource = self
         
         setupPickerViews()
         
-    
+        
 
         //test of tableview system
         let date2 = Date(timeIntervalSince1970: TimeInterval(exactly: 3095904229.00)!)
@@ -89,6 +100,12 @@ class myAssessmentsViewController: UIViewController, UIPickerViewDelegate, UIPic
         }
         
         bodyTableView.insertRows(at: indexPaths, with: .automatic)
+        
+        
+        //set the list to "Most Recent" initially
+        sortedContentList = allAssessments.sorted { $0.date > $1.date }
+        bodyTableView.reloadSections(NSIndexSet(index: 0) as IndexSet, with: UITableViewRowAnimation.automatic)
+        
         
     }
 
@@ -142,6 +159,8 @@ class myAssessmentsViewController: UIViewController, UIPickerViewDelegate, UIPic
     }
     
     func configureCell(cell: TestTableViewCell, assessment: Assessment){
+        
+        cell.isUserInteractionEnabled = false
         
         let mainView = cell.recentAssessmentView
         mainView?.awakeFromNib()
