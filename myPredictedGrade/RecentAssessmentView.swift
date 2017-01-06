@@ -48,7 +48,11 @@ class RecentAssessmentView: UIView {
         super.init(coder: aDecoder)
         
         Bundle.main.loadNibNamed("RecentAssessmentView", owner: self, options: nil)
+        mainView.layer.borderColor = UIColor.black.cgColor
+        mainView.layer.borderWidth = 0.5
         self.addSubview(self.mainView)
+        
+        
     }
     
     func updateLabels(assessment: Assessment){
@@ -60,8 +64,6 @@ class RecentAssessmentView: UIView {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "EEE, dd MMM yyyy"
         var string = dateFormatter.string(from: assessment.date)
-        print(assessment.date)
-        print(string)
         string = string.insert(string: daySuffix(from: assessment.date), ind: 7)
         if string[5] == "0" {
             string.remove(at: string.characters.index(of: "0")!)
