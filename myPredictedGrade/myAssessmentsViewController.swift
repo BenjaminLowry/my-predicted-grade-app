@@ -10,6 +10,8 @@ import UIKit
 
 class myAssessmentsViewController: UIViewController, UISearchBarDelegate, UITableViewDelegate, UITableViewDataSource, UIPickerViewDelegate, UIPickerViewDataSource, UITextFieldDelegate {
     
+    // MARK: - IBOutlets
+    
     @IBOutlet weak var headerView: UIView!
     
     @IBOutlet weak var searchBar: UISearchBar!
@@ -20,6 +22,8 @@ class myAssessmentsViewController: UIViewController, UISearchBarDelegate, UITabl
     @IBOutlet weak var contentSelectionTextField: UITextField!
     @IBOutlet weak var contentOrderingTextField: UITextField!
     
+    // MARK: - Properties
+    
     var contentSelectionPickerView: UIPickerView = UIPickerView()
     var contentOrderingPickerView: UIPickerView = UIPickerView()
     
@@ -28,6 +32,8 @@ class myAssessmentsViewController: UIViewController, UISearchBarDelegate, UITabl
     
     var allAssessments: [Assessment] = [Assessment]()
     var sortedContentList: [Assessment] = [Assessment]()
+    
+    // MARK: - Inherited Funcs
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -113,30 +119,7 @@ class myAssessmentsViewController: UIViewController, UISearchBarDelegate, UITabl
         // Dispose of any resources that can be recreated.
     }
     
-    func setupPickerViews() {
-        contentSelectionPickerView.tag = 1 //for the delegate methods
-        //contentSelectionPickerView.isHidden = true
-        contentSelectionPickerView.delegate = self
-        contentSelectionPickerView.dataSource = self
-        
-        contentSelectionTextField.inputView = contentSelectionPickerView //set pickerView as responder
-        contentSelectionTextField.delegate = self
-        
-        contentOrderingPickerView.tag = 2 //for the delegate methods
-        //contentOrderingPickerView.isHidden = true
-        contentOrderingPickerView.delegate = self
-        contentOrderingPickerView.dataSource = self
-        
-        contentOrderingTextField.inputView = contentOrderingPickerView //set pickerView as responder
-        contentOrderingTextField.delegate = self
-        
-        initializePickerViewToolBar(clearButtonFunc: "clearPressedContentSelectionPickerView", doneButtonFunc: "donePressedContentSelectionPickerView", textField: contentSelectionTextField)
-        initializePickerViewToolBar(clearButtonFunc: "clearPressedContentOrderingPickerView", doneButtonFunc: "donePressedContentOrderingPickerView", textField: contentOrderingTextField)
-    }
-    
-    func reloadTableViewData() {
-        
-    }
+    // MARK: - UITableView Delegate Funcs
     
     func numberOfSections(in tableView: UITableView) -> Int {
         return 1 //will I be creating sections for each subject? (when ordered by subject)
@@ -157,9 +140,7 @@ class myAssessmentsViewController: UIViewController, UISearchBarDelegate, UITabl
         
     }
     
-    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        sortContent()
-    }
+    // MARK: - UITableView Helper Funcs
     
     func configureCell(cell: AssessmentCell, assessment: Assessment){
         
@@ -170,6 +151,14 @@ class myAssessmentsViewController: UIViewController, UISearchBarDelegate, UITabl
         mainView?.updateLabels(assessment: assessment)
         
     }
+    
+    // MARK: - UISearchBar Delegate Funcs
+    
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        sortContent()
+    }
+    
+    //MARK: - UIPickerView Delegate Funcs
     
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
         return 1 //same for both pickers
@@ -211,17 +200,7 @@ class myAssessmentsViewController: UIViewController, UISearchBarDelegate, UITabl
         
     }
     
-    
-    func textFieldDidBeginEditing(_ textField: UITextField) {
-        
-        if textField == contentSelectionTextField {
-            //contentSelectionPickerView.isHidden = false
-        } else if textField == contentOrderingTextField {
-            //contentOrderingPickerView.isHidden = false
-        }
-    
-        
-    }
+    // MARK: - Sorting Mechanisms
     
     func sortContent() {
         
@@ -262,15 +241,12 @@ class myAssessmentsViewController: UIViewController, UISearchBarDelegate, UITabl
         
     }
     
-    
-    //IS THERE A BETTER WAY TO DO THIS???
     func donePressedContentSelectionPickerView(){
         contentSelectionTextField.resignFirstResponder()
     }
     func donePressedContentOrderingPickerView(){
         contentOrderingTextField.resignFirstResponder()
-        
-        
+        sortContent()
     }
     
     func clearPressedContentSelectionPickerView(){
@@ -281,6 +257,30 @@ class myAssessmentsViewController: UIViewController, UISearchBarDelegate, UITabl
         contentOrderingTextField.resignFirstResponder()
         contentOrderingTextField.text = ""
     }
+    
+    // MARK: - UI Setup
+    
+    func setupPickerViews() {
+        contentSelectionPickerView.tag = 1 //for the delegate methods
+        //contentSelectionPickerView.isHidden = true
+        contentSelectionPickerView.delegate = self
+        contentSelectionPickerView.dataSource = self
+        
+        contentSelectionTextField.inputView = contentSelectionPickerView //set pickerView as responder
+        contentSelectionTextField.delegate = self
+        
+        contentOrderingPickerView.tag = 2 //for the delegate methods
+        //contentOrderingPickerView.isHidden = true
+        contentOrderingPickerView.delegate = self
+        contentOrderingPickerView.dataSource = self
+        
+        contentOrderingTextField.inputView = contentOrderingPickerView //set pickerView as responder
+        contentOrderingTextField.delegate = self
+        
+        initializePickerViewToolBar(clearButtonFunc: "clearPressedContentSelectionPickerView", doneButtonFunc: "donePressedContentSelectionPickerView", textField: contentSelectionTextField)
+        initializePickerViewToolBar(clearButtonFunc: "clearPressedContentOrderingPickerView", doneButtonFunc: "donePressedContentOrderingPickerView", textField: contentOrderingTextField)
+    }
+    
     
     func initializePickerViewToolBar(clearButtonFunc: String, doneButtonFunc: String, textField: UITextField){
         
@@ -299,16 +299,5 @@ class myAssessmentsViewController: UIViewController, UISearchBarDelegate, UITabl
         textField.inputAccessoryView = toolBar
         
     }
-    
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
 
 }
