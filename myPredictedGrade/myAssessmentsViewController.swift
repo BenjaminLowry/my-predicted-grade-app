@@ -8,13 +8,13 @@
 
 import UIKit
 
-class myAssessmentsViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource, UITextFieldDelegate, UITableViewDelegate, UITableViewDataSource {
+class myAssessmentsViewController: UIViewController, UISearchBarDelegate, UITableViewDelegate, UITableViewDataSource, UIPickerViewDelegate, UIPickerViewDataSource, UITextFieldDelegate {
     
     @IBOutlet weak var headerView: UIView!
-    @IBOutlet weak var separatorView: UIView!
-
+    
+    @IBOutlet weak var searchBar: UISearchBar!
+    
     @IBOutlet weak var bodyTableView: UITableView!
-    @IBOutlet weak var contentView: UIView!
     
     @IBOutlet weak var contentSelectionView: UIView!
     @IBOutlet weak var contentSelectionTextField: UITextField!
@@ -32,15 +32,10 @@ class myAssessmentsViewController: UIViewController, UIPickerViewDelegate, UIPic
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        bodyTableView.register(UINib(nibName: "TestTableViewCell", bundle: Bundle.main), forCellReuseIdentifier: "TestCell")
+        bodyTableView.register(UINib(nibName: "AssessmentCell", bundle: Bundle.main), forCellReuseIdentifier: "AssessmentCell")
         
-        //add shadow to separator view
-        separatorView.layer.shadowColor = UIColor.black.cgColor
-        separatorView.layer.shadowRadius = 7
-        separatorView.layer.shadowOpacity = 1.0
-        
-        headerView.layer.borderColor = UIColor.black.cgColor
-        headerView.layer.borderWidth = 1.0
+        //headerView.layer.borderColor = UIColor.black.cgColor
+        //headerView.layer.borderWidth = 1.0
         headerView.layer.shadowColor = UIColor.black.cgColor
         headerView.layer.shadowRadius = 8.0
         headerView.layer.shadowOpacity = 1.0
@@ -48,13 +43,17 @@ class myAssessmentsViewController: UIViewController, UIPickerViewDelegate, UIPic
         //contentSelectionView.layer.borderWidth = 0.5
         //contentSelectionView.layer.borderColor = UIColor.black.cgColor
         
+        contentSelectionTextField.underlined()
+        contentOrderingTextField.underlined()
+        
+        searchBar.delegate = self
         
         bodyTableView.delegate = self
         bodyTableView.dataSource = self
         
         setupPickerViews()
         
-        
+        //searchBar.removeBackground()
 
         //test of tableview system
         let date2 = Date(timeIntervalSince1970: TimeInterval(exactly: 3095904229.00)!)
@@ -150,7 +149,7 @@ class myAssessmentsViewController: UIViewController, UIPickerViewDelegate, UIPic
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        let cell: TestTableViewCell = tableView.dequeueReusableCell(withIdentifier: "TestCell") as! TestTableViewCell
+        let cell: AssessmentCell = tableView.dequeueReusableCell(withIdentifier: "AssessmentCell") as! AssessmentCell
         
         configureCell(cell: cell, assessment: sortedContentList[indexPath.row])
         
@@ -158,7 +157,11 @@ class myAssessmentsViewController: UIViewController, UIPickerViewDelegate, UIPic
         
     }
     
-    func configureCell(cell: TestTableViewCell, assessment: Assessment){
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        sortContent()
+    }
+    
+    func configureCell(cell: AssessmentCell, assessment: Assessment){
         
         cell.isUserInteractionEnabled = false
         
@@ -220,31 +223,53 @@ class myAssessmentsViewController: UIViewController, UIPickerViewDelegate, UIPic
         
     }
     
+    func sortContent() {
+        
+        if searchBar.text == nil || searchBar.text == "" { //if no search
+            sortByHeaderPreference(content: allAssessments)
+        } else { //if search is in progress
+            let searchContent: [Assessment]
+            searchContent = allAssessments.filter { assessment in {
+                return assessment.assessmentTitle.lowercased().contains(searchBar.text!.lowercased())
+                }()
+            }
+            sortByHeaderPreference(content: searchContent)
+        }
+        
+    }
+    
+    //takes a custom list of assessments and sorts them according to user preference (from the header view)
+    func sortByHeaderPreference(content: [Assessment]){
+        if contentOrderingTextField.text == "Most Recent" {
+            sortedContentList = content.sorted { $0.date > $1.date }
+            bodyTableView.reloadSections(NSIndexSet(index: 0) as IndexSet, with: UITableViewRowAnimation.none)
+        } else if contentOrderingTextField.text == "Oldest" {
+            sortedContentList = content.sorted { $0.date < $1.date }
+            bodyTableView.reloadSections(NSIndexSet(index: 0) as IndexSet, with: UITableViewRowAnimation.none)
+        } else if contentOrderingTextField.text == "Subject" {
+            sortedContentList = content.sorted { $0.subject.0.sortIndex > $1.subject.0.sortIndex }
+            bodyTableView.reloadSections(NSIndexSet(index: 0) as IndexSet, with: UITableViewRowAnimation.none)
+        } else if contentOrderingTextField.text == "Overall Grade" {
+            sortedContentList = content.sorted { $0.overallGrade > $1.overallGrade }
+            bodyTableView.reloadSections(NSIndexSet(index: 0) as IndexSet, with: UITableViewRowAnimation.none)
+        } else if contentOrderingTextField.text == "Percentage Marks" {
+            sortedContentList = content.sorted { $0.percentageMarksObtained > $1.percentageMarksObtained }
+            bodyTableView.reloadSections(NSIndexSet(index: 0) as IndexSet, with: UITableViewRowAnimation.none)
+        } else if contentOrderingTextField.text == "Title" {
+            sortedContentList = content.sorted { $0.assessmentTitle < $1.assessmentTitle }
+            bodyTableView.reloadSections(NSIndexSet(index: 0) as IndexSet, with: UITableViewRowAnimation.none)
+        }
+        
+    }
+    
+    
     //IS THERE A BETTER WAY TO DO THIS???
     func donePressedContentSelectionPickerView(){
         contentSelectionTextField.resignFirstResponder()
     }
     func donePressedContentOrderingPickerView(){
         contentOrderingTextField.resignFirstResponder()
-        if contentOrderingTextField.text == "Most Recent" {
-            sortedContentList = allAssessments.sorted { $0.date > $1.date }
-            bodyTableView.reloadSections(NSIndexSet(index: 0) as IndexSet, with: UITableViewRowAnimation.automatic)
-        } else if contentOrderingTextField.text == "Oldest" {
-            sortedContentList = allAssessments.sorted { $0.date < $1.date }
-            bodyTableView.reloadSections(NSIndexSet(index: 0) as IndexSet, with: UITableViewRowAnimation.automatic)
-        } else if contentOrderingTextField.text == "Subject" {
-            sortedContentList = allAssessments.sorted { $0.subject.0.sortIndex > $1.subject.0.sortIndex }
-            bodyTableView.reloadSections(NSIndexSet(index: 0) as IndexSet, with: UITableViewRowAnimation.automatic)
-        } else if contentOrderingTextField.text == "Overall Grade" {
-            sortedContentList = allAssessments.sorted { $0.overallGrade > $1.overallGrade }
-            bodyTableView.reloadSections(NSIndexSet(index: 0) as IndexSet, with: UITableViewRowAnimation.automatic)
-        } else if contentOrderingTextField.text == "Percentage Marks" {
-            sortedContentList = allAssessments.sorted { $0.percentageMarksObtained > $1.percentageMarksObtained }
-            bodyTableView.reloadSections(NSIndexSet(index: 0) as IndexSet, with: UITableViewRowAnimation.automatic)
-        } else if contentOrderingTextField.text == "Title" {
-            sortedContentList = allAssessments.sorted { $0.assessmentTitle < $1.assessmentTitle }
-            bodyTableView.reloadSections(NSIndexSet(index: 0) as IndexSet, with: UITableViewRowAnimation.automatic)
-        }
+        
         
     }
     
