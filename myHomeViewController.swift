@@ -10,6 +10,8 @@ import UIKit
 
 class myHomeViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
 
+    // MARK: - IBOutlets
+    
     @IBOutlet weak var headerView: UIView!
     
     @IBOutlet weak var overallGradeLabel: UILabel!
@@ -22,13 +24,17 @@ class myHomeViewController: UIViewController, UITableViewDelegate, UITableViewDa
     
     @IBOutlet weak var leftHeaderView: BorderedView!
     
+    // MARK: - Properties
+    
     var recentAssessments = [Assessment]()
+    
+    // MARK: - Inherited Funcs
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         //bodyTableView.register(UINib(nibName: "CustomAssessmentCell", bundle: Bundle.main), forCellReuseIdentifier: "CustomAssessmentCell")
-        bodyTableView.register(UINib(nibName: "TestTableViewCell", bundle: Bundle.main), forCellReuseIdentifier: "TestCell")
+        bodyTableView.register(UINib(nibName: "AssessmentCell", bundle: Bundle.main), forCellReuseIdentifier: "AssessmentCell")
         
         //set-up headerView shadow
         headerView.layer.shadowOpacity = 1.0
@@ -36,13 +42,13 @@ class myHomeViewController: UIViewController, UITableViewDelegate, UITableViewDa
         headerView.layer.shadowColor = UIColor.black.cgColor
         
         //draw borders for custom "BorderedViews"
-        leftHeaderView.drawBorder(orientation: .Right, color: UIColor.black, thickness: 1)
+        leftHeaderView.drawBorder(orientation: .Right, color: UIColor.black, thickness: 0.5)
         bodyTitleView.drawBorder(orientation: .Bottom, color: UIColor.black, thickness: 1.5)
         
         bodyTableView.delegate = self
         bodyTableView.dataSource = self
         
-        /*
+    
         
         //test of tableview system
         let date = Date(timeIntervalSince1970: TimeInterval(exactly: 30549.00)!)
@@ -55,12 +61,11 @@ class myHomeViewController: UIViewController, UITableViewDelegate, UITableViewDa
         let indexPaths = [indexPath]
         
         bodyTableView.insertRows(at: indexPaths, with: .automatic)
- 
- */
+
         
-        let date = Date(timeIntervalSinceNow: 0)
-        let biologyTest = Assessment(assessmentTitle: "Cells Test", subject: .Biology, subjectIsHL: true, date: date, marksAvailable: 40, marksReceived: 34)
-        biologyTest.calculateOverallGrade()
+        //let date = Date(timeIntervalSinceNow: 0)
+        //let biologyTest = Assessment(assessmentTitle: "Cells Test", subject: .Biology, subjectIsHL: true, date: date, marksAvailable: 40, marksReceived: 34)
+        //biologyTest.calculateOverallGrade()
         
     }
     
@@ -78,6 +83,7 @@ class myHomeViewController: UIViewController, UITableViewDelegate, UITableViewDa
         
     }
     
+    // MARK: - UITableView Delegate Funcs
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if section == 0 {
@@ -90,12 +96,8 @@ class myHomeViewController: UIViewController, UITableViewDelegate, UITableViewDa
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         //let cell: CustomAssessmentCell = tableView.dequeueReusableCell(withIdentifier: "CustomAssessmentCell") as! CustomAssessmentCell //possible error thrown here
-        let cell: TestTableViewCell = tableView.dequeueReusableCell(withIdentifier: "TestCell") as! TestTableViewCell
+        let cell: AssessmentCell = tableView.dequeueReusableCell(withIdentifier: "AssessmentCell") as! AssessmentCell
         //cell.mainCell.awakeFromNib()
-        
-        let press = UILongPressGestureRecognizer(target: self, action: #selector(handlePress))
-        press.minimumPressDuration = 2.0 //however long you want
-        cell.addGestureRecognizer(press)
         
         let assessment = recentAssessments[indexPath.row]
         
@@ -105,28 +107,15 @@ class myHomeViewController: UIViewController, UITableViewDelegate, UITableViewDa
         
     }
     
-    func handlePress() {
-        
-    }
+    // MARK: - Configuration Funcs
     
-    func configureCell(cell: TestTableViewCell, assessment: Assessment){
+    func configureCell(cell: AssessmentCell, assessment: Assessment){
         
         let mainView = cell.recentAssessmentView
         mainView?.awakeFromNib()
         mainView?.updateLabels(assessment: assessment)
         
     }
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
-    
 
 }
 

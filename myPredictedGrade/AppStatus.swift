@@ -8,6 +8,12 @@
 
 import Foundation
 
+/* 
+ * NOTE:
+ * THIS IS THE MODEL USED FOR THE APP
+ *
+ */
+
 struct AppStatus {
     static var loggedInUser: Profile?
 }

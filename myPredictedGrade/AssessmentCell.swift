@@ -8,7 +8,7 @@
 
 import UIKit
 
-class TestTableViewCell: UITableViewCell {
+class AssessmentCell: UITableViewCell {
 
     @IBOutlet weak var recentAssessmentView: RecentAssessmentView!
     
