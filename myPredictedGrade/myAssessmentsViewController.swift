@@ -14,11 +14,12 @@ class myAssessmentsViewController: UIViewController, UISearchBarDelegate, UITabl
     
     @IBOutlet weak var headerView: UIView!
     
+    @IBOutlet weak var filterView: BorderedView!
+    
     @IBOutlet weak var searchBar: UISearchBar!
     
     @IBOutlet weak var bodyTableView: UITableView!
     
-    @IBOutlet weak var contentSelectionView: UIView!
     @IBOutlet weak var contentSelectionTextField: UITextField!
     @IBOutlet weak var contentOrderingTextField: UITextField!
     
@@ -33,34 +34,33 @@ class myAssessmentsViewController: UIViewController, UISearchBarDelegate, UITabl
     var allAssessments: [Assessment] = [Assessment]()
     var sortedContentList: [Assessment] = [Assessment]()
     
+    var currentScope: Subject?
+    
+    var noResultsLabel: UILabel = UILabel()
+    
+    //TEMPORARY
+    var userSubjects: [(Subject, Bool)] = [(Subject.Physics, true), (Subject.Chemistry, true), (Subject.SpanishAb, false)]
+    
     // MARK: - Inherited Funcs
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        //regist XIB for usage
         bodyTableView.register(UINib(nibName: "AssessmentCell", bundle: Bundle.main), forCellReuseIdentifier: "AssessmentCell")
         
-        //headerView.layer.borderColor = UIColor.black.cgColor
-        //headerView.layer.borderWidth = 1.0
-        headerView.layer.shadowColor = UIColor.black.cgColor
-        headerView.layer.shadowRadius = 8.0
-        headerView.layer.shadowOpacity = 1.0
-        
-        //contentSelectionView.layer.borderWidth = 0.5
-        //contentSelectionView.layer.borderColor = UIColor.black.cgColor
-        
-        contentSelectionTextField.underlined()
-        contentOrderingTextField.underlined()
-        
+        //setup delegates
         searchBar.delegate = self
-        
         bodyTableView.delegate = self
         bodyTableView.dataSource = self
         
+        //UI setup
         setupPickerViews()
+        setupNoResultsLabel()
+        setupSearchBar()
+        setupHeaderViews()
         
-        //searchBar.removeBackground()
-
+        
         //test of tableview system
         let date2 = Date(timeIntervalSince1970: TimeInterval(exactly: 3095904229.00)!)
         let chemTest = Assessment(assessmentTitle: "Stoichiometry Test", subject: .Chemistry, subjectIsHL: false, date: date2, marksAvailable: 49, marksReceived: 32)
@@ -79,22 +79,6 @@ class myAssessmentsViewController: UIViewController, UISearchBarDelegate, UITabl
         mathTest.overallGrade = 5
         allAssessments.append(mathTest)
  
-
-        
-        
-        
-        //this sorts the assessments in terms of oldest date
-        //sortedContentList = allAssessments.sorted { $0.date < $1.date }
-        
-        //this sorts the assessments into their subject groups (but interior ordering is arbitrary (?) )
-        //sortedContentList = allAssessments.sorted { $0.subject.sortIndex < $1.subject.sortIndex }
-        
-        //this sorts the assessments with highest overall grade first
-        //sortedContentList = allAssessments.sorted { $0.overallGrade >  $1.overallGrade }
-        
-        //this sorts the assessments with highest percentage marks first
-        //sortedContentList = allAssessments.sorted { $0.percentageMarksObtained < $1.percentageMarksObtained }
-        
         var indexPaths: [IndexPath] = [IndexPath]()
         
         for assessment in sortedContentList {
@@ -155,7 +139,7 @@ class myAssessmentsViewController: UIViewController, UISearchBarDelegate, UITabl
     // MARK: - UISearchBar Delegate Funcs
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        sortContent()
+        updateContent()
     }
     
     //MARK: - UIPickerView Delegate Funcs
@@ -202,16 +186,39 @@ class myAssessmentsViewController: UIViewController, UISearchBarDelegate, UITabl
     
     // MARK: - Sorting Mechanisms
     
-    func sortContent() {
+    func updateContent() {
+        
+        if let scope = currentScope {
+            let content = allAssessments.filter { assessment in {
+                return assessment.subject.0 == scope
+                }()
+                
+            }
+            sortContent(content: content)
+            
+        } else {
+            sortContent(content: allAssessments)
+        }
+        
+    }
+    
+    func sortContent(content: [Assessment]) {
         
         if searchBar.text == nil || searchBar.text == "" { //if no search
-            sortByHeaderPreference(content: allAssessments)
+            noResultsLabel.removeFromSuperview()
+            sortByHeaderPreference(content: content)
         } else { //if search is in progress
             let searchContent: [Assessment]
-            searchContent = allAssessments.filter { assessment in {
+            searchContent = content.filter { assessment in {
                 return assessment.assessmentTitle.lowercased().contains(searchBar.text!.lowercased())
                 }()
             }
+            if searchContent.count == 0 { //if no results match the string
+                bodyTableView.addSubview(noResultsLabel)
+            } else {
+                noResultsLabel.removeFromSuperview()
+            }
+            
             sortByHeaderPreference(content: searchContent)
         }
         
@@ -243,15 +250,29 @@ class myAssessmentsViewController: UIViewController, UISearchBarDelegate, UITabl
     
     func donePressedContentSelectionPickerView(){
         contentSelectionTextField.resignFirstResponder()
+        
+        for subject in userSubjects {
+            var hlString = ""
+            if subject.1 == true {
+                hlString = " HL"
+            } else {
+                hlString = " SL"
+            }
+            if subject.0.rawValue + hlString == contentSelectionTextField.text! {
+                currentScope = subject.0
+                updateContent()
+            }
+        }
     }
     func donePressedContentOrderingPickerView(){
         contentOrderingTextField.resignFirstResponder()
-        sortContent()
+        updateContent()
     }
     
     func clearPressedContentSelectionPickerView(){
         contentSelectionTextField.resignFirstResponder()
         contentSelectionTextField.text = ""
+        currentScope = nil
     }
     func clearPressedContentOrderingPickerView(){
         contentOrderingTextField.resignFirstResponder()
@@ -281,6 +302,33 @@ class myAssessmentsViewController: UIViewController, UISearchBarDelegate, UITabl
         initializePickerViewToolBar(clearButtonFunc: "clearPressedContentOrderingPickerView", doneButtonFunc: "donePressedContentOrderingPickerView", textField: contentOrderingTextField)
     }
     
+    func setupNoResultsLabel() {
+        
+        noResultsLabel = UILabel(frame: CGRect(x: bodyTableView.center.x - 50, y: bodyTableView.center.y - 10, width: 100, height: 20))
+        noResultsLabel.font = UIFont(name: "AvenirNext", size: 16)
+        noResultsLabel.text = "No Results"
+        noResultsLabel.textAlignment = .center
+        
+    }
+    
+    func setupSearchBar() {
+        if let textFieldInsideSearchBar = self.searchBar.value(forKey: "searchField") as? UITextField,
+            let glassIconView = textFieldInsideSearchBar.leftView as? UIImageView {
+            
+            //Magnifying glass
+            glassIconView.image = glassIconView.image?.withRenderingMode(UIImageRenderingMode.alwaysTemplate)
+            glassIconView.tintColor = UIColor.red
+            
+        }
+    }
+    
+    func setupHeaderViews() {
+        filterView.drawBorder(orientation: .Bottom, color: .black, thickness: 0.5)
+        
+        //create underline graphic for header text fields
+        contentSelectionTextField.underlined()
+        contentOrderingTextField.underlined()
+    }
     
     func initializePickerViewToolBar(clearButtonFunc: String, doneButtonFunc: String, textField: UITextField){
         
@@ -301,3 +349,10 @@ class myAssessmentsViewController: UIViewController, UISearchBarDelegate, UITabl
     }
 
 }
+
+
+
+
+
+
+
