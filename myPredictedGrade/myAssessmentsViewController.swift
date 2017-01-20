@@ -8,7 +8,7 @@
 
 import UIKit
 
-class myAssessmentsViewController: UIViewController, UISearchBarDelegate, UITableViewDelegate, UITableViewDataSource, UIPickerViewDelegate, UIPickerViewDataSource, UITextFieldDelegate {
+class myAssessmentsViewController: UIViewController, UISearchBarDelegate, UITableViewDelegate, UITableViewDataSource, UIPickerViewDelegate, UIPickerViewDataSource, UITextFieldDelegate, AssessmentDetailViewControllerDelegate {
     
     // MARK: - IBOutlets
     
@@ -46,7 +46,7 @@ class myAssessmentsViewController: UIViewController, UISearchBarDelegate, UITabl
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        //regist XIB for usage
+        //register XIB for usage
         bodyTableView.register(UINib(nibName: "AssessmentCell", bundle: Bundle.main), forCellReuseIdentifier: "AssessmentCell")
         
         //setup delegates
@@ -103,6 +103,72 @@ class myAssessmentsViewController: UIViewController, UISearchBarDelegate, UITabl
         // Dispose of any resources that can be recreated.
     }
     
+    // MARK: - Navigation
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        let controller = segue.destination as! UINavigationController
+        
+        if let viewController = controller.topViewController as? AssessmentDetailViewController {
+            viewController.delegate = self
+            
+            if segue.identifier == "EditAssessment" {
+                
+                if let cell = sender as? AssessmentCell {
+                    
+                    viewController.navigationItem.title = "Edit Assessment"
+                    
+                    let assessmentView = cell.recentAssessmentView
+                    
+                    //PREP FOR SUBJECT
+                    let subjectIsHL = assessmentView?.subjectLabel.text?.contains("HL")
+                    var subjectTitle = ""
+                    
+                    var subject: Subject?
+                    
+                    if subjectIsHL! { //if it is HL
+                        if let returnString = assessmentView?.subjectLabel.text?.replacingOccurrences(of: " HL", with: "") {
+                            subjectTitle = returnString
+                        }
+                    } else { //if it is SL
+                        if let returnString = assessmentView?.subjectLabel.text?.replacingOccurrences(of: " SL", with: "") {
+                            subjectTitle = returnString
+                        }
+                    }
+                    
+                    for (subj, _) in userSubjects {
+                        if subj.rawValue == subjectTitle {
+                            subject = subj
+                        }
+                    }
+                    
+                    //PREP FOR DATE
+                    let dateFormatter = DateFormatter()
+                    var date: Date?
+                    if let text = assessmentView?.dateLabel.text {
+                        date = dateFormatter.date(fromSpecific: text)
+                    }
+                    
+                    //PREP FOR MARKS
+                    var marks: [Int]?
+                    if let marksText: String = assessmentView?.marksLabel.text {
+                        var stringArr = marksText.components(separatedBy: " / ")
+                        if let marksAvailable = Int(stringArr[1]), let marksReceived = Int(stringArr[0]) {
+                            marks = [marksReceived, marksAvailable]
+                        }
+                    }
+                    
+                    if  assessmentView != nil || subject != nil || subjectIsHL != nil || date != nil || marks != nil {
+                        if let titleText = assessmentView?.asssessmentTitleLabel.text { //check for sufficient data for assessment
+                            viewController.assessmentToEdit = Assessment(assessmentTitle: titleText, subject: subject!, subjectIsHL: subjectIsHL!, date: date!, marksAvailable: marks![1], marksReceived: marks![0])
+                        }
+                    }
+                    
+                }
+                
+            }
+        }
+    }
+    
     // MARK: - UITableView Delegate Funcs
     
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -118,17 +184,45 @@ class myAssessmentsViewController: UIViewController, UISearchBarDelegate, UITabl
         
         let cell: AssessmentCell = tableView.dequeueReusableCell(withIdentifier: "AssessmentCell") as! AssessmentCell
         
+        cell.recentAssessmentView.infoButton.addTarget(self, action: #selector(segueAway(_:)), for: .touchUpInside)
+        cell.recentAssessmentView.infoButton.tag = indexPath.row
+        
         configureCell(cell: cell, assessment: sortedContentList[indexPath.row])
         
         return cell
         
     }
     
+    
+    func tableView(_ tableView: UITableView, accessoryButtonTappedForRowWith indexPath: IndexPath) {
+        performSegue(withIdentifier: "EditAssessment", sender: tableView.cellForRow(at: indexPath))
+    }
+    
+    func segueAway(_ sender: UIButton){
+        let cell = bodyTableView.cellForRow(at: IndexPath(row: sender.tag, section: 0))
+        performSegue(withIdentifier: "EditAssessment", sender: cell)
+    }
+    
+    
+    // MARK: - AssessmentDetailViewController Delegate Funcs
+    
+    func assessmentDetailViewControllerDidCancel(controller: AssessmentDetailViewController) {
+        controller.dismiss(animated: true, completion: nil)
+    }
+    
+    func assessmentDetailViewController(controller: AssessmentDetailViewController, didFinishAddingAssessment: Assessment) {
+        //
+    }
+    
+    func assessmentDetailViewController(controller: AssessmentDetailViewController, didFinishEditingAssessment: Assessment) {
+        //
+    }
+    
     // MARK: - UITableView Helper Funcs
     
     func configureCell(cell: AssessmentCell, assessment: Assessment){
         
-        cell.isUserInteractionEnabled = false
+        //cell.isUserInteractionEnabled = false
         
         let mainView = cell.recentAssessmentView
         mainView?.awakeFromNib()
@@ -140,6 +234,19 @@ class myAssessmentsViewController: UIViewController, UISearchBarDelegate, UITabl
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         updateContent()
+    }
+    
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        resignSearchResponder()
+    }
+    
+    func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(resignSearchResponder))
+        view.addGestureRecognizer(tapGesture)
+    }
+    
+    func resignSearchResponder() {
+        searchBar.resignFirstResponder()
     }
     
     //MARK: - UIPickerView Delegate Funcs
@@ -177,9 +284,30 @@ class myAssessmentsViewController: UIViewController, UISearchBarDelegate, UITabl
         if pickerView.tag == 1 { //Content selection pickerview
             
             contentSelectionTextField.text = contentSelectionOptions[row]
+            
+            for subject in userSubjects {
+                var hlString = ""
+                if subject.1 == true {
+                    hlString = " HL"
+                } else {
+                    hlString = " SL"
+                }
+                if subject.0.rawValue + hlString == contentSelectionTextField.text! {
+                    currentScope = subject.0
+                    updateContent()
+                    return
+                }
+            }
+            if contentSelectionTextField.text! == "All" {
+                currentScope = nil
+            }
+            //if the pickerview subject does not match any subjects
+            currentScope = nil
+            updateContent()
         } else if pickerView.tag == 2 { //Ordering pickerview
             contentOrderingTextField.text = contentOrderingOptions[row]
             
+            updateContent()
         }
         
     }
@@ -196,6 +324,8 @@ class myAssessmentsViewController: UIViewController, UISearchBarDelegate, UITabl
             }
             sortContent(content: content)
             
+        } else if contentSelectionTextField.text! != "All" {
+            sortContent(content: [])
         } else {
             sortContent(content: allAssessments)
         }
@@ -204,7 +334,11 @@ class myAssessmentsViewController: UIViewController, UISearchBarDelegate, UITabl
     
     func sortContent(content: [Assessment]) {
         
-        if searchBar.text == nil || searchBar.text == "" { //if no search
+        if content.isEmpty {
+            bodyTableView.addSubview(noResultsLabel)
+            sortedContentList.removeAll()
+            bodyTableView.reloadData()
+        } else if searchBar.text == nil || searchBar.text == "" { //if no search
             noResultsLabel.removeFromSuperview()
             sortByHeaderPreference(content: content)
         } else { //if search is in progress
@@ -298,14 +432,13 @@ class myAssessmentsViewController: UIViewController, UISearchBarDelegate, UITabl
         contentOrderingTextField.inputView = contentOrderingPickerView //set pickerView as responder
         contentOrderingTextField.delegate = self
         
-        initializePickerViewToolBar(clearButtonFunc: "clearPressedContentSelectionPickerView", doneButtonFunc: "donePressedContentSelectionPickerView", textField: contentSelectionTextField)
-        initializePickerViewToolBar(clearButtonFunc: "clearPressedContentOrderingPickerView", doneButtonFunc: "donePressedContentOrderingPickerView", textField: contentOrderingTextField)
+        initializePickerViewToolBar()
     }
     
     func setupNoResultsLabel() {
         
         noResultsLabel = UILabel(frame: CGRect(x: bodyTableView.center.x - 50, y: bodyTableView.center.y - 10, width: 100, height: 20))
-        noResultsLabel.font = UIFont(name: "AvenirNext", size: 16)
+        noResultsLabel.font = UIFont(name: "AvenirNext-UltraLight", size: 16)
         noResultsLabel.text = "No Results"
         noResultsLabel.textAlignment = .center
         
@@ -325,26 +458,31 @@ class myAssessmentsViewController: UIViewController, UISearchBarDelegate, UITabl
     func setupHeaderViews() {
         filterView.drawBorder(orientation: .Bottom, color: .black, thickness: 0.5)
         
+        
         //create underline graphic for header text fields
         contentSelectionTextField.underlined()
         contentOrderingTextField.underlined()
     }
     
-    func initializePickerViewToolBar(clearButtonFunc: String, doneButtonFunc: String, textField: UITextField){
+    func initializePickerViewToolBar(){
         
-        let toolBar = UIToolbar(frame: CGRect(x: 0, y: textField.frame.size.height/6, width:  textField.frame.size.width, height: 40.0))
-        toolBar.layer.position = CGPoint(x: textField.frame.size.width/2, y: textField.frame.size.height-20.0)
+        let toolBar = UIToolbar()
+        toolBar.sizeToFit()
         toolBar.barStyle = .default
-        toolBar.tintColor = UIColor.black
+        //toolBar.tintColor = UIColor.black
         
-        let clearButton = UIBarButtonItem(title: "Clear", style: .plain, target: self, action: Selector(clearButtonFunc))
-        let doneButton = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: Selector(doneButtonFunc))
+        let cancelButton = UIBarButtonItem(title: "Cancel", style: .plain, target: view, action: #selector(UIView.endEditing(_:)))
+        let doneButton = UIBarButtonItem(barButtonSystemItem: .done, target: view, action: #selector(UIView.endEditing(_:)))
         let flexSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil)
         
-        toolBar.setItems([clearButton,flexSpace,doneButton], animated: true)
+        cancelButton.tintColor = AppStatus.themeColor
+        doneButton.tintColor = AppStatus.themeColor
+        
+        toolBar.setItems([cancelButton,flexSpace,doneButton], animated: true)
         toolBar.isUserInteractionEnabled = true
         
-        textField.inputAccessoryView = toolBar
+        contentSelectionTextField.inputAccessoryView = toolBar
+        contentOrderingTextField.inputAccessoryView = toolBar
         
     }
 

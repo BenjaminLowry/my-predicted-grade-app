@@ -20,6 +20,8 @@ class RecentAssessmentView: UIView {
         @IBOutlet weak var subjectLabel: UILabel!
         @IBOutlet weak var dateLabel: UILabel!
     
+        @IBOutlet weak var infoButton: UIButton!
+    
     @IBOutlet weak var bodyView: UIView! //parent view of the following:
     
         @IBOutlet weak var marksLabel: UILabel! //format: "45 / 54"
@@ -62,12 +64,7 @@ class RecentAssessmentView: UIView {
         
         //converting date to appropriate format
         let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "EEE, dd MMM yyyy"
-        var string = dateFormatter.string(from: assessment.date)
-        string = string.insert(string: daySuffix(from: assessment.date), ind: 7)
-        if string[5] == "0" {
-            string.remove(at: string.characters.index(of: "0")!)
-        }
+        let string = dateFormatter.string(fromSpecific: assessment.date)
         
         dateLabel.text = string
         
@@ -105,18 +102,6 @@ class RecentAssessmentView: UIView {
         overallGradeLabel.text = String(assessment.overallGrade)
         
     }
-    
-    func daySuffix(from date: Date) -> String {
-        let calendar = Calendar.current
-        let dayOfMonth = calendar.component(.day, from: date)
-        switch dayOfMonth {
-        case 1, 21, 31: return "st"
-        case 2, 22: return "nd"
-        case 3, 23: return "rd"
-        default: return "th"
-        }
-    }
-    
     
 }
 

@@ -14,7 +14,7 @@ class Profile: NSObject, NSCoding {
     var username: String
     var password: String
     
-    var subjects: [Subject]
+    var subjects: [(Subject, Bool)]
     var colorPreferences: [Subject: UIColor]
     
     var assessments: [Assessment]
@@ -23,13 +23,13 @@ class Profile: NSObject, NSCoding {
         username = aDecoder.decodeObject(forKey: "Username") as! String
         password = aDecoder.decodeObject(forKey: "Password") as! String
         
-        subjects = aDecoder.decodeObject(forKey: "Subjects") as! [Subject]
+        subjects = aDecoder.decodeObject(forKey: "Subjects") as! [(Subject, Bool)]
         colorPreferences = aDecoder.decodeObject(forKey: "Color Preferences") as! [Subject: UIColor]
         
         assessments = aDecoder.decodeObject(forKey: "Assessments") as! [Assessment]
     }
     
-    init(username: String, password: String, subjects: [Subject], colorPreferences: [Subject: UIColor], assessments: [Assessment]) {
+    init(username: String, password: String, subjects: [(Subject, Bool)], colorPreferences: [Subject: UIColor], assessments: [Assessment]) {
         self.username = username
         self.password = password
         

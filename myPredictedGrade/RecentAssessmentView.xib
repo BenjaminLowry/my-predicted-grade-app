@@ -21,6 +21,7 @@
                 <outlet property="criterionDMarkLabel" destination="Hal-lN-Twg" id="M5s-ZR-HQh"/>
                 <outlet property="dateLabel" destination="f3u-RE-zZW" id="hb7-yY-RvT"/>
                 <outlet property="headerView" destination="rHr-ir-eJ6" id="WOI-cb-0sT"/>
+                <outlet property="infoButton" destination="4ld-wX-jHW" id="tNH-Ks-Scp"/>
                 <outlet property="mainView" destination="iN0-l3-epB" id="Tx4-4i-y2u"/>
                 <outlet property="markStackView" destination="qWw-Y2-XJY" id="str-Ue-Hlk"/>
                 <outlet property="marksLabel" destination="mKo-7k-1p3" id="VzO-Xq-kp5"/>
@@ -59,6 +60,13 @@
                             <nil key="textColor"/>
                             <nil key="highlightedColor"/>
                         </label>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="infoLight" reversesTitleShadowWhenHighlighted="YES" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4ld-wX-jHW">
+                            <rect key="frame" x="345" y="28" width="22" height="22"/>
+                            <color key="tintColor" red="0.13068404789999999" green="0.2321828604" blue="0.3089588284" alpha="0.97989198830000002" colorSpace="custom" customColorSpace="sRGB"/>
+                            <state key="highlighted">
+                                <color key="titleColor" red="0.76208978890000001" green="0.1025723144" blue="0.001206409303" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            </state>
+                        </button>
                     </subviews>
                     <color key="backgroundColor" red="0.34999999999999998" green="0.69999999999999996" blue="0.0" alpha="0.65000000000000002" colorSpace="calibratedRGB"/>
                     <constraints>
@@ -66,7 +74,9 @@
                         <constraint firstItem="f3u-RE-zZW" firstAttribute="top" secondItem="q8T-dI-1n8" secondAttribute="bottom" constant="8" id="CeU-Vh-RBi"/>
                         <constraint firstItem="f3u-RE-zZW" firstAttribute="top" secondItem="huc-I4-nlU" secondAttribute="top" id="OAK-ec-2YX"/>
                         <constraint firstItem="f3u-RE-zZW" firstAttribute="leading" secondItem="huc-I4-nlU" secondAttribute="trailing" constant="14.5" id="Qo8-1h-btT"/>
+                        <constraint firstItem="4ld-wX-jHW" firstAttribute="centerY" secondItem="rHr-ir-eJ6" secondAttribute="centerY" id="V7d-37-EWf"/>
                         <constraint firstAttribute="height" constant="79" id="cSZ-BC-Ehs"/>
+                        <constraint firstAttribute="trailing" secondItem="4ld-wX-jHW" secondAttribute="trailing" constant="8" id="e6w-gE-0lE"/>
                         <constraint firstItem="huc-I4-nlU" firstAttribute="leading" secondItem="q8T-dI-1n8" secondAttribute="leading" id="mLi-PI-nQA"/>
                         <constraint firstItem="q8T-dI-1n8" firstAttribute="leading" secondItem="rHr-ir-eJ6" secondAttribute="leading" constant="15" id="xjQ-Pf-1A8"/>
                         <constraint firstItem="q8T-dI-1n8" firstAttribute="top" secondItem="rHr-ir-eJ6" secondAttribute="top" constant="8" id="yTb-Ry-wy8"/>
@@ -237,7 +247,7 @@
                 <constraint firstItem="9RJ-Ik-sMr" firstAttribute="top" secondItem="rHr-ir-eJ6" secondAttribute="bottom" id="tKq-QU-0gS"/>
             </constraints>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
-            <point key="canvasLocation" x="-156.5" y="-16"/>
+            <point key="canvasLocation" x="-169" y="-24"/>
         </view>
     </objects>
 </document>

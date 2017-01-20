@@ -14,6 +14,7 @@
 		5F02F6DF1E1191710030F54E /* UIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F02F6DE1E1191710030F54E /* UIView.swift */; };
 		5F1BACA71E0D776800CFDD6D /* BorderedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F1BACA61E0D776800CFDD6D /* BorderedView.swift */; };
 		5F47083A1E1BBB540084BFA8 /* gradeBoundaries.json in Resources */ = {isa = PBXBuildFile; fileRef = 5F4708391E1BBB540084BFA8 /* gradeBoundaries.json */; };
+		5F5969731E2B51BD001EA42A /* Date.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F5969721E2B51BD001EA42A /* Date.swift */; };
 		5F6032E81E05E6150097639E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F6032E71E05E6150097639E /* AppDelegate.swift */; };
 		5F6032EF1E05E6150097639E /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5F6032ED1E05E6150097639E /* Main.storyboard */; };
 		5F6032F11E05E6150097639E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5F6032F01E05E6150097639E /* Assets.xcassets */; };
@@ -33,6 +34,9 @@
 		5F6142851E14DD1D004DC079 /* AssessmentCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5F6142831E14DD1D004DC079 /* AssessmentCell.xib */; };
 		5F63D3571E20C428005FB875 /* UISearchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F63D3561E20C428005FB875 /* UISearchBar.swift */; };
 		5F63D3591E213C4E005FB875 /* 43aspect.png in Resources */ = {isa = PBXBuildFile; fileRef = 5F63D3581E213C4E005FB875 /* 43aspect.png */; };
+		5F63D3791E225BBB005FB875 /* AssessmentDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F63D3781E225BBB005FB875 /* AssessmentDetailViewController.swift */; };
+		5F7D24DB1E30FC310091FD2C /* DateFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F7D24DA1E30FC310091FD2C /* DateFormatter.swift */; };
+		5F9680E21E266ED1001CF7B4 /* UINavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F9680E11E266ED1001CF7B4 /* UINavigationController.swift */; };
 		5FC1EF6C1E1FC90F00CF379A /* UITextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FC1EF6B1E1FC90F00CF379A /* UITextField.swift */; };
 		5FCC00991E17B90B005201C2 /* Profile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FCC00981E17B90B005201C2 /* Profile.swift */; };
 		5FCC009B1E17BC36005201C2 /* AppStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FCC009A1E17BC36005201C2 /* AppStatus.swift */; };
@@ -46,6 +50,7 @@
 		5F02F6DE1E1191710030F54E /* UIView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIView.swift; sourceTree = "<group>"; };
 		5F1BACA61E0D776800CFDD6D /* BorderedView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BorderedView.swift; sourceTree = "<group>"; };
 		5F4708391E1BBB540084BFA8 /* gradeBoundaries.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = gradeBoundaries.json; sourceTree = "<group>"; };
+		5F5969721E2B51BD001EA42A /* Date.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Date.swift; sourceTree = "<group>"; };
 		5F6032E41E05E6150097639E /* myPredictedGrade.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = myPredictedGrade.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5F6032E71E05E6150097639E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		5F6032EE1E05E6150097639E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -67,6 +72,9 @@
 		5F6142831E14DD1D004DC079 /* AssessmentCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AssessmentCell.xib; sourceTree = "<group>"; };
 		5F63D3561E20C428005FB875 /* UISearchBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UISearchBar.swift; sourceTree = "<group>"; };
 		5F63D3581E213C4E005FB875 /* 43aspect.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 43aspect.png; sourceTree = "<group>"; };
+		5F63D3781E225BBB005FB875 /* AssessmentDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AssessmentDetailViewController.swift; sourceTree = "<group>"; };
+		5F7D24DA1E30FC310091FD2C /* DateFormatter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DateFormatter.swift; sourceTree = "<group>"; };
+		5F9680E11E266ED1001CF7B4 /* UINavigationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UINavigationController.swift; sourceTree = "<group>"; };
 		5FC1EF6B1E1FC90F00CF379A /* UITextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UITextField.swift; sourceTree = "<group>"; };
 		5FCC00981E17B90B005201C2 /* Profile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Profile.swift; sourceTree = "<group>"; };
 		5FCC009A1E17BC36005201C2 /* AppStatus.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppStatus.swift; sourceTree = "<group>"; };
@@ -88,6 +96,7 @@
 			children = (
 				5F60330E1E05EC9E0097639E /* myHomeViewController.swift */,
 				5F6142781E12D781004DC079 /* myAssessmentsViewController.swift */,
+				5F63D3781E225BBB005FB875 /* AssessmentDetailViewController.swift */,
 			);
 			name = ViewControllers;
 			sourceTree = "<group>";
@@ -105,10 +114,13 @@
 		5F02F6DA1E117F770030F54E /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				5F7D24DA1E30FC310091FD2C /* DateFormatter.swift */,
 				5F02F6D61E1136B30030F54E /* String.swift */,
 				5F02F6DE1E1191710030F54E /* UIView.swift */,
 				5FC1EF6B1E1FC90F00CF379A /* UITextField.swift */,
 				5F63D3561E20C428005FB875 /* UISearchBar.swift */,
+				5F9680E11E266ED1001CF7B4 /* UINavigationController.swift */,
+				5F5969721E2B51BD001EA42A /* Date.swift */,
 			);
 			name = Extensions;
 			sourceTree = "<group>";
@@ -261,6 +273,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5F7D24DB1E30FC310091FD2C /* DateFormatter.swift in Sources */,
 				5F02F6DF1E1191710030F54E /* UIView.swift in Sources */,
 				5FCC00991E17B90B005201C2 /* Profile.swift in Sources */,
 				5F63D3571E20C428005FB875 /* UISearchBar.swift in Sources */,
@@ -268,7 +281,10 @@
 				5F02F6CD1E0DC5DE0030F54E /* RecentAssessmentView.swift in Sources */,
 				5F60330F1E05EC9E0097639E /* myHomeViewController.swift in Sources */,
 				5F02F6D71E1136B30030F54E /* String.swift in Sources */,
+				5F5969731E2B51BD001EA42A /* Date.swift in Sources */,
+				5F63D3791E225BBB005FB875 /* AssessmentDetailViewController.swift in Sources */,
 				5F6142791E12D781004DC079 /* myAssessmentsViewController.swift in Sources */,
+				5F9680E21E266ED1001CF7B4 /* UINavigationController.swift in Sources */,
 				5F61427B1E13DC3D004DC079 /* Subject.swift in Sources */,
 				5FC1EF6C1E1FC90F00CF379A /* UITextField.swift in Sources */,
 				5F1BACA71E0D776800CFDD6D /* BorderedView.swift in Sources */,
@@ -397,6 +413,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = QS5G68243B;
 				INFOPLIST_FILE = myPredictedGrade/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.weebly.allbenlowryscode.myPredictedGrade;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -410,6 +427,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = QS5G68243B;
 				INFOPLIST_FILE = myPredictedGrade/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.weebly.allbenlowryscode.myPredictedGrade;
 				PRODUCT_NAME = "$(TARGET_NAME)";

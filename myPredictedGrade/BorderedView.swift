@@ -38,6 +38,7 @@ class BorderedView: UIView {
         path.addLine(to: coordinates.1) //end
         border.path = path.cgPath
         border.strokeColor = color.cgColor
+        border.opacity = 1.0
         border.lineWidth = thickness
         border.fillColor = nil
         layer.addSublayer(border)

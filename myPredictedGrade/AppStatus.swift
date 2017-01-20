@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import UIKit
 
 /* 
  * NOTE:
@@ -16,4 +17,6 @@ import Foundation
 
 struct AppStatus {
     static var loggedInUser: Profile?
+    
+    static let themeColor = UIColor(red: 40/255, green: 73/255, blue: 98/255, alpha: 1.0)
 }
