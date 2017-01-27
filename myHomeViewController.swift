@@ -33,6 +33,9 @@ class myHomeViewController: UIViewController, UITableViewDelegate, UITableViewDa
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        //temporary
+        AppStatus.loggedInUser = Profile(username: "Benthos", password: "benjiman", subjects: [(Subject.Physics, true), (Subject.Chemistry, false)], colorPreferences: [Subject.Physics: AppStatus.validAssessmentColors[0], Subject.Chemistry: AppStatus.validAssessmentColors[1]], assessments: [])
+        
         //bodyTableView.register(UINib(nibName: "CustomAssessmentCell", bundle: Bundle.main), forCellReuseIdentifier: "CustomAssessmentCell")
         bodyTableView.register(UINib(nibName: "AssessmentCell", bundle: Bundle.main), forCellReuseIdentifier: "AssessmentCell")
         
@@ -95,9 +98,9 @@ class myHomeViewController: UIViewController, UITableViewDelegate, UITableViewDa
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        //let cell: CustomAssessmentCell = tableView.dequeueReusableCell(withIdentifier: "CustomAssessmentCell") as! CustomAssessmentCell //possible error thrown here
         let cell: AssessmentCell = tableView.dequeueReusableCell(withIdentifier: "AssessmentCell") as! AssessmentCell
-        //cell.mainCell.awakeFromNib()
+        cell.recentAssessmentView.infoButton.isHidden = true
+        cell.recentAssessmentView.infoButton.isUserInteractionEnabled = false
         
         let assessment = recentAssessments[indexPath.row]
         

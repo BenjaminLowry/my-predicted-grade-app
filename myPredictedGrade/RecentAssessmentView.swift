@@ -17,8 +17,7 @@ class RecentAssessmentView: UIView {
     @IBOutlet weak var headerView: UIView! //parent view of titleLabel, subjectLabel, and dateLabel
     
         @IBOutlet weak var asssessmentTitleLabel: UILabel!
-        @IBOutlet weak var subjectLabel: UILabel!
-        @IBOutlet weak var dateLabel: UILabel!
+        @IBOutlet weak var subjectDateLabel: UILabel!
     
         @IBOutlet weak var infoButton: UIButton!
     
@@ -44,7 +43,7 @@ class RecentAssessmentView: UIView {
     
         @IBOutlet weak var overallGradeTitleLabel: UILabel!
         @IBOutlet weak var overallGradeLabel: UILabel!
-    
+
     
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
@@ -52,6 +51,7 @@ class RecentAssessmentView: UIView {
         Bundle.main.loadNibNamed("RecentAssessmentView", owner: self, options: nil)
         mainView.layer.borderColor = UIColor.black.cgColor
         mainView.layer.borderWidth = 0.5
+        subjectDateLabel.adjustsFontSizeToFitWidth = true
         self.addSubview(self.mainView)
         
         
@@ -59,14 +59,38 @@ class RecentAssessmentView: UIView {
     
     func updateLabels(assessment: Assessment){
         
+        
+        //update colors
+        if let user = AppStatus.loggedInUser {
+            for subject in user.subjects {
+                if assessment.subject == subject {
+                    var color = user.colorPreferences[subject.0]
+                    color = color?.withAlphaComponent(0.30)
+                    headerView.backgroundColor = color
+                    color = color?.withAlphaComponent(0)
+                    bodyView.backgroundColor = color
+                    color = color?.withAlphaComponent(0.8)
+                    marksLabel.textColor = color
+                    percentageLabel.textColor = color
+                    overallGradeLabel.textColor = color
+                }
+            }
+        }
+        
         asssessmentTitleLabel.text = assessment.assessmentTitle
-        subjectLabel.text = assessment.subject.0.rawValue
+        let subjectText = assessment.subject.0.rawValue + (assessment.subject.1 ? " HL" : " SL")
         
         //converting date to appropriate format
         let dateFormatter = DateFormatter()
-        let string = dateFormatter.string(fromSpecific: assessment.date)
+        let dateString = dateFormatter.string(fromSpecific: assessment.date)
         
-        dateLabel.text = string
+        let labelString: NSString = NSString(string: subjectText + "  " + dateString) //combine the two for the label
+        let range = labelString.range(of: dateString)
+        
+        let attributedString = NSMutableAttributedString(string: labelString as String, attributes: [NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 17)!])
+        attributedString.setAttributes([NSFontAttributeName: UIFont(name: "Avenir Next", size: 17)! ], range: range)
+        
+        subjectDateLabel.attributedText = attributedString
         
         marksLabel.text = "\(assessment.marksReceived) / \(assessment.marksAvailable)"
         

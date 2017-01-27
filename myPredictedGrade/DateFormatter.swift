@@ -11,7 +11,7 @@ import Foundation
 extension DateFormatter {
     
     func date(fromSpecific inputString: String) -> Date {
-        let stringsToDelete = ["th", "nd", "rd"]
+        let stringsToDelete = ["th", "st", "nd", "rd"]
         var dateString = inputString
         for string in stringsToDelete {
             dateString = dateString.replacingOccurrences(of: string, with: "")

@@ -8,15 +8,19 @@
 
 import UIKit
 
+// MARK: - Delegate Protocol
+
 //protocol to allow myAssessmentsViewController to control this class
 protocol AssessmentDetailViewControllerDelegate: class {
     func assessmentDetailViewControllerDidCancel(controller: AssessmentDetailViewController)
-    func assessmentDetailViewController(controller: AssessmentDetailViewController, didFinishAddingAssessment: Assessment)
-    func assessmentDetailViewController(controller: AssessmentDetailViewController, didFinishEditingAssessment: Assessment)
+    func assessmentDetailViewController(controller: AssessmentDetailViewController, didFinishAddingAssessment assessment: Assessment)
+    func assessmentDetailViewController(controller: AssessmentDetailViewController, didFinishEditingAssessment assessment: Assessment)
 }
 
 class AssessmentDetailViewController: UITableViewController, UITextFieldDelegate, UIPickerViewDelegate, UIPickerViewDataSource {
 
+    // MARK: - IBOutlets
+    
     @IBOutlet weak var assessmentTitleTextField: UITextField!
     @IBOutlet weak var subjectTextField: UITextField!
     @IBOutlet weak var dateTextField: UITextField!
@@ -26,20 +30,26 @@ class AssessmentDetailViewController: UITableViewController, UITextFieldDelegate
     
     @IBOutlet var bodyTableView: UITableView!
     
-    var subjectPickerViewData: [String] = [String]()
+    // MARK: - Instance Variables
+    
+    var subjectPickerViewData: [(Subject, Bool)] = [(Subject, Bool)]()
     var subjectPickerView: UIPickerView = UIPickerView()
     
     var datePicker = UIDatePicker()
     
     var assessmentToEdit: Assessment?
+    var indexOfAssessment: Int?
     
     var delegate: AssessmentDetailViewControllerDelegate?
+    
+    // MARK: - Inherited Funcs
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         if let assessment = assessmentToEdit {
             prepareLabelsForEditing(assessment: assessment)
+            self.navigationItem.title = "Edit Assessment"
         }
         
         marksAvailableTextField.keyboardType = UIKeyboardType.numberPad
@@ -67,15 +77,11 @@ class AssessmentDetailViewController: UITableViewController, UITextFieldDelegate
         AppStatus.loggedInUser = profile
         
         //load pickerview data
-        subjectPickerViewData = [String]() //clear array (necessary??)
+        subjectPickerViewData = [(Subject, Bool)]() //clear array (necessary??)
         if let user = AppStatus.loggedInUser {
             let subjects = user.subjects
             for subject in subjects {
-                var hlString = " HL"
-                if subject.1 == false {
-                    hlString = " SL"
-                }
-                subjectPickerViewData.append(subject.0.rawValue + hlString)
+                subjectPickerViewData.append(subject)
             }
         }
         
@@ -86,18 +92,47 @@ class AssessmentDetailViewController: UITableViewController, UITextFieldDelegate
         
         // Do any additional setup after loading the view.
     }
-    @IBAction func cancelButtonPressed(_ sender: UIBarButtonItem) {
-        delegate?.assessmentDetailViewControllerDidCancel(controller: self)
-    }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 50 //ubiquitous among cells
     }
+    
+    // MARK: - IBActions
+    
+    @IBAction func cancelButtonPressed(_ sender: UIBarButtonItem) {
+        delegate?.assessmentDetailViewControllerDidCancel(controller: self)
+    }
+    @IBAction func doneButtonPressed(_ sender: UIBarButtonItem) {
+        if let marksAvailableText = marksAvailableTextField.text, let marksReceivedText = marksAvailableTextField.text, let assessmentTitle = assessmentTitleTextField.text, let dateText = dateTextField.text, let subjectText = subjectTextField.text {
+            
+            guard let marksAvailable = Int(marksAvailableText), let marksReceived = Int(marksReceivedText) else {
+                print("Input not a number") //add error here
+                return
+            }
+            
+            if marksAvailable != 0 {
+                updateAssessment()
+                
+                if let assessment = assessmentToEdit {
+                    delegate?.assessmentDetailViewController(controller: self, didFinishEditingAssessment: assessment)
+                } else {
+                    let dateFormatter = DateFormatter()
+                    let date = dateFormatter.date(fromSpecific: dateText)
+                    
+                    if let subject = subjectValue(forString: subjectText) {
+                        let assessment = Assessment(assessmentTitle: assessmentTitle, subject: subject.0, subjectIsHL: subject.1, date: date, marksAvailable: marksAvailable, marksReceived: marksReceived)
+                        delegate?.assessmentDetailViewController(controller: self, didFinishAddingAssessment: assessment)
+                    }
+                    
+                }
+            } else {
+                print("Marks available cannot be zero") //add error here
+            }
+            
+        }
+    }
+    
+    // MARK: - UITextField Delegate Funcs
     
     func textFieldDidBeginEditing(_ textField: UITextField) {
         let tap = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboards))
@@ -105,9 +140,27 @@ class AssessmentDetailViewController: UITableViewController, UITextFieldDelegate
         if textField.accessibilityIdentifier == "DateTextField" {
             handleDatePicker(datePicker)
         } else if textField.accessibilityIdentifier == "SubjectTextField" {
-            textField.text = subjectPickerViewData[0]
+            if let assessment = assessmentToEdit {
+                guard let user = AppStatus.loggedInUser else {
+                    print("error")
+                    return
+                }
+                for subject in user.subjects {
+                    if assessment.subject.0.rawValue == subject.0.rawValue {
+                        if let row = subjectPickerViewData.index(where: {$0 == subject}) {
+                            textField.text = subjectString(forSubjectAtRow: row)
+                        }
+                    } else {
+                        textField.text = subjectString(forSubjectAtRow: 0)
+                    }
+                }
+            } else {
+                textField.text = subjectString(forSubjectAtRow: 0)
+            }
         }
     }
+    
+    // MARK: - UIPickerView Delegate Funcs
     
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
         return 1
@@ -118,37 +171,58 @@ class AssessmentDetailViewController: UITableViewController, UITextFieldDelegate
     }
     
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-        return subjectPickerViewData[row]
+        return subjectString(forSubjectAtRow: row)
     }
     
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-        subjectTextField.text = subjectPickerViewData[row]
+        subjectTextField.text = subjectString(forSubjectAtRow: row)
     }
     
     func pickerView(_ pickerView: UIPickerView, viewForRow row: Int, forComponent component: Int, reusing view: UIView?) -> UIView {
         if let label = view as? UILabel {
-            label.text = subjectPickerViewData[row]
+            label.text = subjectString(forSubjectAtRow: row)
             return label
         } else {
             let label = UILabel()
             label.font = UIFont(name: "AvenirNext", size: 20)
             label.adjustsFontSizeToFitWidth = true
             label.textAlignment = .center
-            label.text = subjectPickerViewData[row]
+            label.text = subjectString(forSubjectAtRow: row)
             return label
         }
     }
     
-    func prepareLabelsForEditing(assessment: Assessment) {
-        assessmentTitleTextField.text = assessment.assessmentTitle
-        subjectTextField.text = assessment.subject.0.rawValue
+    // MARK: - Date Creation Funcs
+    
+    func updateAssessment(){
+        print(dateTextField.text!)
         
+        guard let assessmentTitle = assessmentTitleTextField.text, let subjectString = subjectTextField.text, let dateText = dateTextField.text, let marksAvailable = Int(marksAvailableTextField.text!), let marksReceived = Int(marksReceivedTextField.text!) else {
+            print("error")
+            return
+        }/*
+        guard let dateText = dateTextField.text else {
+            print("error")
+            return
+        }*/
+        print(dateText)
+        
+        guard let subject = subjectValue(forString: subjectString) else {
+            print("error")
+            return
+        }
         let dateFormatter = DateFormatter()
-        dateTextField.text = dateFormatter.string(fromSpecific: assessment.date)
+        let date = dateFormatter.date(fromSpecific: dateText)
         
-        marksAvailableTextField.text = String(assessment.marksAvailable)
-        marksReceivedTextField.text = String(assessment.marksReceived)
+        assessmentToEdit?.assessmentTitle = assessmentTitle
+        assessmentToEdit?.subject = subject
+        assessmentToEdit?.date = date
+        assessmentToEdit?.marksAvailable = marksAvailable
+        assessmentToEdit?.marksReceived = marksReceived
+        
     }
+    
+    // MARK: - UITextField Helper Funcs
     
     func dismissKeyboards() {
         assessmentTitleTextField.resignFirstResponder()
@@ -159,26 +233,32 @@ class AssessmentDetailViewController: UITableViewController, UITextFieldDelegate
         marksReceivedTextField.resignFirstResponder()
     }
     
-    func addResponderButtons() {
-        let keyboardToolbar = UIToolbar()
-        keyboardToolbar.sizeToFit()
-        let flexBarButton = UIBarButtonItem(barButtonSystemItem: .flexibleSpace,
-                                            target: nil, action: nil)
-        let doneBarButton = UIBarButtonItem(barButtonSystemItem: .done,
-                                            target: view, action: #selector(UIView.endEditing(_:)))
-        let cancelBarButton = UIBarButtonItem(title: "Cancel", style: .plain, target: view, action: #selector(UIView.endEditing(_:)))
-            
-        doneBarButton.tintColor = AppStatus.themeColor
-        cancelBarButton.tintColor = AppStatus.themeColor
-        keyboardToolbar.items = [cancelBarButton, flexBarButton, doneBarButton]
-        marksAvailableTextField.inputAccessoryView = keyboardToolbar
-        marksReceivedTextField.inputAccessoryView = keyboardToolbar
-        
-        subjectTextField.inputAccessoryView = keyboardToolbar
-        
-        
-        assessmentTitleTextField.inputAccessoryView = keyboardToolbar
+    // MARK: - Subject Helper Funcs
+    
+    func subjectSuffix(subject: (Subject, Bool)) -> String {
+        var hlString = " HL"
+        if subject.1 == false {
+            hlString = " SL"
+        }
+        return hlString
     }
+    
+    func subjectString(forSubjectAtRow row: Int) -> String {
+        return subjectPickerViewData[row].0.rawValue + subjectSuffix(subject: subjectPickerViewData[row])
+    }
+    
+    func subjectValue(forString string: String) -> (Subject, Bool)? {
+        if let user = AppStatus.loggedInUser {
+            for subject in user.subjects {
+                if subject.0.rawValue + subjectSuffix(subject: subject) == string {
+                    return subject
+                }
+            }
+        }
+        return nil
+    }
+    
+    // MARK: - DatePicker Helper Funcs
     
     func handleDatePicker(_ sender: UIDatePicker){
         //converting date to appropriate format
@@ -205,6 +285,40 @@ class AssessmentDetailViewController: UITableViewController, UITextFieldDelegate
         datePicker.addTarget(self, action: #selector(handleDatePicker(_:)), for: .valueChanged)
     }
     
+    // MARK: - UI Setup
+    
+    func prepareLabelsForEditing(assessment: Assessment) {
+        assessmentTitleTextField.text = assessment.assessmentTitle
+        subjectTextField.text = assessment.subject.0.rawValue + (assessment.subject.1 ? " HL" : " SL")
+        
+        let dateFormatter = DateFormatter()
+        dateTextField.text = dateFormatter.string(fromSpecific: assessment.date)
+        
+        marksAvailableTextField.text = String(assessment.marksAvailable)
+        marksReceivedTextField.text = String(assessment.marksReceived)
+    }
+    
+    func addResponderButtons() {
+        let keyboardToolbar = UIToolbar()
+        keyboardToolbar.sizeToFit()
+        let flexBarButton = UIBarButtonItem(barButtonSystemItem: .flexibleSpace,
+                                            target: nil, action: nil)
+        let doneBarButton = UIBarButtonItem(barButtonSystemItem: .done,
+                                            target: view, action: #selector(UIView.endEditing(_:)))
+        let cancelBarButton = UIBarButtonItem(title: "Cancel", style: .plain, target: view, action: #selector(UIView.endEditing(_:)))
+            
+        doneBarButton.tintColor = AppStatus.themeColor
+        cancelBarButton.tintColor = AppStatus.themeColor
+        keyboardToolbar.items = [cancelBarButton, flexBarButton, doneBarButton]
+        marksAvailableTextField.inputAccessoryView = keyboardToolbar
+        marksReceivedTextField.inputAccessoryView = keyboardToolbar
+        
+        subjectTextField.inputAccessoryView = keyboardToolbar
+        
+        
+        assessmentTitleTextField.inputAccessoryView = keyboardToolbar
+    }
+    
     func setupDateTextField() {
         //converting date to appropriate format
         let dateFormatter = DateFormatter()
@@ -213,14 +327,5 @@ class AssessmentDetailViewController: UITableViewController, UITextFieldDelegate
         dateTextField.placeholder = string
     }
     
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
 
 }

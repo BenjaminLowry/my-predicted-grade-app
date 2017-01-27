@@ -92,6 +92,7 @@ class myAssessmentsViewController: UIViewController, UISearchBarDelegate, UITabl
         
         
         //set the list to "Most Recent" initially
+        
         sortedContentList = allAssessments.sorted { $0.date > $1.date }
         bodyTableView.reloadSections(NSIndexSet(index: 0) as IndexSet, with: UITableViewRowAnimation.automatic)
         
@@ -115,8 +116,12 @@ class myAssessmentsViewController: UIViewController, UISearchBarDelegate, UITabl
                 
                 if let cell = sender as? AssessmentCell {
                     
-                    viewController.navigationItem.title = "Edit Assessment"
+                    let index = bodyTableView.indexPath(for: cell)
                     
+                    //set the assessment to edit as the sorted content list since sorted content list will always be the data source
+                    let assessment = sortedContentList[index!.row]
+                    viewController.assessmentToEdit = assessment
+                    /*
                     let assessmentView = cell.recentAssessmentView
                     
                     //PREP FOR SUBJECT
@@ -159,9 +164,15 @@ class myAssessmentsViewController: UIViewController, UISearchBarDelegate, UITabl
                     
                     if  assessmentView != nil || subject != nil || subjectIsHL != nil || date != nil || marks != nil {
                         if let titleText = assessmentView?.asssessmentTitleLabel.text { //check for sufficient data for assessment
-                            viewController.assessmentToEdit = Assessment(assessmentTitle: titleText, subject: subject!, subjectIsHL: subjectIsHL!, date: date!, marksAvailable: marks![1], marksReceived: marks![0])
+                            let assessment = Assessment(assessmentTitle: titleText, subject: subject!, subjectIsHL: subjectIsHL!, date: date!, marksAvailable: marks![1], marksReceived: marks![0])
+                            let index = allAssessments.index(of: assessment)!
+                            
+                            viewController.assessmentToEdit = assessment
+                            viewController.indexOfAssessment = index
+                            
+                            allAssessments.remove(at: index)
                         }
-                    }
+                    }*/
                     
                 }
                 
@@ -211,11 +222,24 @@ class myAssessmentsViewController: UIViewController, UISearchBarDelegate, UITabl
     }
     
     func assessmentDetailViewController(controller: AssessmentDetailViewController, didFinishAddingAssessment: Assessment) {
-        //
+        
     }
     
-    func assessmentDetailViewController(controller: AssessmentDetailViewController, didFinishEditingAssessment: Assessment) {
-        //
+    func assessmentDetailViewController(controller: AssessmentDetailViewController, didFinishEditingAssessment assessment: Assessment) {
+        if let index = allAssessments.index(of: assessment) {
+            allAssessments[index] = assessment //update the assessment
+            let indexPath = IndexPath(row: index, section: 0)
+            
+            if let cell = tableView(bodyTableView, cellForRowAt: indexPath) as? AssessmentCell {
+                configureCell(cell: cell, assessment: assessment) //update the labels
+                currentScope = nil
+                updateContent()
+                bodyTableView.reloadData()
+            }
+            
+        }
+        
+        controller.dismiss(animated: true, completion: nil)
     }
     
     // MARK: - UITableView Helper Funcs
@@ -316,7 +340,7 @@ class myAssessmentsViewController: UIViewController, UISearchBarDelegate, UITabl
     
     func updateContent() {
         
-        if let scope = currentScope {
+        if let scope = currentScope { //if there is content selection
             let content = allAssessments.filter { assessment in {
                 return assessment.subject.0 == scope
                 }()

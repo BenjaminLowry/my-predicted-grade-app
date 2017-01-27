@@ -20,23 +20,15 @@
 		5F6032F11E05E6150097639E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5F6032F01E05E6150097639E /* Assets.xcassets */; };
 		5F6032F41E05E6150097639E /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5F6032F21E05E6150097639E /* LaunchScreen.storyboard */; };
 		5F60330F1E05EC9E0097639E /* myHomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F60330E1E05EC9E0097639E /* myHomeViewController.swift */; };
-		5F6033151E0739A30097639E /* home_0a60ff_30.png in Resources */ = {isa = PBXBuildFile; fileRef = 5F6033141E0739A30097639E /* home_0a60ff_30.png */; };
-		5F6033171E073AD30097639E /* home_0a60ff_30@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5F6033161E073AD30097639E /* home_0a60ff_30@2x.png */; };
-		5F6033221E073E300097639E /* combo-chart_0a60ff_30.png in Resources */ = {isa = PBXBuildFile; fileRef = 5F6033201E073E300097639E /* combo-chart_0a60ff_30.png */; };
-		5F6033231E073E300097639E /* combo-chart_0a60ff_30@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5F6033211E073E300097639E /* combo-chart_0a60ff_30@2x.png */; };
-		5F6033261E073E710097639E /* settings_0a60ff_30.png in Resources */ = {isa = PBXBuildFile; fileRef = 5F6033241E073E710097639E /* settings_0a60ff_30.png */; };
-		5F6033271E073E710097639E /* settings_0a60ff_30@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5F6033251E073E710097639E /* settings_0a60ff_30@2x.png */; };
-		5F60332A1E073EC10097639E /* document_0a60ff_30.png in Resources */ = {isa = PBXBuildFile; fileRef = 5F6033281E073EC10097639E /* document_0a60ff_30.png */; };
-		5F60332B1E073EC10097639E /* document_0a60ff_30@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5F6033291E073EC10097639E /* document_0a60ff_30@2x.png */; };
 		5F6142791E12D781004DC079 /* myAssessmentsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F6142781E12D781004DC079 /* myAssessmentsViewController.swift */; };
 		5F61427B1E13DC3D004DC079 /* Subject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F61427A1E13DC3D004DC079 /* Subject.swift */; };
 		5F6142841E14DD1D004DC079 /* AssessmentCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F6142821E14DD1D004DC079 /* AssessmentCell.swift */; };
 		5F6142851E14DD1D004DC079 /* AssessmentCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5F6142831E14DD1D004DC079 /* AssessmentCell.xib */; };
 		5F63D3571E20C428005FB875 /* UISearchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F63D3561E20C428005FB875 /* UISearchBar.swift */; };
-		5F63D3591E213C4E005FB875 /* 43aspect.png in Resources */ = {isa = PBXBuildFile; fileRef = 5F63D3581E213C4E005FB875 /* 43aspect.png */; };
 		5F63D3791E225BBB005FB875 /* AssessmentDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F63D3781E225BBB005FB875 /* AssessmentDetailViewController.swift */; };
 		5F7D24DB1E30FC310091FD2C /* DateFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F7D24DA1E30FC310091FD2C /* DateFormatter.swift */; };
 		5F9680E21E266ED1001CF7B4 /* UINavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F9680E11E266ED1001CF7B4 /* UINavigationController.swift */; };
+		5FBC4BBD1E38E63D004E64A6 /* myTrendsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FBC4BBC1E38E63D004E64A6 /* myTrendsViewController.swift */; };
 		5FC1EF6C1E1FC90F00CF379A /* UITextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FC1EF6B1E1FC90F00CF379A /* UITextField.swift */; };
 		5FCC00991E17B90B005201C2 /* Profile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FCC00981E17B90B005201C2 /* Profile.swift */; };
 		5FCC009B1E17BC36005201C2 /* AppStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FCC009A1E17BC36005201C2 /* AppStatus.swift */; };
@@ -58,23 +50,15 @@
 		5F6032F31E05E6150097639E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		5F6032F51E05E6150097639E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		5F60330E1E05EC9E0097639E /* myHomeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = myHomeViewController.swift; path = ../myHomeViewController.swift; sourceTree = "<group>"; };
-		5F6033141E0739A30097639E /* home_0a60ff_30.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = home_0a60ff_30.png; sourceTree = "<group>"; };
-		5F6033161E073AD30097639E /* home_0a60ff_30@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "home_0a60ff_30@2x.png"; sourceTree = "<group>"; };
-		5F6033201E073E300097639E /* combo-chart_0a60ff_30.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "combo-chart_0a60ff_30.png"; sourceTree = "<group>"; };
-		5F6033211E073E300097639E /* combo-chart_0a60ff_30@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "combo-chart_0a60ff_30@2x.png"; sourceTree = "<group>"; };
-		5F6033241E073E710097639E /* settings_0a60ff_30.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = settings_0a60ff_30.png; sourceTree = "<group>"; };
-		5F6033251E073E710097639E /* settings_0a60ff_30@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "settings_0a60ff_30@2x.png"; sourceTree = "<group>"; };
-		5F6033281E073EC10097639E /* document_0a60ff_30.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = document_0a60ff_30.png; sourceTree = "<group>"; };
-		5F6033291E073EC10097639E /* document_0a60ff_30@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "document_0a60ff_30@2x.png"; sourceTree = "<group>"; };
 		5F6142781E12D781004DC079 /* myAssessmentsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = myAssessmentsViewController.swift; sourceTree = "<group>"; };
 		5F61427A1E13DC3D004DC079 /* Subject.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Subject.swift; sourceTree = "<group>"; };
 		5F6142821E14DD1D004DC079 /* AssessmentCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AssessmentCell.swift; sourceTree = "<group>"; };
 		5F6142831E14DD1D004DC079 /* AssessmentCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AssessmentCell.xib; sourceTree = "<group>"; };
 		5F63D3561E20C428005FB875 /* UISearchBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UISearchBar.swift; sourceTree = "<group>"; };
-		5F63D3581E213C4E005FB875 /* 43aspect.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 43aspect.png; sourceTree = "<group>"; };
 		5F63D3781E225BBB005FB875 /* AssessmentDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AssessmentDetailViewController.swift; sourceTree = "<group>"; };
 		5F7D24DA1E30FC310091FD2C /* DateFormatter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DateFormatter.swift; sourceTree = "<group>"; };
 		5F9680E11E266ED1001CF7B4 /* UINavigationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UINavigationController.swift; sourceTree = "<group>"; };
+		5FBC4BBC1E38E63D004E64A6 /* myTrendsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = myTrendsViewController.swift; path = ../myTrendsViewController.swift; sourceTree = "<group>"; };
 		5FC1EF6B1E1FC90F00CF379A /* UITextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UITextField.swift; sourceTree = "<group>"; };
 		5FCC00981E17B90B005201C2 /* Profile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Profile.swift; sourceTree = "<group>"; };
 		5FCC009A1E17BC36005201C2 /* AppStatus.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppStatus.swift; sourceTree = "<group>"; };
@@ -96,6 +80,7 @@
 			children = (
 				5F60330E1E05EC9E0097639E /* myHomeViewController.swift */,
 				5F6142781E12D781004DC079 /* myAssessmentsViewController.swift */,
+				5FBC4BBC1E38E63D004E64A6 /* myTrendsViewController.swift */,
 				5F63D3781E225BBB005FB875 /* AssessmentDetailViewController.swift */,
 			);
 			name = ViewControllers;
@@ -128,11 +113,11 @@
 		5F02F6DB1E117FA20030F54E /* CustomObjects */ = {
 			isa = PBXGroup;
 			children = (
+				5F02F6CC1E0DC5DE0030F54E /* RecentAssessmentView.swift */,
 				5F1BACA61E0D776800CFDD6D /* BorderedView.swift */,
 				5F6142821E14DD1D004DC079 /* AssessmentCell.swift */,
 				5F6142831E14DD1D004DC079 /* AssessmentCell.xib */,
 				5F02F6CE1E0DCC4A0030F54E /* RecentAssessmentView.xib */,
-				5F02F6CC1E0DC5DE0030F54E /* RecentAssessmentView.swift */,
 			);
 			name = CustomObjects;
 			sourceTree = "<group>";
@@ -175,15 +160,6 @@
 		5F6032FD1E05EB480097639E /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				5F6033141E0739A30097639E /* home_0a60ff_30.png */,
-				5F6033161E073AD30097639E /* home_0a60ff_30@2x.png */,
-				5F6033201E073E300097639E /* combo-chart_0a60ff_30.png */,
-				5F6033211E073E300097639E /* combo-chart_0a60ff_30@2x.png */,
-				5F6033241E073E710097639E /* settings_0a60ff_30.png */,
-				5F6033251E073E710097639E /* settings_0a60ff_30@2x.png */,
-				5F6033281E073EC10097639E /* document_0a60ff_30.png */,
-				5F6033291E073EC10097639E /* document_0a60ff_30@2x.png */,
-				5F63D3581E213C4E005FB875 /* 43aspect.png */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -248,20 +224,11 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5F60332A1E073EC10097639E /* document_0a60ff_30.png in Resources */,
 				5F6032F41E05E6150097639E /* LaunchScreen.storyboard in Resources */,
-				5F6033171E073AD30097639E /* home_0a60ff_30@2x.png in Resources */,
 				5F02F6CF1E0DCC4A0030F54E /* RecentAssessmentView.xib in Resources */,
-				5F60332B1E073EC10097639E /* document_0a60ff_30@2x.png in Resources */,
 				5F6032F11E05E6150097639E /* Assets.xcassets in Resources */,
-				5F63D3591E213C4E005FB875 /* 43aspect.png in Resources */,
 				5F47083A1E1BBB540084BFA8 /* gradeBoundaries.json in Resources */,
-				5F6033151E0739A30097639E /* home_0a60ff_30.png in Resources */,
-				5F6033271E073E710097639E /* settings_0a60ff_30@2x.png in Resources */,
-				5F6033231E073E300097639E /* combo-chart_0a60ff_30@2x.png in Resources */,
-				5F6033221E073E300097639E /* combo-chart_0a60ff_30.png in Resources */,
 				5F6142851E14DD1D004DC079 /* AssessmentCell.xib in Resources */,
-				5F6033261E073E710097639E /* settings_0a60ff_30.png in Resources */,
 				5F6032EF1E05E6150097639E /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -280,6 +247,7 @@
 				5F6032E81E05E6150097639E /* AppDelegate.swift in Sources */,
 				5F02F6CD1E0DC5DE0030F54E /* RecentAssessmentView.swift in Sources */,
 				5F60330F1E05EC9E0097639E /* myHomeViewController.swift in Sources */,
+				5FBC4BBD1E38E63D004E64A6 /* myTrendsViewController.swift in Sources */,
 				5F02F6D71E1136B30030F54E /* String.swift in Sources */,
 				5F5969731E2B51BD001EA42A /* Date.swift in Sources */,
 				5F63D3791E225BBB005FB875 /* AssessmentDetailViewController.swift in Sources */,
@@ -415,7 +383,7 @@
 				INFOPLIST_FILE = myPredictedGrade/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.weebly.allbenlowryscode.myPredictedGrade;
+				PRODUCT_BUNDLE_IDENTIFIER = com.benlowryscode.mypredictedgrade;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 3.0;
 			};
@@ -429,7 +397,7 @@
 				INFOPLIST_FILE = myPredictedGrade/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.weebly.allbenlowryscode.myPredictedGrade;
+				PRODUCT_BUNDLE_IDENTIFIER = com.benlowryscode.mypredictedgrade;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 3.0;
 			};
