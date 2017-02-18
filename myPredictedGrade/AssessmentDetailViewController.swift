@@ -73,7 +73,7 @@ class AssessmentDetailViewController: UITableViewController, UITextFieldDelegate
         addResponderButtons()
         
         //temporary setup
-        let profile = Profile(username: "Benthos", password: "benjiman", subjects: [(Subject.Biology, false), (Subject.ComputerScience, true), (Subject.Physics, true), (Subject.EnvironmentalSystemsandSocities, false), (Subject.InformationTechonologyinaGlobalSociety, true)], colorPreferences: [Subject.Biology: .black], assessments: [])
+        let profile = Profile(username: "Benthos", password: "benjiman", yearLevel: YearLevel.year12, subjects: [(Subject.Biology, false), (Subject.ComputerScience, true), (Subject.Physics, true), (Subject.EnvironmentalSystemsandSocities, false), (Subject.InformationTechonologyinaGlobalSociety, true)], colorPreferences: [Subject.Biology: .black], assessments: [])
         AppStatus.loggedInUser = profile
         
         //load pickerview data

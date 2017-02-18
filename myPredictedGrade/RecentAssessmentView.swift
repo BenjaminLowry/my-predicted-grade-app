@@ -122,8 +122,7 @@ class RecentAssessmentView: UIView {
             criterionDMarkLabel.text = "~"
         }
         
-        assessment.calculateOverallGrade()
-        overallGradeLabel.text = String(assessment.overallGrade)
+        overallGradeLabel.text = String(assessment.getOverallGrade())
         
     }
     

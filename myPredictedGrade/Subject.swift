@@ -81,6 +81,43 @@ enum Subject: String {
             return 6
         }
         
+    }
+    
+    var shortName: String {
+        switch self {
+        case .EnglishALit:
+            return "Eng A Lit"
+        case .EnglishALangLit:
+            return "Eng A LangLit"
+        case .ChineseALit:
+            return "Chin A Lit"
+        case .ChineseALangLit:
+            return "Chin A LangLit"
+        case .SpanishAb:
+            return "Spanish Ab"
+        case .ChineseAb:
+            return "Chinese Ab"
+        case .FrenchAb:
+            return "French Ab"
+        case .GermanAb:
+            return "German Ab"
+        case .InformationTechonologyinaGlobalSociety:
+            return "ITGS"
+        case .SocialandCulturalAnthropology:
+            return "S&CA"
+        case .EnvironmentalSystemsandSocities:
+            return "ESS"
+        case .SportsExcerciseandHealthScience:
+            return "SE&HS"
+        case .MathematicsStudies:
+            return "Math Studies"
+        case .Mathematics:
+            return "Math"
+        case .FurtherMathematics:
+            return "Fur. Math"
+        default:
+            return ""
+        }
         
     }
     

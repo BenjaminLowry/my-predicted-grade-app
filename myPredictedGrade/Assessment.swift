@@ -19,7 +19,7 @@ class Assessment: NSObject, NSCoding {
     
     var percentageMarksObtained: Double
     
-    var overallGrade: Int = 0
+    fileprivate var overallGrade: Int = 0
     
     var criteriaA: Int?
     var criteriaB: Int?
@@ -52,6 +52,10 @@ class Assessment: NSObject, NSCoding {
         self.criteriaB = criteriaB
         self.criteriaC = criteriaC
         self.criteriaD = criteriaD
+        
+        super.init()
+        
+        overallGrade = getOverallGrade()
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -81,7 +85,7 @@ class Assessment: NSObject, NSCoding {
         
     }
     
-    func calculateOverallGrade() {
+    func getOverallGrade() -> Int {
         
         let percent: Int = lround(self.percentageMarksObtained)
         
@@ -91,6 +95,7 @@ class Assessment: NSObject, NSCoding {
         } else {
             hlString = " SL"
         }
+        
         
         typealias JSONDictionary = [String: Any]
         
@@ -113,8 +118,8 @@ class Assessment: NSObject, NSCoding {
                             
                             for key in gradeBoundaries.keys { //iterate through the keys
                                 var value: [Int] = gradeBoundaries[key] as! [Int] //get the value of the dictionary for the current key
-                                if percent <= value[1] && percent >= value[0] { //if the percentage from the assessment falls between the bounds
-                                    overallGrade = Int(key)! //set the overall grade to the current key
+                                if percent < value[1] + 1 && percent >= value[0] { //if the percentage from the assessment falls between the bounds
+                                    self.overallGrade = Int(key)! //set the overall grade to the current key
                                 }
                             }
                             
@@ -133,6 +138,7 @@ class Assessment: NSObject, NSCoding {
             }
         }
         
+        return self.overallGrade
     }
     
     func encode(with aCoder: NSCoder) {

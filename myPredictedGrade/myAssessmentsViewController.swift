@@ -31,6 +31,8 @@ class myAssessmentsViewController: UIViewController, UISearchBarDelegate, UITabl
     var contentSelectionOptions: [String] = ["All", "Physics HL", "Chemistry HL", "Spanish Ab SL"]
     var contentOrderingOptions: [String] = ["Most Recent", "Oldest", "Subject", "Overall Grade", "Percentage Marks", "Title"] //DEVELOPMENT: hide "Subject" when a specific subject is selected (?)
     
+    typealias JSONObject = [String: Any]
+    
     var allAssessments: [Assessment] = [Assessment]()
     var sortedContentList: [Assessment] = [Assessment]()
     
@@ -64,19 +66,16 @@ class myAssessmentsViewController: UIViewController, UISearchBarDelegate, UITabl
         //test of tableview system
         let date2 = Date(timeIntervalSince1970: TimeInterval(exactly: 3095904229.00)!)
         let chemTest = Assessment(assessmentTitle: "Stoichiometry Test", subject: .Chemistry, subjectIsHL: false, date: date2, marksAvailable: 49, marksReceived: 32)
-        chemTest.overallGrade = 6
         allAssessments.append(chemTest)
         
         //test of tableview system
         let date = Date(timeIntervalSince1970: TimeInterval(exactly: 30549.00)!)
         let physicsTest = Assessment(assessmentTitle: "Forces & Mechanics Test", subject: .Physics, subjectIsHL: true, date: date, marksAvailable: 45, marksReceived: 36)
-        physicsTest.overallGrade = 4
         allAssessments.append(physicsTest)
     
         //test of tableview system
         let date3 = Date(timeIntervalSince1970: TimeInterval(exactly: 3056959229.00)!)
         let mathTest = Assessment(assessmentTitle: "Calculus Test", subject: .Mathematics, subjectIsHL: true, date: date3, marksAvailable: 50, marksReceived: 49)
-        mathTest.overallGrade = 5
         allAssessments.append(mathTest)
  
         var indexPaths: [IndexPath] = [IndexPath]()
@@ -394,7 +393,7 @@ class myAssessmentsViewController: UIViewController, UISearchBarDelegate, UITabl
             sortedContentList = content.sorted { $0.subject.0.sortIndex > $1.subject.0.sortIndex }
             bodyTableView.reloadSections(NSIndexSet(index: 0) as IndexSet, with: UITableViewRowAnimation.none)
         } else if contentOrderingTextField.text == "Overall Grade" {
-            sortedContentList = content.sorted { $0.overallGrade > $1.overallGrade }
+            sortedContentList = content.sorted { $0.getOverallGrade() > $1.getOverallGrade() }
             bodyTableView.reloadSections(NSIndexSet(index: 0) as IndexSet, with: UITableViewRowAnimation.none)
         } else if contentOrderingTextField.text == "Percentage Marks" {
             sortedContentList = content.sorted { $0.percentageMarksObtained > $1.percentageMarksObtained }
