@@ -87,6 +87,8 @@ class Assessment: NSObject, NSCoding {
     
     func getOverallGrade() -> Int {
         
+        percentageMarksObtained = Double(marksReceived) / Double(marksAvailable) * 100
+        
         let percent: Int = lround(self.percentageMarksObtained)
         
         var hlString = ""

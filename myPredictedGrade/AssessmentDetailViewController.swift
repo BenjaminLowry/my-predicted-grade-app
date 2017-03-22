@@ -57,6 +57,8 @@ class AssessmentDetailViewController: UITableViewController, UITextFieldDelegate
         marksAvailableTextField.delegate = self
         marksReceivedTextField.delegate = self
         
+        assessmentTitleTextField.delegate = self
+        
         setupDatePicker()
         dateTextField.inputView = datePicker
         dateTextField.delegate = self
@@ -71,10 +73,10 @@ class AssessmentDetailViewController: UITableViewController, UITextFieldDelegate
         subjectTextField.accessibilityIdentifier = "SubjectTextField"
         
         addResponderButtons()
-        
+        /*
         //temporary setup
         let profile = Profile(username: "Benthos", password: "benjiman", yearLevel: YearLevel.year12, subjects: [(Subject.Biology, false), (Subject.ComputerScience, true), (Subject.Physics, true), (Subject.EnvironmentalSystemsandSocities, false), (Subject.InformationTechonologyinaGlobalSociety, true)], colorPreferences: [Subject.Biology: .black], assessments: [])
-        AppStatus.loggedInUser = profile
+        AppStatus.loggedInUser = profile*/
         
         //load pickerview data
         subjectPickerViewData = [(Subject, Bool)]() //clear array (necessary??)
@@ -103,7 +105,7 @@ class AssessmentDetailViewController: UITableViewController, UITextFieldDelegate
         delegate?.assessmentDetailViewControllerDidCancel(controller: self)
     }
     @IBAction func doneButtonPressed(_ sender: UIBarButtonItem) {
-        if let marksAvailableText = marksAvailableTextField.text, let marksReceivedText = marksAvailableTextField.text, let assessmentTitle = assessmentTitleTextField.text, let dateText = dateTextField.text, let subjectText = subjectTextField.text {
+        if let marksAvailableText = marksAvailableTextField.text, let marksReceivedText = marksReceivedTextField.text, let assessmentTitle = assessmentTitleTextField.text, let dateText = dateTextField.text, let subjectText = subjectTextField.text {
             
             guard let marksAvailable = Int(marksAvailableText), let marksReceived = Int(marksReceivedText) else {
                 print("Input not a number") //add error here
@@ -158,6 +160,20 @@ class AssessmentDetailViewController: UITableViewController, UITextFieldDelegate
                 textField.text = subjectString(forSubjectAtRow: 0)
             }
         }
+    }
+    
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        
+        if range.location == (textField.text?.characters.count)! && string == " " {
+            
+            let space: String = "\u{00a0}"
+            textField.text?.append(space)
+            return false
+            
+        }
+        
+        return true
+        
     }
     
     // MARK: - UIPickerView Delegate Funcs

@@ -40,9 +40,6 @@ class myAssessmentsViewController: UIViewController, UISearchBarDelegate, UITabl
     
     var noResultsLabel: UILabel = UILabel()
     
-    //TEMPORARY
-    var userSubjects: [(Subject, Bool)] = [(Subject.Physics, true), (Subject.Chemistry, true), (Subject.SpanishAb, false)]
-    
     // MARK: - Inherited Funcs
     
     override func viewDidLoad() {
@@ -62,22 +59,8 @@ class myAssessmentsViewController: UIViewController, UISearchBarDelegate, UITabl
         setupSearchBar()
         setupHeaderViews()
         
+        allAssessments = (AppStatus.loggedInUser?.assessments)!
         
-        //test of tableview system
-        let date2 = Date(timeIntervalSince1970: TimeInterval(exactly: 3095904229.00)!)
-        let chemTest = Assessment(assessmentTitle: "Stoichiometry Test", subject: .Chemistry, subjectIsHL: false, date: date2, marksAvailable: 49, marksReceived: 32)
-        allAssessments.append(chemTest)
-        
-        //test of tableview system
-        let date = Date(timeIntervalSince1970: TimeInterval(exactly: 30549.00)!)
-        let physicsTest = Assessment(assessmentTitle: "Forces & Mechanics Test", subject: .Physics, subjectIsHL: true, date: date, marksAvailable: 45, marksReceived: 36)
-        allAssessments.append(physicsTest)
-    
-        //test of tableview system
-        let date3 = Date(timeIntervalSince1970: TimeInterval(exactly: 3056959229.00)!)
-        let mathTest = Assessment(assessmentTitle: "Calculus Test", subject: .Mathematics, subjectIsHL: true, date: date3, marksAvailable: 50, marksReceived: 49)
-        allAssessments.append(mathTest)
- 
         var indexPaths: [IndexPath] = [IndexPath]()
         
         for assessment in sortedContentList {
@@ -220,7 +203,33 @@ class myAssessmentsViewController: UIViewController, UISearchBarDelegate, UITabl
         controller.dismiss(animated: true, completion: nil)
     }
     
-    func assessmentDetailViewController(controller: AssessmentDetailViewController, didFinishAddingAssessment: Assessment) {
+    func assessmentDetailViewController(controller: AssessmentDetailViewController, didFinishAddingAssessment assessment: Assessment) {
+        
+        allAssessments.append(assessment)
+        
+        currentScope = nil
+        contentSelectionTextField.text = "All"
+        updateContent()
+        bodyTableView.reloadData()
+    
+        if let user = AppStatus.loggedInUser {
+            
+            user.assessments = allAssessments
+            
+            let subjectGrades = user.getSubjectGrades()
+            
+            for (subject, grade) in subjectGrades {
+                
+                let snapshot = SubjectSnapshot(grade: grade, subject: subject)
+                user.addSnapshot(snapshot: snapshot)
+                
+            }
+            
+        }
+        
+        //save changes
+        AppStatus.saveData()
+        controller.dismiss(animated: true, completion: nil)
         
     }
     
@@ -232,20 +241,36 @@ class myAssessmentsViewController: UIViewController, UISearchBarDelegate, UITabl
             if let cell = tableView(bodyTableView, cellForRowAt: indexPath) as? AssessmentCell {
                 configureCell(cell: cell, assessment: assessment) //update the labels
                 currentScope = nil
+                contentSelectionTextField.text = "All"
                 updateContent()
                 bodyTableView.reloadData()
             }
             
         }
         
+        if let user = AppStatus.loggedInUser {
+            
+            user.assessments = allAssessments
+            
+            let subjectGrades = user.getSubjectGrades()
+            
+            for (subject, grade) in subjectGrades {
+                
+                let snapshot = SubjectSnapshot(grade: grade, subject: subject)
+                user.addSnapshot(snapshot: snapshot)
+                
+            }
+            
+        }
+        
+        //save changes
+        AppStatus.saveData()
         controller.dismiss(animated: true, completion: nil)
     }
     
     // MARK: - UITableView Helper Funcs
     
     func configureCell(cell: AssessmentCell, assessment: Assessment){
-        
-        //cell.isUserInteractionEnabled = false
         
         let mainView = cell.recentAssessmentView
         mainView?.awakeFromNib()
@@ -308,7 +333,7 @@ class myAssessmentsViewController: UIViewController, UISearchBarDelegate, UITabl
             
             contentSelectionTextField.text = contentSelectionOptions[row]
             
-            for subject in userSubjects {
+            for subject in (AppStatus.loggedInUser?.subjects)! {
                 var hlString = ""
                 if subject.1 == true {
                     hlString = " HL"
@@ -408,7 +433,7 @@ class myAssessmentsViewController: UIViewController, UISearchBarDelegate, UITabl
     func donePressedContentSelectionPickerView(){
         contentSelectionTextField.resignFirstResponder()
         
-        for subject in userSubjects {
+        for subject in (AppStatus.loggedInUser?.subjects)! {
             var hlString = ""
             if subject.1 == true {
                 hlString = " HL"

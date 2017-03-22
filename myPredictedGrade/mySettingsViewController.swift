@@ -44,9 +44,6 @@ class mySettingsViewController: UITableViewController, UITextFieldDelegate, UIPi
         
         gradeCalculationTextField.resignFirstResponder()
         
-        //temporary
-        AppStatus.loggedInUser?.getSubjectGrades()
-        
     }
 
     override func didReceiveMemoryWarning() {
@@ -90,6 +87,9 @@ class mySettingsViewController: UITableViewController, UITextFieldDelegate, UIPi
             
             AppStatus.loggedInUser?.subjectGradeSetting = subjectGradeSettings
         }
+        
+        //save changes
+        AppStatus.saveData()
         
     }
     

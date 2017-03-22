@@ -46,14 +46,28 @@ class myHomeViewController: UIViewController, UITableViewDelegate, UITableViewDa
         AppStatus.loggedInUser = Profile(username: "Benthos", password: "benjiman", yearLevel: YearLevel.year12, subjects: [(Subject.Physics, true), (Subject.Chemistry, true), (Subject.Mathematics, true), (Subject.Economics, true), (Subject.InformationTechonologyinaGlobalSociety, false), (Subject.SpanishAb, false)], colorPreferences: [Subject.Physics: AppStatus.validAssessmentColors[0], Subject.Chemistry: AppStatus.validAssessmentColors[1], Subject.Mathematics: AppStatus.validAssessmentColors[2], Subject.Economics: AppStatus.validAssessmentColors[3], Subject.SpanishAb: AppStatus.validAssessmentColors[4], Subject.InformationTechonologyinaGlobalSociety: AppStatus.validAssessmentColors[5]], assessments: [])
         
         //create assessment
-        let date = Date(timeIntervalSince1970: TimeInterval(exactly: 30549.00)!)
-        let physicsTest = Assessment(assessmentTitle: "Forces & Mechanics Test", subject: .Physics, subjectIsHL: true, date: date, marksAvailable: 45, marksReceived: 31)
+        //let date = Date(timeIntervalSince1970: TimeInterval(exactly: 30549.00)!)
+        //let physicsTest = Assessment(assessmentTitle: "Forces & Mechanics Test", subject: .Physics, subjectIsHL: true, date: date, marksAvailable: 45, marksReceived: 31)
         
-        AppStatus.loggedInUser?.assessments = [physicsTest]
+        //test of tableview system
+        let date2 = Date(timeIntervalSince1970: TimeInterval(exactly: 3095904229.00)!)
+        let chemTest = Assessment(assessmentTitle: "Stoichiometry Test", subject: .Chemistry, subjectIsHL: true, date: date2, marksAvailable: 49, marksReceived: 32)
+        AppStatus.loggedInUser?.assessments.append(chemTest)
+        
+        //test of tableview system
+        let date = Date(timeIntervalSince1970: TimeInterval(exactly: 30549.00)!)
+        let physicsTest = Assessment(assessmentTitle: "Forces & Mechanics Test", subject: .Physics, subjectIsHL: true, date: date, marksAvailable: 45, marksReceived: 36)
+        AppStatus.loggedInUser?.assessments.append(physicsTest)
+        
+        //test of tableview system
+        let date3 = Date(timeIntervalSince1970: TimeInterval(exactly: 3056959229.00)!)
+        let mathTest = Assessment(assessmentTitle: "Calculus Test", subject: .Mathematics, subjectIsHL: true, date: date3, marksAvailable: 50, marksReceived: 49)
+        AppStatus.loggedInUser?.assessments .append(mathTest)
+        
+        //AppStatus.loggedInUser?.assessments = [physicsTest]
         
         //bodyTableView.register(UINib(nibName: "CustomAssessmentCell", bundle: Bundle.main), forCellReuseIdentifier: "CustomAssessmentCell")
         bodyTableView.register(UINib(nibName: "AssessmentCell", bundle: Bundle.main), forCellReuseIdentifier: "AssessmentCell")
-        
         
         setupHeaderView()
         
@@ -72,6 +86,7 @@ class myHomeViewController: UIViewController, UITableViewDelegate, UITableViewDa
         }
         
         setupStackViews()
+        setupBodyView()
     }
     
     // MARK: - UITableView Delegate Funcs
@@ -108,6 +123,8 @@ class myHomeViewController: UIViewController, UITableViewDelegate, UITableViewDa
     
     func setupStackViews() {
         
+        print("number of assessments: \(AppStatus.loggedInUser?.assessments.count)")
+        
         //empty the stack view
         for view in subjectStackView.subviews {
             subjectStackView.removeArrangedSubview(view)
@@ -121,7 +138,7 @@ class myHomeViewController: UIViewController, UITableViewDelegate, UITableViewDa
             if subject.shortName == "" {
                 label.text = "\(subject.rawValue) \(isHL ? "HL" : "SL" ):"
             } else {
-                label.text = subject.shortName + " \(isHL ? "HL" : "SL")"
+                label.text = subject.shortName + " \(isHL ? "HL" : "SL"):"
             }
             label.font = UIFont(name: "AvenirNext-DemiBold", size: 17)
             label.textAlignment = .right
@@ -181,7 +198,8 @@ class myHomeViewController: UIViewController, UITableViewDelegate, UITableViewDa
         }
         
         if let averageGrade = AppStatus.loggedInUser?.getAverageGrade() {
-            averageGradeContentLabel.text = String(describing: averageGrade)
+            let averageGradeInt: Int = Int(averageGrade * 10.0)
+            averageGradeContentLabel.text = String(describing: Double(averageGradeInt) / 10.0)
         }
         
         if let bestSubject = AppStatus.loggedInUser?.getBestSubject() {

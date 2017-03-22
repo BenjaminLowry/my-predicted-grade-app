@@ -23,6 +23,8 @@ class Profile: NSObject, NSCoding {
     
     var subjectGradeSetting: SubjectGradeCalculation
     
+    fileprivate var subjectGradeSnapshots: [SubjectSnapshot]
+    
     fileprivate var subjectGrades: [Subject: Int]
     
     fileprivate var overallGrade: Int
@@ -51,6 +53,8 @@ class Profile: NSObject, NSCoding {
         bestSubject = aDecoder.decodeObject(forKey: "Best Subject") as! (Subject, Bool)
         
         subjectGradeSetting = aDecoder.decodeObject(forKey: "Subject Grade Settings") as! SubjectGradeCalculation
+        
+        subjectGradeSnapshots = aDecoder.decodeObject(forKey: "Subject Snapshots") as! [SubjectSnapshot]
     }
     
     init(username: String, password: String, yearLevel: YearLevel, subjects: [(Subject, Bool)], colorPreferences: [Subject: UIColor], assessments: [Assessment]) {
@@ -76,6 +80,8 @@ class Profile: NSObject, NSCoding {
         
         self.subjectGradeSetting = SubjectGradeCalculation.averageOfGrades
         
+        self.subjectGradeSnapshots = [SubjectSnapshot]()
+        
         super.init()
     }
     
@@ -99,11 +105,26 @@ class Profile: NSObject, NSCoding {
         aCoder.encode(bestSubject, forKey: "Best Subject")
         
         aCoder.encode(subjectGradeSetting, forKey: "Subject Grade Settings")
+        
+        aCoder.encode(subjectGradeSnapshots, forKey: "Subject Snapshots")
+    }
+    
+    func addSnapshot(snapshot: SubjectSnapshot) {
+        
+        subjectGradeSnapshots.append(snapshot)
+        
+    }
+    
+    func getSnapshots() -> [SubjectSnapshot] {
+        
+        return subjectGradeSnapshots
+        
     }
     
     func getBestSubject() -> (Subject, Bool) {
         
         var bestAverage = 0.0
+        var bestPercentageAverage = 0.0
         
         for (subject, isHL) in subjects {
             
@@ -120,11 +141,40 @@ class Profile: NSObject, NSCoding {
             }
             
             if numberOfAssessments != 0 {
+                
                 let average = Double(sum / numberOfAssessments)
                 if average > bestAverage {
                     
                     bestAverage = average
                     bestSubject = (subject, isHL)
+                    
+                    var percentageSum = 0.0
+                    
+                    for assessment in assessmentsForSubject {
+                        
+                        percentageSum += assessment.percentageMarksObtained
+                        
+                    }
+                    
+                    bestPercentageAverage = percentageSum / Double(numberOfAssessments)
+                    
+                } else if average == bestAverage { //if the average grade is the same for two subjects
+                    
+                    var percentageSum = 0.0
+                    
+                    for assessment in assessmentsForSubject {
+                        
+                        percentageSum += assessment.percentageMarksObtained
+                        
+                    }
+                    
+                    if percentageSum / Double(numberOfAssessments) > bestPercentageAverage { //if the current subject has better percentages even with the same grade
+                        
+                        //no need to set best average again since it will be the same
+                        bestSubject = (subject, isHL)
+                        bestPercentageAverage = percentageSum / Double(numberOfAssessments)
+                        
+                    }
                     
                 }
             }
@@ -146,7 +196,7 @@ class Profile: NSObject, NSCoding {
             
         }
         
-        averageGrade = Double(sum/numberOfAssessments)
+        averageGrade = Double(sum)/Double(numberOfAssessments)
         
         return averageGrade
     }
@@ -167,7 +217,12 @@ class Profile: NSObject, NSCoding {
     
     func getSubjectGrades() -> [Subject: Int] {
     
+        print(subjects)
         for (subject, isHL) in subjects {
+            print(subject)
+            if subject == Subject.SpanishAb {
+                
+            }
             
             var sumPercentageMarks = 0.0
             var numberOfAssessments = 0
@@ -189,7 +244,7 @@ class Profile: NSObject, NSCoding {
             
             //if the subject has no assessments
             if subjectAssessments.count == 0 {
-                return subjectGrades
+                continue
             }
             
             //return the median grade if that is the preference
@@ -253,7 +308,7 @@ class Profile: NSObject, NSCoding {
                     let returnGrade = Int(round(gradeSum))
                     subjectGrades[subject] = returnGrade
                     
-                    return subjectGrades
+                    continue
                     
                 }
             }

@@ -26,6 +26,10 @@
 		5F6142851E14DD1D004DC079 /* AssessmentCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5F6142831E14DD1D004DC079 /* AssessmentCell.xib */; };
 		5F63D3571E20C428005FB875 /* UISearchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F63D3561E20C428005FB875 /* UISearchBar.swift */; };
 		5F63D3791E225BBB005FB875 /* AssessmentDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F63D3781E225BBB005FB875 /* AssessmentDetailViewController.swift */; };
+		5F6F6D561E601EDF0035B196 /* Snapshot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F6F6D551E601EDF0035B196 /* Snapshot.swift */; };
+		5F6F6D581E601F6B0035B196 /* SubjectSnapshot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F6F6D571E601F6B0035B196 /* SubjectSnapshot.swift */; };
+		5F6FF6811E5DD4F20004CAEF /* MyValueFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F6FF6801E5DD4F20004CAEF /* MyValueFormatter.swift */; };
+		5F6FF6831E5DD8720004CAEF /* MyAxisFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F6FF6821E5DD8720004CAEF /* MyAxisFormatter.swift */; };
 		5F7D24DB1E30FC310091FD2C /* DateFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F7D24DA1E30FC310091FD2C /* DateFormatter.swift */; };
 		5F8C8F321E4C2B0A003A14E3 /* gradePercentiles.json in Resources */ = {isa = PBXBuildFile; fileRef = 5F8C8F311E4C2B0A003A14E3 /* gradePercentiles.json */; };
 		5F8C8F341E4C425C003A14E3 /* YearLevel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F8C8F331E4C425C003A14E3 /* YearLevel.swift */; };
@@ -41,9 +45,11 @@
 		5FC1EF6C1E1FC90F00CF379A /* UITextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FC1EF6B1E1FC90F00CF379A /* UITextField.swift */; };
 		5FCC00991E17B90B005201C2 /* Profile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FCC00981E17B90B005201C2 /* Profile.swift */; };
 		5FCC009B1E17BC36005201C2 /* AppStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FCC009A1E17BC36005201C2 /* AppStatus.swift */; };
+		A864B6D9095C8FA7626B4254 /* Pods_myPredictedGrade.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E8D3FAA413698C633D49FE5A /* Pods_myPredictedGrade.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		33F212EFA0A4DC55FFE2FE4E /* Pods-myPredictedGrade.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-myPredictedGrade.debug.xcconfig"; path = "Pods/Target Support Files/Pods-myPredictedGrade/Pods-myPredictedGrade.debug.xcconfig"; sourceTree = "<group>"; };
 		5F02F6CC1E0DC5DE0030F54E /* RecentAssessmentView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecentAssessmentView.swift; sourceTree = "<group>"; };
 		5F02F6CE1E0DCC4A0030F54E /* RecentAssessmentView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = RecentAssessmentView.xib; sourceTree = "<group>"; };
 		5F02F6D61E1136B30030F54E /* String.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = String.swift; sourceTree = "<group>"; };
@@ -65,6 +71,10 @@
 		5F6142831E14DD1D004DC079 /* AssessmentCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AssessmentCell.xib; sourceTree = "<group>"; };
 		5F63D3561E20C428005FB875 /* UISearchBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UISearchBar.swift; sourceTree = "<group>"; };
 		5F63D3781E225BBB005FB875 /* AssessmentDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AssessmentDetailViewController.swift; sourceTree = "<group>"; };
+		5F6F6D551E601EDF0035B196 /* Snapshot.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Snapshot.swift; sourceTree = "<group>"; };
+		5F6F6D571E601F6B0035B196 /* SubjectSnapshot.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SubjectSnapshot.swift; sourceTree = "<group>"; };
+		5F6FF6801E5DD4F20004CAEF /* MyValueFormatter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyValueFormatter.swift; sourceTree = "<group>"; };
+		5F6FF6821E5DD8720004CAEF /* MyAxisFormatter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyAxisFormatter.swift; sourceTree = "<group>"; };
 		5F7D24DA1E30FC310091FD2C /* DateFormatter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DateFormatter.swift; sourceTree = "<group>"; };
 		5F8C8F311E4C2B0A003A14E3 /* gradePercentiles.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = gradePercentiles.json; sourceTree = "<group>"; };
 		5F8C8F331E4C425C003A14E3 /* YearLevel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YearLevel.swift; sourceTree = "<group>"; };
@@ -80,6 +90,8 @@
 		5FC1EF6B1E1FC90F00CF379A /* UITextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UITextField.swift; sourceTree = "<group>"; };
 		5FCC00981E17B90B005201C2 /* Profile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Profile.swift; sourceTree = "<group>"; };
 		5FCC009A1E17BC36005201C2 /* AppStatus.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppStatus.swift; sourceTree = "<group>"; };
+		8EFCFA22CCF058202AA5409A /* Pods-myPredictedGrade.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-myPredictedGrade.release.xcconfig"; path = "Pods/Target Support Files/Pods-myPredictedGrade/Pods-myPredictedGrade.release.xcconfig"; sourceTree = "<group>"; };
+		E8D3FAA413698C633D49FE5A /* Pods_myPredictedGrade.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_myPredictedGrade.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -87,12 +99,21 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A864B6D9095C8FA7626B4254 /* Pods_myPredictedGrade.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		02C77B6FB0D4D4D40B3FE007 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				E8D3FAA413698C633D49FE5A /* Pods_myPredictedGrade.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		5F02F6D81E117F330030F54E /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
@@ -110,6 +131,8 @@
 			children = (
 				5F02F6DC1E1183AC0030F54E /* Assessment.swift */,
 				5FCC00981E17B90B005201C2 /* Profile.swift */,
+				5F6F6D551E601EDF0035B196 /* Snapshot.swift */,
+				5F6F6D571E601F6B0035B196 /* SubjectSnapshot.swift */,
 				5F61427A1E13DC3D004DC079 /* Subject.swift */,
 				5F8C8F331E4C425C003A14E3 /* YearLevel.swift */,
 				5F8C8F371E4D327A003A14E3 /* SubjectGradeCalculation.swift */,
@@ -135,6 +158,8 @@
 			isa = PBXGroup;
 			children = (
 				5F9CF5FD1E553B9500FC40C3 /* IndexedSum.swift */,
+				5F6FF6801E5DD4F20004CAEF /* MyValueFormatter.swift */,
+				5F6FF6821E5DD8720004CAEF /* MyAxisFormatter.swift */,
 				5F02F6CC1E0DC5DE0030F54E /* RecentAssessmentView.swift */,
 				5F1BACA61E0D776800CFDD6D /* BorderedView.swift */,
 				5F2B3FFB1E47272500FAAA74 /* UnderlinedLabel.swift */,
@@ -151,6 +176,8 @@
 				5F6032E61E05E6150097639E /* myPredictedGrade */,
 				5F6032E51E05E6150097639E /* Products */,
 				5F6032FD1E05EB480097639E /* Resources */,
+				B049F8A6483A465C038727A0 /* Pods */,
+				02C77B6FB0D4D4D40B3FE007 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -191,6 +218,15 @@
 			name = Resources;
 			sourceTree = "<group>";
 		};
+		B049F8A6483A465C038727A0 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				33F212EFA0A4DC55FFE2FE4E /* Pods-myPredictedGrade.debug.xcconfig */,
+				8EFCFA22CCF058202AA5409A /* Pods-myPredictedGrade.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -198,9 +234,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 5F6032F81E05E6150097639E /* Build configuration list for PBXNativeTarget "myPredictedGrade" */;
 			buildPhases = (
+				C585E413BCDC19863502EE4F /* [CP] Check Pods Manifest.lock */,
 				5F6032E01E05E6150097639E /* Sources */,
 				5F6032E11E05E6150097639E /* Frameworks */,
 				5F6032E21E05E6150097639E /* Resources */,
+				E2E75B8D620C82D6C43BE2D3 /* [CP] Embed Pods Frameworks */,
+				07D6811011AB55179BDD35DB /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -266,6 +305,54 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		07D6811011AB55179BDD35DB /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-myPredictedGrade/Pods-myPredictedGrade-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		C585E413BCDC19863502EE4F /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		E2E75B8D620C82D6C43BE2D3 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-myPredictedGrade/Pods-myPredictedGrade-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		5F6032E01E05E6150097639E /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -275,11 +362,14 @@
 				5F9CF5FE1E553B9500FC40C3 /* IndexedSum.swift in Sources */,
 				5F02F6DF1E1191710030F54E /* UIView.swift in Sources */,
 				5F8C8F381E4D327A003A14E3 /* SubjectGradeCalculation.swift in Sources */,
+				5F6F6D581E601F6B0035B196 /* SubjectSnapshot.swift in Sources */,
 				5FCC00991E17B90B005201C2 /* Profile.swift in Sources */,
 				5F63D3571E20C428005FB875 /* UISearchBar.swift in Sources */,
+				5F6F6D561E601EDF0035B196 /* Snapshot.swift in Sources */,
 				5F6032E81E05E6150097639E /* AppDelegate.swift in Sources */,
 				5F8C8F361E4C4B0F003A14E3 /* mySettingsViewController.swift in Sources */,
 				5F02F6CD1E0DC5DE0030F54E /* RecentAssessmentView.swift in Sources */,
+				5F6FF6811E5DD4F20004CAEF /* MyValueFormatter.swift in Sources */,
 				5F60330F1E05EC9E0097639E /* myHomeViewController.swift in Sources */,
 				5FBC4BBD1E38E63D004E64A6 /* myTrendsViewController.swift in Sources */,
 				5F02F6D71E1136B30030F54E /* String.swift in Sources */,
@@ -287,6 +377,7 @@
 				5F63D3791E225BBB005FB875 /* AssessmentDetailViewController.swift in Sources */,
 				5F6142791E12D781004DC079 /* myAssessmentsViewController.swift in Sources */,
 				5F9680E21E266ED1001CF7B4 /* UINavigationController.swift in Sources */,
+				5F6FF6831E5DD8720004CAEF /* MyAxisFormatter.swift in Sources */,
 				5F61427B1E13DC3D004DC079 /* Subject.swift in Sources */,
 				5F2B3FFC1E47272500FAAA74 /* UnderlinedLabel.swift in Sources */,
 				5FC1EF6C1E1FC90F00CF379A /* UITextField.swift in Sources */,
@@ -413,6 +504,7 @@
 		};
 		5F6032F91E05E6150097639E /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 33F212EFA0A4DC55FFE2FE4E /* Pods-myPredictedGrade.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = QS5G68243B;
@@ -427,6 +519,7 @@
 		};
 		5F6032FA1E05E6150097639E /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 8EFCFA22CCF058202AA5409A /* Pods-myPredictedGrade.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = QS5G68243B;

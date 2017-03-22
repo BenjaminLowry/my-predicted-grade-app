@@ -59,7 +59,6 @@ class RecentAssessmentView: UIView {
     
     func updateLabels(assessment: Assessment){
         
-        
         //update colors
         if let user = AppStatus.loggedInUser {
             for subject in user.subjects {
