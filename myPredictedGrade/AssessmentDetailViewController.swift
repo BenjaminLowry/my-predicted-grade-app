@@ -32,7 +32,7 @@ class AssessmentDetailViewController: UITableViewController, UITextFieldDelegate
     
     // MARK: - Instance Variables
     
-    var subjectPickerViewData: [(Subject, Bool)] = [(Subject, Bool)]()
+    var subjectPickerViewData: [SubjectObject] = [SubjectObject]()
     var subjectPickerView: UIPickerView = UIPickerView()
     
     var datePicker = UIDatePicker()
@@ -73,13 +73,9 @@ class AssessmentDetailViewController: UITableViewController, UITextFieldDelegate
         subjectTextField.accessibilityIdentifier = "SubjectTextField"
         
         addResponderButtons()
-        /*
-        //temporary setup
-        let profile = Profile(username: "Benthos", password: "benjiman", yearLevel: YearLevel.year12, subjects: [(Subject.Biology, false), (Subject.ComputerScience, true), (Subject.Physics, true), (Subject.EnvironmentalSystemsandSocities, false), (Subject.InformationTechonologyinaGlobalSociety, true)], colorPreferences: [Subject.Biology: .black], assessments: [])
-        AppStatus.loggedInUser = profile*/
         
         //load pickerview data
-        subjectPickerViewData = [(Subject, Bool)]() //clear array (necessary??)
+        subjectPickerViewData = [SubjectObject]() //clear array (necessary??)
         if let user = AppStatus.loggedInUser {
             let subjects = user.subjects
             for subject in subjects {
@@ -121,8 +117,8 @@ class AssessmentDetailViewController: UITableViewController, UITextFieldDelegate
                     let dateFormatter = DateFormatter()
                     let date = dateFormatter.date(fromSpecific: dateText)
                     
-                    if let subject = subjectValue(forString: subjectText) {
-                        let assessment = Assessment(assessmentTitle: assessmentTitle, subject: subject.0, subjectIsHL: subject.1, date: date, marksAvailable: marksAvailable, marksReceived: marksReceived)
+                    if let subjectObject = subjectValue(forString: subjectText) {
+                        let assessment = Assessment(assessmentTitle: assessmentTitle, subjectObject: subjectObject, date: date, marksAvailable: marksAvailable, marksReceived: marksReceived)
                         delegate?.assessmentDetailViewController(controller: self, didFinishAddingAssessment: assessment)
                     }
                     
@@ -147,9 +143,9 @@ class AssessmentDetailViewController: UITableViewController, UITextFieldDelegate
                     print("error")
                     return
                 }
-                for subject in user.subjects {
-                    if assessment.subject.0.rawValue == subject.0.rawValue {
-                        if let row = subjectPickerViewData.index(where: {$0 == subject}) {
+                for subjectObject in user.subjects {
+                    if assessment.subjectObject == subjectObject {
+                        if let row = subjectPickerViewData.index(where: {$0 == subjectObject}) {
                             textField.text = subjectString(forSubjectAtRow: row)
                         }
                     } else {
@@ -231,7 +227,7 @@ class AssessmentDetailViewController: UITableViewController, UITextFieldDelegate
         let date = dateFormatter.date(fromSpecific: dateText)
         
         assessmentToEdit?.assessmentTitle = assessmentTitle
-        assessmentToEdit?.subject = subject
+        assessmentToEdit?.subjectObject = subject
         assessmentToEdit?.date = date
         assessmentToEdit?.marksAvailable = marksAvailable
         assessmentToEdit?.marksReceived = marksReceived
@@ -251,23 +247,15 @@ class AssessmentDetailViewController: UITableViewController, UITextFieldDelegate
     
     // MARK: - Subject Helper Funcs
     
-    func subjectSuffix(subject: (Subject, Bool)) -> String {
-        var hlString = " HL"
-        if subject.1 == false {
-            hlString = " SL"
-        }
-        return hlString
-    }
-    
     func subjectString(forSubjectAtRow row: Int) -> String {
-        return subjectPickerViewData[row].0.rawValue + subjectSuffix(subject: subjectPickerViewData[row])
+        return subjectPickerViewData[row].toString()
     }
     
-    func subjectValue(forString string: String) -> (Subject, Bool)? {
+    func subjectValue(forString string: String) -> SubjectObject? {
         if let user = AppStatus.loggedInUser {
-            for subject in user.subjects {
-                if subject.0.rawValue + subjectSuffix(subject: subject) == string {
-                    return subject
+            for subjectObject in user.subjects {
+                if subjectObject.toString() == string {
+                    return subjectObject
                 }
             }
         }
@@ -305,7 +293,7 @@ class AssessmentDetailViewController: UITableViewController, UITextFieldDelegate
     
     func prepareLabelsForEditing(assessment: Assessment) {
         assessmentTitleTextField.text = assessment.assessmentTitle
-        subjectTextField.text = assessment.subject.0.rawValue + (assessment.subject.1 ? " HL" : " SL")
+        subjectTextField.text = assessment.subjectObject.toString()
         
         let dateFormatter = DateFormatter()
         dateTextField.text = dateFormatter.string(fromSpecific: assessment.date)

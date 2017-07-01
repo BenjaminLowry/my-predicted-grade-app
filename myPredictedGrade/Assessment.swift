@@ -11,7 +11,7 @@ import Foundation
 class Assessment: NSObject, NSCoding {
     
     var assessmentTitle: String
-    var subject: (Subject, Bool)
+    var subjectObject: SubjectObject
     var date: Date
     
     var marksAvailable: Int
@@ -20,15 +20,10 @@ class Assessment: NSObject, NSCoding {
     var percentageMarksObtained: Double
     
     fileprivate var overallGrade: Int = 0
-    
-    var criteriaA: Int?
-    var criteriaB: Int?
-    var criteriaC: Int?
-    var criteriaD: Int?
-    
-    init (assessmentTitle: String, subject: Subject, subjectIsHL: Bool, date: Date, marksAvailable: Int, marksReceived: Int){
+  
+    init (assessmentTitle: String, subjectObject: SubjectObject, date: Date, marksAvailable: Int, marksReceived: Int){
         self.assessmentTitle = assessmentTitle
-        self.subject = (subject, subjectIsHL)
+        self.subjectObject = subjectObject
         self.date = date
         
         self.marksAvailable = marksAvailable
@@ -37,21 +32,15 @@ class Assessment: NSObject, NSCoding {
         percentageMarksObtained = Double(marksReceived) / Double(marksAvailable) * 100
     }
     
-    //DEVELOPMENT: need more of these for every combinations of criterias assessed?
-    init (assessmentTitle: String, subject: Subject, subjectIsHL: Bool, date: Date, marksAvailable: Int, marksReceived: Int, criteriaA: Int, criteriaB: Int, criteriaC: Int, criteriaD: Int){
+    init (assessmentTitle: String, subjectObject: SubjectObject, date: Date, marksAvailable: Int, marksReceived: Int, criteriaA: Int, criteriaB: Int, criteriaC: Int, criteriaD: Int){
         self.assessmentTitle = assessmentTitle
-        self.subject = (subject, subjectIsHL)
+        self.subjectObject = subjectObject
         self.date = date
         
         self.marksAvailable = marksAvailable
         self.marksReceived = marksReceived
         
         percentageMarksObtained = Double(marksReceived) / Double(marksAvailable) * 100
-        
-        self.criteriaA = criteriaA
-        self.criteriaB = criteriaB
-        self.criteriaC = criteriaC
-        self.criteriaD = criteriaD
         
         super.init()
         
@@ -60,7 +49,7 @@ class Assessment: NSObject, NSCoding {
     
     required init?(coder aDecoder: NSCoder) {
         assessmentTitle = aDecoder.decodeObject(forKey: "AssessmentTitle") as! String
-        subject = aDecoder.decodeObject(forKey: "Subject") as! (Subject, Bool)
+        subjectObject = aDecoder.decodeObject(forKey: "SubjectObject") as! SubjectObject
         date = aDecoder.decodeObject(forKey: "Date") as! Date
         
         marksAvailable = aDecoder.decodeInteger(forKey: "MarksAvailable")
@@ -70,19 +59,6 @@ class Assessment: NSObject, NSCoding {
         
         overallGrade = aDecoder.decodeInteger(forKey: "OverallGrade")
         
-        if let criteriaA = aDecoder.decodeInteger(forKey: "CriteriaA") as Int? {
-            self.criteriaA = criteriaA
-        }
-        if let criteriaB = aDecoder.decodeInteger(forKey: "CriteriaB") as Int? {
-            self.criteriaB = criteriaB
-        }
-        if let criteriaC = aDecoder.decodeInteger(forKey: "CriteriaC") as Int? {
-            self.criteriaC = criteriaC
-        }
-        if let criteriaD = aDecoder.decodeInteger(forKey: "CriteriaD") as Int? {
-            self.criteriaD = criteriaD
-        }
-        
     }
     
     func getOverallGrade() -> Int {
@@ -90,14 +66,6 @@ class Assessment: NSObject, NSCoding {
         percentageMarksObtained = Double(marksReceived) / Double(marksAvailable) * 100
         
         let percent: Int = lround(self.percentageMarksObtained)
-        
-        var hlString = ""
-        if subject.1 == true {
-            hlString = " HL"
-        } else {
-            hlString = " SL"
-        }
-        
         
         typealias JSONDictionary = [String: Any]
         
@@ -114,7 +82,7 @@ class Assessment: NSObject, NSCoding {
                         
                         let title: String = subject["Title"] as! String //get subject title
                         
-                        if title == self.subject.0.rawValue + hlString { //see if the subject title matches the subject of the assessment
+                        if title == self.subjectObject.toString() { //see if the subject title matches the subject of the assessment
                             
                             let gradeBoundaries: JSONDictionary = subject["Boundaries"] as! JSONDictionary //get dictionary of grade boundaries
                             
@@ -145,16 +113,11 @@ class Assessment: NSObject, NSCoding {
     
     func encode(with aCoder: NSCoder) {
         aCoder.encode(assessmentTitle, forKey: "AssessmentTitle")
-        aCoder.encode(subject, forKey: "Subject")
+        aCoder.encode(subjectObject, forKey: "SubjectObject")
         aCoder.encode(date, forKey: "Date")
         
         aCoder.encode(marksAvailable, forKey: "MarksAvailable")
         aCoder.encode(marksReceived, forKey: "MarksReceived")
-        
-        aCoder.encode(criteriaA, forKey: "CriteriaA")
-        aCoder.encode(criteriaB, forKey: "CriteriaB")
-        aCoder.encode(criteriaB, forKey: "CriteriaC")
-        aCoder.encode(criteriaB, forKey: "CriteriaD")
     }
     
 }

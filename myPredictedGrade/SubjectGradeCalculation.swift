@@ -8,9 +8,10 @@
 
 import Foundation
 
-enum SubjectGradeCalculation {
-    case averageOfGrades
-    case dateWeighted
-    case medianGrade
-    case pessimistMode
+enum SubjectGradeCalculation: String {
+    case averageOfGrades = "Average of Grades"
+    case dateWeighted = "Date Weighted"
+    case medianGrade = "Median Grade"
+    case pessimistMode = "Pessimist Mode"
+    
 }

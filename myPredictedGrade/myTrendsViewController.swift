@@ -29,9 +29,8 @@ class myTrendsViewController: UIViewController {
         if let user = AppStatus.loggedInUser {
             let assessments = user.assessments
             
-            //let subjectSnapshots = user.subjectGradeSnapshots.filter { $0.subject == .BusinessManagement }
+            let subjectSnapshots = user.getSubjectSnapshots().filter { $0.subjectObject.subject == .Physics }
             
-            /*
             for snapshot in subjectSnapshots {
                 
                 subjectGradeData.append(snapshot.grade)
@@ -42,9 +41,10 @@ class myTrendsViewController: UIViewController {
                 xAxisValues.append(dateFormatter.string(from: snapshot.date))
                 
             }
-            */
             
         }
+        
+        print(xAxisValues)
         
         self.automaticallyAdjustsScrollViewInsets = false
         

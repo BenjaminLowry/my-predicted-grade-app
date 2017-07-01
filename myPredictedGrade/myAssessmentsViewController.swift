@@ -36,7 +36,7 @@ class myAssessmentsViewController: UIViewController, UISearchBarDelegate, UITabl
     var allAssessments: [Assessment] = [Assessment]()
     var sortedContentList: [Assessment] = [Assessment]()
     
-    var currentScope: Subject?
+    var currentScope: SubjectObject?
     
     var noResultsLabel: UILabel = UILabel()
     
@@ -103,58 +103,6 @@ class myAssessmentsViewController: UIViewController, UISearchBarDelegate, UITabl
                     //set the assessment to edit as the sorted content list since sorted content list will always be the data source
                     let assessment = sortedContentList[index!.row]
                     viewController.assessmentToEdit = assessment
-                    /*
-                    let assessmentView = cell.recentAssessmentView
-                    
-                    //PREP FOR SUBJECT
-                    let subjectIsHL = assessmentView?.subjectLabel.text?.contains("HL")
-                    var subjectTitle = ""
-                    
-                    var subject: Subject?
-                    
-                    if subjectIsHL! { //if it is HL
-                        if let returnString = assessmentView?.subjectLabel.text?.replacingOccurrences(of: " HL", with: "") {
-                            subjectTitle = returnString
-                        }
-                    } else { //if it is SL
-                        if let returnString = assessmentView?.subjectLabel.text?.replacingOccurrences(of: " SL", with: "") {
-                            subjectTitle = returnString
-                        }
-                    }
-                    
-                    for (subj, _) in userSubjects {
-                        if subj.rawValue == subjectTitle {
-                            subject = subj
-                        }
-                    }
-                    
-                    //PREP FOR DATE
-                    let dateFormatter = DateFormatter()
-                    var date: Date?
-                    if let text = assessmentView?.dateLabel.text {
-                        date = dateFormatter.date(fromSpecific: text)
-                    }
-                    
-                    //PREP FOR MARKS
-                    var marks: [Int]?
-                    if let marksText: String = assessmentView?.marksLabel.text {
-                        var stringArr = marksText.components(separatedBy: " / ")
-                        if let marksAvailable = Int(stringArr[1]), let marksReceived = Int(stringArr[0]) {
-                            marks = [marksReceived, marksAvailable]
-                        }
-                    }
-                    
-                    if  assessmentView != nil || subject != nil || subjectIsHL != nil || date != nil || marks != nil {
-                        if let titleText = assessmentView?.asssessmentTitleLabel.text { //check for sufficient data for assessment
-                            let assessment = Assessment(assessmentTitle: titleText, subject: subject!, subjectIsHL: subjectIsHL!, date: date!, marksAvailable: marks![1], marksReceived: marks![0])
-                            let index = allAssessments.index(of: assessment)!
-                            
-                            viewController.assessmentToEdit = assessment
-                            viewController.indexOfAssessment = index
-                            
-                            allAssessments.remove(at: index)
-                        }
-                    }*/
                     
                 }
                 
@@ -214,16 +162,21 @@ class myAssessmentsViewController: UIViewController, UISearchBarDelegate, UITabl
     
         if let user = AppStatus.loggedInUser {
             
+            //** Take snapshots of data **//
+            
             user.assessments = allAssessments
             
             let subjectGrades = user.getSubjectGrades()
             
-            for (subject, grade) in subjectGrades {
+            for (subjectObject, grade) in subjectGrades {
                 
-                let snapshot = SubjectSnapshot(grade: grade, subject: subject)
-                user.addSnapshot(snapshot: snapshot)
+                let subjectSnapshot = SubjectSnapshot(grade: grade, subjectObject: subjectObject)
+                user.addSubjectSnapshot(snapshot: subjectSnapshot)
                 
             }
+            
+            let overallGradeSnapshot = OverallGradeSnapshot(grade: user.getOverallGrade())
+            user.addOverallGradeSnapshot(snapshot: overallGradeSnapshot)
             
         }
         
@@ -250,16 +203,21 @@ class myAssessmentsViewController: UIViewController, UISearchBarDelegate, UITabl
         
         if let user = AppStatus.loggedInUser {
             
+            //** Take snapshots of data **//
+            
             user.assessments = allAssessments
             
             let subjectGrades = user.getSubjectGrades()
             
-            for (subject, grade) in subjectGrades {
+            for (subjectObject, grade) in subjectGrades {
                 
-                let snapshot = SubjectSnapshot(grade: grade, subject: subject)
-                user.addSnapshot(snapshot: snapshot)
+                let subjectSnapshot = SubjectSnapshot(grade: grade, subjectObject: subjectObject)
+                user.addSubjectSnapshot(snapshot: subjectSnapshot)
                 
             }
+            
+            let overallGradeSnapshot = OverallGradeSnapshot(grade: user.getOverallGrade())
+            user.addOverallGradeSnapshot(snapshot: overallGradeSnapshot)
             
         }
         
@@ -333,18 +291,14 @@ class myAssessmentsViewController: UIViewController, UISearchBarDelegate, UITabl
             
             contentSelectionTextField.text = contentSelectionOptions[row]
             
-            for subject in (AppStatus.loggedInUser?.subjects)! {
-                var hlString = ""
-                if subject.1 == true {
-                    hlString = " HL"
-                } else {
-                    hlString = " SL"
-                }
-                if subject.0.rawValue + hlString == contentSelectionTextField.text! {
-                    currentScope = subject.0
+            for subjectObject in (AppStatus.loggedInUser?.subjects)! {
+                
+                if subjectObject.toString() == contentSelectionTextField.text! {
+                    currentScope = subjectObject
                     updateContent()
                     return
                 }
+                
             }
             if contentSelectionTextField.text! == "All" {
                 currentScope = nil
@@ -366,7 +320,7 @@ class myAssessmentsViewController: UIViewController, UISearchBarDelegate, UITabl
         
         if let scope = currentScope { //if there is content selection
             let content = allAssessments.filter { assessment in {
-                return assessment.subject.0 == scope
+                return assessment.subjectObject == scope
                 }()
                 
             }
@@ -415,7 +369,7 @@ class myAssessmentsViewController: UIViewController, UISearchBarDelegate, UITabl
             sortedContentList = content.sorted { $0.date < $1.date }
             bodyTableView.reloadSections(NSIndexSet(index: 0) as IndexSet, with: UITableViewRowAnimation.none)
         } else if contentOrderingTextField.text == "Subject" {
-            sortedContentList = content.sorted { $0.subject.0.sortIndex > $1.subject.0.sortIndex }
+            sortedContentList = content.sorted { $0.subjectObject.subject.sortIndex > $1.subjectObject.subject.sortIndex }
             bodyTableView.reloadSections(NSIndexSet(index: 0) as IndexSet, with: UITableViewRowAnimation.none)
         } else if contentOrderingTextField.text == "Overall Grade" {
             sortedContentList = content.sorted { $0.getOverallGrade() > $1.getOverallGrade() }
@@ -433,17 +387,13 @@ class myAssessmentsViewController: UIViewController, UISearchBarDelegate, UITabl
     func donePressedContentSelectionPickerView(){
         contentSelectionTextField.resignFirstResponder()
         
-        for subject in (AppStatus.loggedInUser?.subjects)! {
-            var hlString = ""
-            if subject.1 == true {
-                hlString = " HL"
-            } else {
-                hlString = " SL"
-            }
-            if subject.0.rawValue + hlString == contentSelectionTextField.text! {
-                currentScope = subject.0
+        for subjectObject in (AppStatus.loggedInUser?.subjects)! {
+    
+            if subjectObject.toString() == contentSelectionTextField.text! {
+                currentScope = subjectObject
                 updateContent()
             }
+            
         }
     }
     func donePressedContentOrderingPickerView(){

@@ -11,90 +11,99 @@ import UIKit
 
 class Profile: NSObject, NSCoding {
     
-    var username: String
-    var password: String
+    var name: String
     
-    var subjects: [(Subject, Bool)]
-    var colorPreferences: [Subject: UIColor]
+    var subjects: [SubjectObject]
+    var colorPreferences: [SubjectObject: UIColor]
     
     var assessments: [Assessment]
     
-    var yearLevel: YearLevel
+    var yearLevelObject: YearLevelObject
     
     var subjectGradeSetting: SubjectGradeCalculation
+    var subjectGradeSettingString: String
     
     fileprivate var subjectGradeSnapshots: [SubjectSnapshot]
+    fileprivate var overallGradeSnapshots: [OverallGradeSnapshot]
     
-    fileprivate var subjectGrades: [Subject: Int]
+    fileprivate var subjectGrades: [SubjectObject: Int]
     
     fileprivate var overallGrade: Int
     
     fileprivate var averageGrade: Double
     
-    fileprivate var bestSubject: (Subject, Bool)
+    fileprivate var bestSubject: SubjectObject
     
     required init?(coder aDecoder: NSCoder) {
-        username = aDecoder.decodeObject(forKey: "Username") as! String
-        password = aDecoder.decodeObject(forKey: "Password") as! String
+        name = aDecoder.decodeObject(forKey: "Name") as! String
         
-        subjects = aDecoder.decodeObject(forKey: "Subjects") as! [(Subject, Bool)]
-        colorPreferences = aDecoder.decodeObject(forKey: "Color Preferences") as! [Subject: UIColor]
+        subjects = aDecoder.decodeObject(forKey: "Subjects") as! [SubjectObject]
+        colorPreferences = aDecoder.decodeObject(forKey: "Color Preferences") as! [SubjectObject: UIColor]
         
         assessments = aDecoder.decodeObject(forKey: "Assessments") as! [Assessment]
         
-        yearLevel = aDecoder.decodeObject(forKey: "Year Level") as! YearLevel
+        yearLevelObject = aDecoder.decodeObject(forKey: "Year Level") as! YearLevelObject
         
-        subjectGrades = aDecoder.decodeObject(forKey: "Subject Grades") as! [Subject: Int]
+        subjectGrades = aDecoder.decodeObject(forKey: "Subject Grades") as! [SubjectObject: Int]
         
-        overallGrade = aDecoder.decodeObject(forKey: "Overall Grade") as! Int
+        overallGrade = aDecoder.decodeInteger(forKey: "Overall Grade")
         
-        averageGrade = aDecoder.decodeObject(forKey: "Average Grade") as! Double
+        averageGrade = aDecoder.decodeDouble(forKey: "Average Grade")
         
-        bestSubject = aDecoder.decodeObject(forKey: "Best Subject") as! (Subject, Bool)
+        bestSubject = aDecoder.decodeObject(forKey: "Best Subject") as! SubjectObject
         
-        subjectGradeSetting = aDecoder.decodeObject(forKey: "Subject Grade Settings") as! SubjectGradeCalculation
+        subjectGradeSetting = SubjectGradeCalculation.averageOfGrades //default value, can be improved?
+        subjectGradeSettingString = aDecoder.decodeObject(forKey: "Subject Grade Setting String") as! String
         
         subjectGradeSnapshots = aDecoder.decodeObject(forKey: "Subject Snapshots") as! [SubjectSnapshot]
+        overallGradeSnapshots = aDecoder.decodeObject(forKey: "Overall Grade Snapshots") as! [OverallGradeSnapshot]
+        
+        super.init()
+        
+        //take the string which is encodable and then find the right enum option
+        subjectGradeSetting = subjectGradeSettingEnum(from: subjectGradeSettingString)
     }
     
-    init(username: String, password: String, yearLevel: YearLevel, subjects: [(Subject, Bool)], colorPreferences: [Subject: UIColor], assessments: [Assessment]) {
+    init(name: String, yearLevelObject: YearLevelObject, subjects: [SubjectObject], colorPreferences: [SubjectObject: UIColor], assessments: [Assessment]) {
         
-        self.username = username
-        self.password = password
+        self.name = name
         
         self.subjects = subjects
         self.colorPreferences = colorPreferences
         
         self.assessments = assessments
         
-        self.yearLevel = yearLevel
+        self.yearLevelObject = yearLevelObject
         
-        self.subjectGrades = [Subject: Int]()
+        self.subjectGrades = [SubjectObject: Int]()
         
         self.overallGrade = 0
         
         self.averageGrade = 0
         
         //default
-        self.bestSubject = (Subject.Biology, true)
+        self.bestSubject = subjects[0]
         
         self.subjectGradeSetting = SubjectGradeCalculation.averageOfGrades
+        self.subjectGradeSettingString = "Average of Grades" //default value
         
         self.subjectGradeSnapshots = [SubjectSnapshot]()
+        self.overallGradeSnapshots = [OverallGradeSnapshot]()
         
         super.init()
+        
+        updateGradeSettingString()
     }
     
     func encode(with aCoder: NSCoder) {
-        aCoder.encode(username, forKey: "Username")
-        aCoder.encode(password, forKey: "Password")
+        aCoder.encode(name, forKey: "Name")
         
         aCoder.encode(subjects, forKey: "Subjects")
         aCoder.encode(colorPreferences, forKey: "Color Preferences")
         
         aCoder.encode(assessments, forKey: "Assessments")
         
-        aCoder.encode(yearLevel, forKey: "Year Level")
+        aCoder.encode(yearLevelObject, forKey: "Year Level")
         
         aCoder.encode(subjectGrades, forKey: "Subject Grades")
         
@@ -104,31 +113,44 @@ class Profile: NSObject, NSCoding {
         
         aCoder.encode(bestSubject, forKey: "Best Subject")
         
-        aCoder.encode(subjectGradeSetting, forKey: "Subject Grade Settings")
+        aCoder.encode(subjectGradeSetting.rawValue, forKey: "Subject Grade Setting String")
         
         aCoder.encode(subjectGradeSnapshots, forKey: "Subject Snapshots")
+        aCoder.encode(overallGradeSnapshots, forKey: "Overall Grade Snapshots")
     }
     
-    func addSnapshot(snapshot: SubjectSnapshot) {
+    func addSubjectSnapshot(snapshot: SubjectSnapshot) {
         
         subjectGradeSnapshots.append(snapshot)
         
     }
     
-    func getSnapshots() -> [SubjectSnapshot] {
+    func addOverallGradeSnapshot(snapshot: OverallGradeSnapshot) {
+        
+        overallGradeSnapshots.append(snapshot)
+        
+    }
+    
+    func getSubjectSnapshots() -> [SubjectSnapshot] {
         
         return subjectGradeSnapshots
         
     }
     
-    func getBestSubject() -> (Subject, Bool) {
+    func getOverallGradeSnapshots() -> [OverallGradeSnapshot] {
+        
+        return overallGradeSnapshots
+        
+    }
+    
+    func getBestSubject() -> SubjectObject {
         
         var bestAverage = 0.0
         var bestPercentageAverage = 0.0
         
-        for (subject, isHL) in subjects {
+        for subjectObject in subjects {
             
-            let assessmentsForSubject = assessments.filter { $0.subject.0 == subject }
+            let assessmentsForSubject = assessments.filter { $0.subjectObject == subjectObject }
             
             var sum = 0
             var numberOfAssessments = 0
@@ -146,7 +168,7 @@ class Profile: NSObject, NSCoding {
                 if average > bestAverage {
                     
                     bestAverage = average
-                    bestSubject = (subject, isHL)
+                    bestSubject = subjectObject
                     
                     var percentageSum = 0.0
                     
@@ -171,7 +193,7 @@ class Profile: NSObject, NSCoding {
                     if percentageSum / Double(numberOfAssessments) > bestPercentageAverage { //if the current subject has better percentages even with the same grade
                         
                         //no need to set best average again since it will be the same
-                        bestSubject = (subject, isHL)
+                        bestSubject = subjectObject
                         bestPercentageAverage = percentageSum / Double(numberOfAssessments)
                         
                     }
@@ -215,15 +237,10 @@ class Profile: NSObject, NSCoding {
         return overallGrade
     }
     
-    func getSubjectGrades() -> [Subject: Int] {
+    func getSubjectGrades() -> [SubjectObject: Int] {
     
-        print(subjects)
-        for (subject, isHL) in subjects {
-            print(subject)
-            if subject == Subject.SpanishAb {
-                
-            }
-            
+        for subjectObject in subjects {
+
             var sumPercentageMarks = 0.0
             var numberOfAssessments = 0
             
@@ -231,7 +248,7 @@ class Profile: NSObject, NSCoding {
             
             for assessment in assessments {
                 
-                if assessment.subject.0 == subject {
+                if assessment.subjectObject == subjectObject {
                     sumPercentageMarks += assessment.percentageMarksObtained
                     
                     subjectAssessments.append(assessment)
@@ -267,7 +284,7 @@ class Profile: NSObject, NSCoding {
                     }
                     let medianGrade = assessment?.getOverallGrade()
                     
-                    subjectGrades[subject] = medianGrade
+                    subjectGrades[subjectObject] = medianGrade
                     continue
                 }
             }
@@ -306,7 +323,7 @@ class Profile: NSObject, NSCoding {
                     }
                     
                     let returnGrade = Int(round(gradeSum))
-                    subjectGrades[subject] = returnGrade
+                    subjectGrades[subjectObject] = returnGrade
                     
                     continue
                     
@@ -330,7 +347,7 @@ class Profile: NSObject, NSCoding {
                             
                             let title: String = aSubject["Title"] as! String //get subject title
                             
-                            if title == subject.rawValue + " \(isHL ? "HL" : "SL")" { //see if the subject title matches the subject of the assessment
+                            if title == subjectObject.toString() { //see if the subject title matches the subject of the assessment
                                 
                                 let gradeBoundaries: JSONDictionary = aSubject["Boundaries"] as! JSONDictionary //get dictionary of grade boundaries
                                 
@@ -344,14 +361,14 @@ class Profile: NSObject, NSCoding {
                                             
                                             if averagePercentage - 5.0 < Double(value[1] + 1) && averagePercentage - 5.0 >= Double(value[0]) { //if the percentage (minus five) from the assessment falls between the bounds
                                                 
-                                                subjectGrades[subject] = Int(key) //add the subject grade to the dictionary
+                                                subjectGrades[subjectObject] = Int(key) //add the subject grade to the dictionary
                                             }
                                             
                                         } else { //if the user just wants a simple average done
                                             
                                             if averagePercentage < Double(value[1] + 1) && averagePercentage >= Double(value[0]) { //if the percentage (minus five) from the assessment falls between the bounds
                                                 
-                                                subjectGrades[subject] = Int(key) //add the subject grade to the dictionary
+                                                subjectGrades[subjectObject] = Int(key) //add the subject grade to the dictionary
                                             }
                                             
                                         }
@@ -374,6 +391,28 @@ class Profile: NSObject, NSCoding {
         }
         
         return subjectGrades
+    }
+    
+    func subjectGradeSettingEnum(from string: String) -> SubjectGradeCalculation{
+        
+        if string == "Average of Grades" {
+            return SubjectGradeCalculation.averageOfGrades
+        } else if string == "Median Grade" {
+            return SubjectGradeCalculation.medianGrade
+        } else if string == "Pessimist Mode" {
+            return SubjectGradeCalculation.pessimistMode
+        } else if string == "Date Weighted" {
+            return SubjectGradeCalculation.dateWeighted
+        } else { //to shut the compiler up
+            return SubjectGradeCalculation.averageOfGrades
+        }
+        
+    }
+    
+    func updateGradeSettingString() {
+        
+        subjectGradeSettingString = subjectGradeSetting.rawValue
+        
     }
     
 }

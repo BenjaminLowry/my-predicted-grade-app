@@ -8,7 +8,7 @@
 
 import Foundation
 
-class Snapshot {
+class Snapshot: NSObject, NSCoding {
     
     var date: Date
     var grade: Int
@@ -16,6 +16,23 @@ class Snapshot {
     init(grade: Int) {
         self.date = Date(timeIntervalSinceNow: 0)
         self.grade = grade
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        
+        print(aDecoder.decodeObject(forKey: "Date"))
+        date = aDecoder.decodeObject(forKey: "Date") as! Date
+        
+        grade = aDecoder.decodeInteger(forKey: "Grade")
+        
+    }
+    
+    func encode(with aCoder: NSCoder) {
+        
+        aCoder.encode(date, forKey: "Date")
+        
+        aCoder.encode(grade, forKey: "Grade")
+        
     }
     
 }

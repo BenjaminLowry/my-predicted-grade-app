@@ -13,7 +13,8 @@ class RecentAssessmentView: UIView {
     
     @IBOutlet var mainView: RecentAssessmentView!
     
-    //UI members
+    // MARK: - IB Outlets
+    
     @IBOutlet weak var headerView: UIView! //parent view of titleLabel, subjectLabel, and dateLabel
     
         @IBOutlet weak var asssessmentTitleLabel: UILabel!
@@ -31,19 +32,10 @@ class RecentAssessmentView: UIView {
             @IBOutlet weak var percentageTitleLabel: UILabel!
             @IBOutlet weak var percentageLabel: UILabel!
     
-            @IBOutlet weak var parentStackView: UIStackView!
-    
-                @IBOutlet weak var criteriaStackView: UIStackView!
-                @IBOutlet weak var markStackView: UIStackView!
-    
-                    @IBOutlet weak var criterionAMarkLabel: UILabel!
-                    @IBOutlet weak var criterionBMarkLabel: UILabel!
-                    @IBOutlet weak var criterionCMarkLabel: UILabel!
-                    @IBOutlet weak var criterionDMarkLabel: UILabel!
-    
         @IBOutlet weak var overallGradeTitleLabel: UILabel!
         @IBOutlet weak var overallGradeLabel: UILabel!
 
+    // MARK: - Initializers
     
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
@@ -52,18 +44,20 @@ class RecentAssessmentView: UIView {
         mainView.layer.borderColor = UIColor.black.cgColor
         mainView.layer.borderWidth = 0.5
         subjectDateLabel.adjustsFontSizeToFitWidth = true
+        asssessmentTitleLabel.adjustsFontSizeToFitWidth = true
         self.addSubview(self.mainView)
         
-        
     }
+    
+    // MARK: - UI Update Funcs
     
     func updateLabels(assessment: Assessment){
         
         //update colors
         if let user = AppStatus.loggedInUser {
-            for subject in user.subjects {
-                if assessment.subject == subject {
-                    var color = user.colorPreferences[subject.0]
+            for subjectObject in user.subjects {
+                if assessment.subjectObject == subjectObject {
+                    var color = user.colorPreferences[subjectObject]
                     color = color?.withAlphaComponent(0.30)
                     headerView.backgroundColor = color
                     color = color?.withAlphaComponent(0)
@@ -77,7 +71,7 @@ class RecentAssessmentView: UIView {
         }
         
         asssessmentTitleLabel.text = assessment.assessmentTitle
-        let subjectText = assessment.subject.0.rawValue + (assessment.subject.1 ? " HL" : " SL")
+        let subjectText = assessment.subjectObject.toString()
         
         //converting date to appropriate format
         let dateFormatter = DateFormatter()
@@ -100,6 +94,7 @@ class RecentAssessmentView: UIView {
         let number = NSDecimalNumber(decimal: Decimal(numberDouble))
         percentageLabel.text = numberFormatter.string(from: number)
         
+        /*
         if let criteriaA = assessment.criteriaA {
             criterionAMarkLabel.text = String(criteriaA)
         } else {
@@ -120,8 +115,22 @@ class RecentAssessmentView: UIView {
         } else {
             criterionDMarkLabel.text = "~"
         }
-        
+        */
         overallGradeLabel.text = String(assessment.getOverallGrade())
+        
+    }
+    
+    func updateView(for color: UIColor) {
+        
+        var color = color
+        color = color.withAlphaComponent(0.30)
+        headerView.backgroundColor = color
+        color = color.withAlphaComponent(0)
+        bodyView.backgroundColor = color
+        color = color.withAlphaComponent(0.8)
+        marksLabel.textColor = color
+        percentageLabel.textColor = color
+        overallGradeLabel.textColor = color
         
     }
     

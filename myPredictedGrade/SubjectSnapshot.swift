@@ -10,14 +10,29 @@ import Foundation
 
 class SubjectSnapshot: Snapshot {
     
-    var subject: Subject
+    var subjectObject: SubjectObject
     
-    init(grade: Int, subject: Subject) {
+    init(grade: Int, subjectObject: SubjectObject) {
         
-        self.subject = subject
+        self.subjectObject = subjectObject
         
         super.init(grade: grade)
         
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        
+        subjectObject = aDecoder.decodeObject(forKey: "Subject Object") as! SubjectObject
+        
+        super.init(coder: aDecoder)
+        
+    }
+    
+    override func encode(with aCoder: NSCoder) {
+        
+        aCoder.encode(subjectObject, forKey: "Subject Object")
+        
+        super.encode(with: aCoder)
     }
     
 }

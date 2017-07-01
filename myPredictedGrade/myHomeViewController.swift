@@ -27,7 +27,6 @@ class myHomeViewController: UIViewController, UITableViewDelegate, UITableViewDa
     
     @IBOutlet weak var userLabel: UnderlinedLabel!
     
-    
     @IBOutlet weak var bestSubjectContentLabel: UILabel!
     @IBOutlet weak var averageGradeContentLabel: UILabel!
     @IBOutlet weak var IBPercentileContentLabel: UILabel!
@@ -37,46 +36,41 @@ class myHomeViewController: UIViewController, UITableViewDelegate, UITableViewDa
     
     var mostRecentAssessment: Assessment!
     
+    var noAssessmentsLabel = UILabel()
+    
     // MARK: - Inherited Funcs
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        AppStatus.loadData()
+        print(AppStatus.loggedInUser?.assessments)
+        //where is my assessment?
+        
+        let subject1 = SubjectObject(subject: .Physics, isHL: true)
+        let subject2 = SubjectObject(subject: .Chemistry, isHL: true)
+        let subject3 = SubjectObject(subject: .Mathematics, isHL: true)
+        let subject4 = SubjectObject(subject: .Economics, isHL: true)
+        let subject5 = SubjectObject(subject: .EnglishALit, isHL: false)
+        let subject6 = SubjectObject(subject: .SpanishAb, isHL: false)
+        
+        let subjects = [subject1, subject2, subject3, subject4, subject5, subject6]
+        
+        let yearLevelObject = YearLevelObject(yearLevel: .year12)
+        
         //temporary
-        AppStatus.loggedInUser = Profile(username: "Benthos", password: "benjiman", yearLevel: YearLevel.year12, subjects: [(Subject.Physics, true), (Subject.Chemistry, true), (Subject.Mathematics, true), (Subject.Economics, true), (Subject.InformationTechonologyinaGlobalSociety, false), (Subject.SpanishAb, false)], colorPreferences: [Subject.Physics: AppStatus.validAssessmentColors[0], Subject.Chemistry: AppStatus.validAssessmentColors[1], Subject.Mathematics: AppStatus.validAssessmentColors[2], Subject.Economics: AppStatus.validAssessmentColors[3], Subject.SpanishAb: AppStatus.validAssessmentColors[4], Subject.InformationTechonologyinaGlobalSociety: AppStatus.validAssessmentColors[5]], assessments: [])
+        AppStatus.loggedInUser = Profile(name: "Benthos", yearLevelObject: yearLevelObject, subjects: subjects, colorPreferences: [subject1: AppStatus.validAssessmentColors[0], subject2: AppStatus.validAssessmentColors[1], subject3: AppStatus.validAssessmentColors[2], subject4: AppStatus.validAssessmentColors[3], subject6: AppStatus.validAssessmentColors[4], subject5: AppStatus.validAssessmentColors[5]], assessments: [])
         
-        //create assessment
-        //let date = Date(timeIntervalSince1970: TimeInterval(exactly: 30549.00)!)
-        //let physicsTest = Assessment(assessmentTitle: "Forces & Mechanics Test", subject: .Physics, subjectIsHL: true, date: date, marksAvailable: 45, marksReceived: 31)
-        
-        //test of tableview system
-        let date2 = Date(timeIntervalSince1970: TimeInterval(exactly: 3095904229.00)!)
-        let chemTest = Assessment(assessmentTitle: "Stoichiometry Test", subject: .Chemistry, subjectIsHL: true, date: date2, marksAvailable: 49, marksReceived: 32)
-        AppStatus.loggedInUser?.assessments.append(chemTest)
-        
-        //test of tableview system
-        let date = Date(timeIntervalSince1970: TimeInterval(exactly: 30549.00)!)
-        let physicsTest = Assessment(assessmentTitle: "Forces & Mechanics Test", subject: .Physics, subjectIsHL: true, date: date, marksAvailable: 45, marksReceived: 36)
-        AppStatus.loggedInUser?.assessments.append(physicsTest)
-        
-        //test of tableview system
-        let date3 = Date(timeIntervalSince1970: TimeInterval(exactly: 3056959229.00)!)
-        let mathTest = Assessment(assessmentTitle: "Calculus Test", subject: .Mathematics, subjectIsHL: true, date: date3, marksAvailable: 50, marksReceived: 49)
-        AppStatus.loggedInUser?.assessments .append(mathTest)
-        
-        //AppStatus.loggedInUser?.assessments = [physicsTest]
-        
-        //bodyTableView.register(UINib(nibName: "CustomAssessmentCell", bundle: Bundle.main), forCellReuseIdentifier: "CustomAssessmentCell")
         bodyTableView.register(UINib(nibName: "AssessmentCell", bundle: Bundle.main), forCellReuseIdentifier: "AssessmentCell")
         
+        //UI setup
+        setupNoAssessmentsLabel()
         setupHeaderView()
-        
         setupAssessmentTableView()
-        
         setupBodyView()
+        bodyScrollView.contentSize = CGSize(width: self.view.frame.width, height: 736)
     
     }
-    
     
     override func viewWillAppear(_ animated: Bool) {
         //set the overall grade to the sum of the subject grades
@@ -85,6 +79,7 @@ class myHomeViewController: UIViewController, UITableViewDelegate, UITableViewDa
             overallGradeLabel.text = String(describing: overallGrade)
         }
         
+        setupAssessmentTableView()
         setupStackViews()
         setupBodyView()
     }
@@ -92,7 +87,7 @@ class myHomeViewController: UIViewController, UITableViewDelegate, UITableViewDa
     // MARK: - UITableView Delegate Funcs
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 1
+        return (mostRecentAssessment != nil) ? 1 : 0
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -101,9 +96,9 @@ class myHomeViewController: UIViewController, UITableViewDelegate, UITableViewDa
         cell.recentAssessmentView.infoButton.isHidden = true
         cell.recentAssessmentView.infoButton.isUserInteractionEnabled = false
         
-        let assessment = mostRecentAssessment
-        
-        configureCell(cell: cell, assessment: assessment!)
+        if let assessment = mostRecentAssessment {
+            configureCell(cell: cell, assessment: assessment)
+        }
         
         return cell
         
@@ -123,31 +118,31 @@ class myHomeViewController: UIViewController, UITableViewDelegate, UITableViewDa
     
     func setupStackViews() {
         
-        print("number of assessments: \(AppStatus.loggedInUser?.assessments.count)")
+        //print("number of assessments: \(AppStatus.loggedInUser?.assessments.count)")
         
         //empty the stack view
         for view in subjectStackView.subviews {
             subjectStackView.removeArrangedSubview(view)
         }
         
-        var subjectArray = [Subject]()
+        var subjectArray = [SubjectObject]()
         
-        for (subject, isHL) in (AppStatus.loggedInUser?.subjects)! {
+        for subjectObject in (AppStatus.loggedInUser?.subjects)! {
             
             let label = UILabel()
-            if subject.shortName == "" {
-                label.text = "\(subject.rawValue) \(isHL ? "HL" : "SL" ):"
+            if subjectObject.subject.shortName == "" {
+                label.text = subjectObject.toString()
             } else {
-                label.text = subject.shortName + " \(isHL ? "HL" : "SL"):"
+                label.text = subjectObject.toShortString()
             }
             label.font = UIFont(name: "AvenirNext-DemiBold", size: 17)
             label.textAlignment = .right
             label.adjustsFontSizeToFitWidth = true
-            let color = AppStatus.loggedInUser?.colorPreferences[subject]
+            let color = AppStatus.loggedInUser?.colorPreferences[subjectObject]
             label.textColor = color?.withAlphaComponent(0.8)
             subjectStackView.addArrangedSubview(label)
             
-            subjectArray.append(subject)
+            subjectArray.append(subjectObject)
         }
         
         for view in gradeStackView.subviews {
@@ -181,20 +176,33 @@ class myHomeViewController: UIViewController, UITableViewDelegate, UITableViewDa
         bodyTableView.dataSource = self
         
         //get the most recent assessment
-        mostRecentAssessment = AppStatus.loggedInUser?.assessments[0]
-        bodyTableView.reloadData()
-        
+        print(AppStatus.loggedInUser?.name)
+        if AppStatus.loggedInUser?.assessments.count == 0 { //if they haven't logged any assessments yet
+            bodyScrollView.addSubview(noAssessmentsLabel)
+            bodyTableView.reloadData()
+        } else {
+            noAssessmentsLabel.removeFromSuperview()
+            mostRecentAssessment = AppStatus.loggedInUser?.assessments[0]
+            bodyTableView.reloadData()
+        }
         
         //can't scroll because only one item
         bodyTableView.isScrollEnabled = false
     }
     
     func setupBodyView() {
-        bodyScrollView.contentSize = CGSize(width: self.view.frame.width, height: 736)
         bestSubjectContentLabel.adjustsFontSizeToFitWidth = true
         
-        if let yearLevel = AppStatus.loggedInUser?.yearLevel {
-            userLabel.text = "Benjamin Lowry - \(yearLevel.rawValue) Student"
+        if AppStatus.loggedInUser?.assessments.count == 0 { //if there are no logged assessments
+            averageGradeContentLabel.text = "N/A"
+            bestSubjectContentLabel.text = "N/A"
+            loggedAssessmentsContentLabel.text = "0"
+            IBPercentileContentLabel.text = "N/A"
+            return
+        }
+        
+        if let yearLevelObject = AppStatus.loggedInUser?.yearLevelObject {
+            userLabel.text = "Benjamin Lowry - \(yearLevelObject.yearLevel.rawValue) Student"
         }
         
         if let averageGrade = AppStatus.loggedInUser?.getAverageGrade() {
@@ -203,7 +211,7 @@ class myHomeViewController: UIViewController, UITableViewDelegate, UITableViewDa
         }
         
         if let bestSubject = AppStatus.loggedInUser?.getBestSubject() {
-            bestSubjectContentLabel.text = "\(bestSubject.0) \(bestSubject.1 ? "HL" : "SL")"
+            bestSubjectContentLabel.text = bestSubject.toString()
         }
         
         if let assessmentsCount = AppStatus.loggedInUser?.assessments.count {
@@ -256,6 +264,15 @@ class myHomeViewController: UIViewController, UITableViewDelegate, UITableViewDa
         }
         
         return percentile
+    }
+    
+    func setupNoAssessmentsLabel() {
+        
+        noAssessmentsLabel = UILabel(frame: CGRect(x: self.bodyTableView.frame.origin.x, y: self.bodyTableView.frame.origin.y, width: UIScreen.main.bounds.width, height: self.bodyTableView.frame.height))
+        noAssessmentsLabel.text = "No Assessments Yet!"
+        noAssessmentsLabel.font = UIFont(name: "AvenirNext-UltraLight", size: 16)
+        noAssessmentsLabel.textAlignment = .center
+        
     }
     
     func setupHeaderView() {
