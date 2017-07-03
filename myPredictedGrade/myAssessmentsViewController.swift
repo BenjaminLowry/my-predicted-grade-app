@@ -31,8 +31,6 @@ class myAssessmentsViewController: UIViewController, UISearchBarDelegate, UITabl
     var contentSelectionOptions: [String] = ["All", "Physics HL", "Chemistry HL", "Spanish Ab SL"]
     var contentOrderingOptions: [String] = ["Most Recent", "Oldest", "Subject", "Overall Grade", "Percentage Marks", "Title"] //DEVELOPMENT: hide "Subject" when a specific subject is selected (?)
     
-    typealias JSONObject = [String: Any]
-    
     var allAssessments: [Assessment] = [Assessment]()
     var sortedContentList: [Assessment] = [Assessment]()
     
@@ -40,26 +38,29 @@ class myAssessmentsViewController: UIViewController, UISearchBarDelegate, UITabl
     
     var noResultsLabel: UILabel = UILabel()
     
+    // MARK: - Typealiases
+    
+    typealias JSONObject = [String: Any]
+    
     // MARK: - Inherited Funcs
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        //register XIB for usage
+        // Register XIB for usage
         bodyTableView.register(UINib(nibName: "AssessmentCell", bundle: Bundle.main), forCellReuseIdentifier: "AssessmentCell")
         
-        //setup delegates
+        // Setup delegates
         searchBar.delegate = self
         bodyTableView.delegate = self
         bodyTableView.dataSource = self
         
-        //UI setup
+        // UI setup
         setupPickerViews()
-        setupNoResultsLabel()
         setupSearchBar()
         setupHeaderViews()
         
-        allAssessments = (AppStatus.loggedInUser?.assessments)!
+        allAssessments = AppStatus.user.assessments
         
         var indexPaths: [IndexPath] = [IndexPath]()
         
@@ -72,20 +73,16 @@ class myAssessmentsViewController: UIViewController, UISearchBarDelegate, UITabl
         
         bodyTableView.insertRows(at: indexPaths, with: .automatic)
         
-        
-        //set the list to "Most Recent" initially
-        
+        // Set the list to "Most Recent" initially
         sortedContentList = allAssessments.sorted { $0.date > $1.date }
         bodyTableView.reloadSections(NSIndexSet(index: 0) as IndexSet, with: UITableViewRowAnimation.automatic)
         
-        
-    }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        setupNoResultsLabel()
+    }
+
     // MARK: - Navigation
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -134,7 +131,6 @@ class myAssessmentsViewController: UIViewController, UISearchBarDelegate, UITabl
         
     }
     
-    
     func tableView(_ tableView: UITableView, accessoryButtonTappedForRowWith indexPath: IndexPath) {
         performSegue(withIdentifier: "EditAssessment", sender: tableView.cellForRow(at: indexPath))
     }
@@ -143,7 +139,6 @@ class myAssessmentsViewController: UIViewController, UISearchBarDelegate, UITabl
         let cell = bodyTableView.cellForRow(at: IndexPath(row: sender.tag, section: 0))
         performSegue(withIdentifier: "EditAssessment", sender: cell)
     }
-    
     
     // MARK: - AssessmentDetailViewController Delegate Funcs
     
@@ -160,26 +155,24 @@ class myAssessmentsViewController: UIViewController, UISearchBarDelegate, UITabl
         updateContent()
         bodyTableView.reloadData()
     
-        if let user = AppStatus.loggedInUser {
+        let user = AppStatus.user
             
-            //** Take snapshots of data **//
+        //** Take snapshots of data **//
             
-            user.assessments = allAssessments
+        user.assessments = allAssessments
             
-            let subjectGrades = user.getSubjectGrades()
+        let subjectGrades = user.getSubjectGrades()
             
-            for (subjectObject, grade) in subjectGrades {
+        for (subjectObject, grade) in subjectGrades {
                 
-                let subjectSnapshot = SubjectSnapshot(grade: grade, subjectObject: subjectObject)
-                user.addSubjectSnapshot(snapshot: subjectSnapshot)
+            let subjectSnapshot = SubjectSnapshot(grade: grade, subjectObject: subjectObject)
+            user.addSubjectSnapshot(snapshot: subjectSnapshot)
                 
-            }
-            
-            let overallGradeSnapshot = OverallGradeSnapshot(grade: user.getOverallGrade())
-            user.addOverallGradeSnapshot(snapshot: overallGradeSnapshot)
-            
         }
-        
+            
+        let overallGradeSnapshot = OverallGradeSnapshot(grade: user.getOverallGrade())
+        user.addOverallGradeSnapshot(snapshot: overallGradeSnapshot)
+          
         //save changes
         AppStatus.saveData()
         controller.dismiss(animated: true, completion: nil)
@@ -201,25 +194,23 @@ class myAssessmentsViewController: UIViewController, UISearchBarDelegate, UITabl
             
         }
         
-        if let user = AppStatus.loggedInUser {
+        let user = AppStatus.user
             
-            //** Take snapshots of data **//
+        //** Take snapshots of data **//
             
-            user.assessments = allAssessments
+        user.assessments = allAssessments
             
-            let subjectGrades = user.getSubjectGrades()
+        let subjectGrades = user.getSubjectGrades()
             
-            for (subjectObject, grade) in subjectGrades {
+        for (subjectObject, grade) in subjectGrades {
+            
+            let subjectSnapshot = SubjectSnapshot(grade: grade, subjectObject: subjectObject)
+            user.addSubjectSnapshot(snapshot: subjectSnapshot)
                 
-                let subjectSnapshot = SubjectSnapshot(grade: grade, subjectObject: subjectObject)
-                user.addSubjectSnapshot(snapshot: subjectSnapshot)
-                
-            }
-            
-            let overallGradeSnapshot = OverallGradeSnapshot(grade: user.getOverallGrade())
-            user.addOverallGradeSnapshot(snapshot: overallGradeSnapshot)
-            
         }
+            
+        let overallGradeSnapshot = OverallGradeSnapshot(grade: user.getOverallGrade())
+        user.addOverallGradeSnapshot(snapshot: overallGradeSnapshot)
         
         //save changes
         AppStatus.saveData()
@@ -291,7 +282,7 @@ class myAssessmentsViewController: UIViewController, UISearchBarDelegate, UITabl
             
             contentSelectionTextField.text = contentSelectionOptions[row]
             
-            for subjectObject in (AppStatus.loggedInUser?.subjects)! {
+            for subjectObject in AppStatus.user.subjects {
                 
                 if subjectObject.toString() == contentSelectionTextField.text! {
                     currentScope = subjectObject
@@ -387,7 +378,7 @@ class myAssessmentsViewController: UIViewController, UISearchBarDelegate, UITabl
     func donePressedContentSelectionPickerView(){
         contentSelectionTextField.resignFirstResponder()
         
-        for subjectObject in (AppStatus.loggedInUser?.subjects)! {
+        for subjectObject in AppStatus.user.subjects {
     
             if subjectObject.toString() == contentSelectionTextField.text! {
                 currentScope = subjectObject
@@ -396,6 +387,7 @@ class myAssessmentsViewController: UIViewController, UISearchBarDelegate, UITabl
             
         }
     }
+    
     func donePressedContentOrderingPickerView(){
         contentOrderingTextField.resignFirstResponder()
         updateContent()
@@ -421,6 +413,12 @@ class myAssessmentsViewController: UIViewController, UISearchBarDelegate, UITabl
         
         contentSelectionTextField.inputView = contentSelectionPickerView //set pickerView as responder
         contentSelectionTextField.delegate = self
+        
+        contentSelectionOptions = []
+        contentSelectionOptions.append("All")
+        for subject in AppStatus.user.subjects {
+            contentSelectionOptions.append(subject.toString())
+        }
         
         contentOrderingPickerView.tag = 2 //for the delegate methods
         //contentOrderingPickerView.isHidden = true
@@ -456,7 +454,6 @@ class myAssessmentsViewController: UIViewController, UISearchBarDelegate, UITabl
     func setupHeaderViews() {
         filterView.drawBorder(orientation: .Bottom, color: .black, thickness: 0.5)
         
-        
         //create underline graphic for header text fields
         contentSelectionTextField.underlined()
         contentOrderingTextField.underlined()
@@ -485,10 +482,3 @@ class myAssessmentsViewController: UIViewController, UISearchBarDelegate, UITabl
     }
 
 }
-
-
-
-
-
-
-

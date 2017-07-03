@@ -20,12 +20,13 @@ class myTrendsViewController: UIViewController {
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        
+        /*
         var subjectGradeData = [Int]()
         var xAxisValues = [String]()
         
         
         //this is still highly in development, not functional at all
+        
         if let user = AppStatus.loggedInUser {
             let assessments = user.assessments
             
@@ -121,7 +122,21 @@ class myTrendsViewController: UIViewController {
         
         scrollView.addSubview(barChart)
         scrollView.addSubview(label)
+        */
+        /*
         
+        let label = UILabel()
+        label.text = "Coming Soon!"
+        label.frame = CGRect(x: self.view.frame.width / 2 - 100, y: self.view.frame.height / 2 - 25, width: 200, height: 50)
+        label.font = UIFont(name: "AvenirNext-Medium", size: 30)
+        self.view.addSubview(label)
+        
+        let imageView = UIImageView()
+        let image = UIImage(named: "AppIcon")
+        imageView.image = image
+        imageView.frame = CGRect(x: self.view.frame.width / 2 - 50, y: self.view.frame.height / 2 + 50, width: 100, height: 100)
+        self.view.addSubview(imageView)
+        */
     }
 
     override func didReceiveMemoryWarning() {

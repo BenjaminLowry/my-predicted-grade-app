@@ -12,6 +12,8 @@
 		5F02F6D71E1136B30030F54E /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F02F6D61E1136B30030F54E /* String.swift */; };
 		5F02F6DD1E1183AC0030F54E /* Assessment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F02F6DC1E1183AC0030F54E /* Assessment.swift */; };
 		5F02F6DF1E1191710030F54E /* UIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F02F6DE1E1191710030F54E /* UIView.swift */; };
+		5F10BBBC1F09DAC6001E3A4F /* RequestSubjectViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F10BBBB1F09DAC6001E3A4F /* RequestSubjectViewController.swift */; };
+		5F10BBBE1F0A7480001E3A4F /* Alert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F10BBBD1F0A7480001E3A4F /* Alert.swift */; };
 		5F1BACA71E0D776800CFDD6D /* BorderedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F1BACA61E0D776800CFDD6D /* BorderedView.swift */; };
 		5F2B3FFC1E47272500FAAA74 /* UnderlinedLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F2B3FFB1E47272500FAAA74 /* UnderlinedLabel.swift */; };
 		5F5969731E2B51BD001EA42A /* Date.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F5969721E2B51BD001EA42A /* Date.swift */; };
@@ -36,14 +38,12 @@
 		5F7AC7501EE6EFE1008660C4 /* SubjectSelectionTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F7AC74F1EE6EFE1008660C4 /* SubjectSelectionTableViewController.swift */; };
 		5F7D24DB1E30FC310091FD2C /* DateFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F7D24DA1E30FC310091FD2C /* DateFormatter.swift */; };
 		5F88C08B1F03BE590030DEA6 /* Checkmark_ffffff_100.png in Resources */ = {isa = PBXBuildFile; fileRef = 5F88C08A1F03BE590030DEA6 /* Checkmark_ffffff_100.png */; };
-		5F8AE9851EE059BA00BC697A /* LandingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F8AE9841EE059BA00BC697A /* LandingViewController.swift */; };
 		5F8AE9871EE059FC00BC697A /* BorderedButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F8AE9861EE059FC00BC697A /* BorderedButton.swift */; };
 		5F8C8F321E4C2B0A003A14E3 /* gradePercentiles.json in Resources */ = {isa = PBXBuildFile; fileRef = 5F8C8F311E4C2B0A003A14E3 /* gradePercentiles.json */; };
 		5F8C8F361E4C4B0F003A14E3 /* mySettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F8C8F351E4C4B0F003A14E3 /* mySettingsViewController.swift */; };
 		5F8C8F381E4D327A003A14E3 /* SubjectGradeCalculation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F8C8F371E4D327A003A14E3 /* SubjectGradeCalculation.swift */; };
 		5F9680E21E266ED1001CF7B4 /* UINavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F9680E11E266ED1001CF7B4 /* UINavigationController.swift */; };
 		5F9A31331EE99C4100996D1A /* PersonalInformationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F9A31321EE99C4100996D1A /* PersonalInformationViewController.swift */; };
-		5F9A31351EE99E0200996D1A /* SchoolSelectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F9A31341EE99E0200996D1A /* SchoolSelectionViewController.swift */; };
 		5F9CF5FE1E553B9500FC40C3 /* IndexedSum.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F9CF5FD1E553B9500FC40C3 /* IndexedSum.swift */; };
 		5F9CF6001E58816E00FC40C3 /* gradeBoundaries.json in Resources */ = {isa = PBXBuildFile; fileRef = 5F9CF5FF1E58816E00FC40C3 /* gradeBoundaries.json */; };
 		5F9CF6021E58929700FC40C3 /* untitled.png in Resources */ = {isa = PBXBuildFile; fileRef = 5F9CF6011E58929700FC40C3 /* untitled.png */; };
@@ -54,7 +54,6 @@
 		5FC1EF6C1E1FC90F00CF379A /* UITextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FC1EF6B1E1FC90F00CF379A /* UITextField.swift */; };
 		5FCC00991E17B90B005201C2 /* Profile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FCC00981E17B90B005201C2 /* Profile.swift */; };
 		5FCC009B1E17BC36005201C2 /* AppStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FCC009A1E17BC36005201C2 /* AppStatus.swift */; };
-		5FFA34B01EEBC365000CEF1C /* LoginInformationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FFA34AF1EEBC365000CEF1C /* LoginInformationViewController.swift */; };
 		A864B6D9095C8FA7626B4254 /* Pods_myPredictedGrade.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E8D3FAA413698C633D49FE5A /* Pods_myPredictedGrade.framework */; };
 /* End PBXBuildFile section */
 
@@ -65,6 +64,8 @@
 		5F02F6D61E1136B30030F54E /* String.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = String.swift; sourceTree = "<group>"; };
 		5F02F6DC1E1183AC0030F54E /* Assessment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Assessment.swift; sourceTree = "<group>"; };
 		5F02F6DE1E1191710030F54E /* UIView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIView.swift; sourceTree = "<group>"; };
+		5F10BBBB1F09DAC6001E3A4F /* RequestSubjectViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RequestSubjectViewController.swift; sourceTree = "<group>"; };
+		5F10BBBD1F0A7480001E3A4F /* Alert.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Alert.swift; sourceTree = "<group>"; };
 		5F1BACA61E0D776800CFDD6D /* BorderedView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BorderedView.swift; sourceTree = "<group>"; };
 		5F2B3FFB1E47272500FAAA74 /* UnderlinedLabel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UnderlinedLabel.swift; sourceTree = "<group>"; };
 		5F5969721E2B51BD001EA42A /* Date.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Date.swift; sourceTree = "<group>"; };
@@ -91,14 +92,12 @@
 		5F7AC74F1EE6EFE1008660C4 /* SubjectSelectionTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SubjectSelectionTableViewController.swift; sourceTree = "<group>"; };
 		5F7D24DA1E30FC310091FD2C /* DateFormatter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DateFormatter.swift; sourceTree = "<group>"; };
 		5F88C08A1F03BE590030DEA6 /* Checkmark_ffffff_100.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Checkmark_ffffff_100.png; sourceTree = "<group>"; };
-		5F8AE9841EE059BA00BC697A /* LandingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LandingViewController.swift; sourceTree = "<group>"; };
 		5F8AE9861EE059FC00BC697A /* BorderedButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BorderedButton.swift; sourceTree = "<group>"; };
 		5F8C8F311E4C2B0A003A14E3 /* gradePercentiles.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = gradePercentiles.json; sourceTree = "<group>"; };
 		5F8C8F351E4C4B0F003A14E3 /* mySettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = mySettingsViewController.swift; sourceTree = "<group>"; };
 		5F8C8F371E4D327A003A14E3 /* SubjectGradeCalculation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SubjectGradeCalculation.swift; sourceTree = "<group>"; };
 		5F9680E11E266ED1001CF7B4 /* UINavigationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UINavigationController.swift; sourceTree = "<group>"; };
 		5F9A31321EE99C4100996D1A /* PersonalInformationViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PersonalInformationViewController.swift; sourceTree = "<group>"; };
-		5F9A31341EE99E0200996D1A /* SchoolSelectionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SchoolSelectionViewController.swift; sourceTree = "<group>"; };
 		5F9CF5FD1E553B9500FC40C3 /* IndexedSum.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IndexedSum.swift; sourceTree = "<group>"; };
 		5F9CF5FF1E58816E00FC40C3 /* gradeBoundaries.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = gradeBoundaries.json; sourceTree = "<group>"; };
 		5F9CF6011E58929700FC40C3 /* untitled.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = untitled.png; path = ../untitled.png; sourceTree = "<group>"; };
@@ -109,7 +108,6 @@
 		5FC1EF6B1E1FC90F00CF379A /* UITextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UITextField.swift; sourceTree = "<group>"; };
 		5FCC00981E17B90B005201C2 /* Profile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Profile.swift; sourceTree = "<group>"; };
 		5FCC009A1E17BC36005201C2 /* AppStatus.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppStatus.swift; sourceTree = "<group>"; };
-		5FFA34AF1EEBC365000CEF1C /* LoginInformationViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginInformationViewController.swift; sourceTree = "<group>"; };
 		8EFCFA22CCF058202AA5409A /* Pods-myPredictedGrade.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-myPredictedGrade.release.xcconfig"; path = "Pods/Target Support Files/Pods-myPredictedGrade/Pods-myPredictedGrade.release.xcconfig"; sourceTree = "<group>"; };
 		E8D3FAA413698C633D49FE5A /* Pods_myPredictedGrade.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_myPredictedGrade.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -180,6 +178,7 @@
 			isa = PBXGroup;
 			children = (
 				5F9CF5FD1E553B9500FC40C3 /* IndexedSum.swift */,
+				5F10BBBD1F0A7480001E3A4F /* Alert.swift */,
 				5F6FF6801E5DD4F20004CAEF /* MyValueFormatter.swift */,
 				5F6FF6821E5DD8720004CAEF /* MyAxisFormatter.swift */,
 				5F1BACA61E0D776800CFDD6D /* BorderedView.swift */,
@@ -246,12 +245,10 @@
 			isa = PBXGroup;
 			children = (
 				5F7AC74F1EE6EFE1008660C4 /* SubjectSelectionTableViewController.swift */,
-				5F9A31341EE99E0200996D1A /* SchoolSelectionViewController.swift */,
+				5F10BBBB1F09DAC6001E3A4F /* RequestSubjectViewController.swift */,
 				5F9A31321EE99C4100996D1A /* PersonalInformationViewController.swift */,
 				5FA509591EEED99300684565 /* ColorSelectionViewController.swift */,
 				5F644A351F065333002D7EB3 /* ColorConfirmationViewController.swift */,
-				5F8AE9841EE059BA00BC697A /* LandingViewController.swift */,
-				5FFA34AF1EEBC365000CEF1C /* LoginInformationViewController.swift */,
 			);
 			name = "Account Creation VCs";
 			sourceTree = "<group>";
@@ -295,12 +292,12 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0820;
-				LastUpgradeCheck = 0820;
+				LastUpgradeCheck = 0830;
 				ORGANIZATIONNAME = "Ben LOWRY";
 				TargetAttributes = {
 					5F6032E31E05E6150097639E = {
 						CreatedOnToolsVersion = 8.2;
-						DevelopmentTeam = QS5G68243B;
+						DevelopmentTeam = NC6Q6DD92R;
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -404,12 +401,10 @@
 				5F8AE9871EE059FC00BC697A /* BorderedButton.swift in Sources */,
 				5F8C8F381E4D327A003A14E3 /* SubjectGradeCalculation.swift in Sources */,
 				5F6F6D581E601F6B0035B196 /* SubjectSnapshot.swift in Sources */,
-				5F9A31351EE99E0200996D1A /* SchoolSelectionViewController.swift in Sources */,
 				5FCC00991E17B90B005201C2 /* Profile.swift in Sources */,
 				5F63D3571E20C428005FB875 /* UISearchBar.swift in Sources */,
 				5F6F6D561E601EDF0035B196 /* Snapshot.swift in Sources */,
 				5F6032E81E05E6150097639E /* AppDelegate.swift in Sources */,
-				5FFA34B01EEBC365000CEF1C /* LoginInformationViewController.swift in Sources */,
 				5F8C8F361E4C4B0F003A14E3 /* mySettingsViewController.swift in Sources */,
 				5F02F6CD1E0DC5DE0030F54E /* RecentAssessmentView.swift in Sources */,
 				5F6FF6811E5DD4F20004CAEF /* MyValueFormatter.swift in Sources */,
@@ -417,6 +412,7 @@
 				5FBC4BBD1E38E63D004E64A6 /* myTrendsViewController.swift in Sources */,
 				5F644A361F065333002D7EB3 /* ColorConfirmationViewController.swift in Sources */,
 				5F02F6D71E1136B30030F54E /* String.swift in Sources */,
+				5F10BBBE1F0A7480001E3A4F /* Alert.swift in Sources */,
 				5F5969731E2B51BD001EA42A /* Date.swift in Sources */,
 				5F63D3791E225BBB005FB875 /* AssessmentDetailViewController.swift in Sources */,
 				5F6142791E12D781004DC079 /* myAssessmentsViewController.swift in Sources */,
@@ -431,8 +427,8 @@
 				5F1BACA71E0D776800CFDD6D /* BorderedView.swift in Sources */,
 				5F02F6DD1E1183AC0030F54E /* Assessment.swift in Sources */,
 				5F6142841E14DD1D004DC079 /* AssessmentCell.swift in Sources */,
+				5F10BBBC1F09DAC6001E3A4F /* RequestSubjectViewController.swift in Sources */,
 				5F60C3281EB462B30062DFC5 /* OverallGradeSnapshot.swift in Sources */,
-				5F8AE9851EE059BA00BC697A /* LandingViewController.swift in Sources */,
 				5FCC009B1E17BC36005201C2 /* AppStatus.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -556,9 +552,9 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = QS5G68243B;
+				DEVELOPMENT_TEAM = NC6Q6DD92R;
 				INFOPLIST_FILE = myPredictedGrade/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.benlowryscode.mypredictedgrade;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -572,9 +568,9 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = QS5G68243B;
+				DEVELOPMENT_TEAM = NC6Q6DD92R;
 				INFOPLIST_FILE = myPredictedGrade/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.benlowryscode.mypredictedgrade;
 				PRODUCT_NAME = "$(TARGET_NAME)";

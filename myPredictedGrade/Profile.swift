@@ -95,6 +95,34 @@ class Profile: NSObject, NSCoding {
         updateGradeSettingString()
     }
     
+    override init() {
+        
+        self.name = "John Doe"
+        
+        self.subjects = []
+        self.colorPreferences = [SubjectObject: UIColor]()
+        
+        self.assessments = []
+        
+        self.yearLevelObject = YearLevelObject(yearLevel: .year12)
+        
+        self.subjectGrades = [SubjectObject: Int]()
+        
+        self.overallGrade = 0
+        self.averageGrade = 0
+        
+        self.bestSubject = SubjectObject(subject: .Default, isHL: false)
+        
+        self.subjectGradeSetting = SubjectGradeCalculation.averageOfGrades
+        self.subjectGradeSettingString = "Average of Grades" //default value
+        
+        self.subjectGradeSnapshots = [SubjectSnapshot]()
+        self.overallGradeSnapshots = [OverallGradeSnapshot]()
+        
+        super.init()
+        
+    }
+    
     func encode(with aCoder: NSCoder) {
         aCoder.encode(name, forKey: "Name")
         
@@ -265,72 +293,74 @@ class Profile: NSObject, NSCoding {
             }
             
             //return the median grade if that is the preference
-            if let user = AppStatus.loggedInUser {
-                if user.subjectGradeSetting == .medianGrade {
+            let user = AppStatus.user
+            if user.subjectGradeSetting == .medianGrade {
                     
-                    let sortedSubjectAssessments = subjectAssessments.sorted { $0.getOverallGrade() > $1.getOverallGrade() }
+                let sortedSubjectAssessments = subjectAssessments.sorted { $0.getOverallGrade() > $1.getOverallGrade() }
                     
-                    /*
+                /*
                      
-                     The below code works in both scenarios because the higher grade will be used when the count is even,
-                     and the "sortedSubjectAssessments.count / 2" is rounded up when the count is odd
+                The below code works in both scenarios because the higher grade will be used when the count is even,
+                and the "sortedSubjectAssessments.count / 2" is rounded up when the count is odd
                      
-                     */
-                    var assessment: Assessment?
-                    if sortedSubjectAssessments.count == 1 {
-                        assessment = sortedSubjectAssessments[0]
-                    } else {
-                        assessment = sortedSubjectAssessments[sortedSubjectAssessments.count / 2]
-                    }
-                    let medianGrade = assessment?.getOverallGrade()
+                */
+                
+                if sortedSubjectAssessments.count == 1 {
+                    let assessment = sortedSubjectAssessments[0]
                     
+                    let medianGrade = assessment.getOverallGrade()
                     subjectGrades[subjectObject] = medianGrade
-                    continue
+                } else {
+                    let assessment1 = sortedSubjectAssessments[sortedSubjectAssessments.count / 2 - 1]
+                    let assessment2 = sortedSubjectAssessments[sortedSubjectAssessments.count / 2]
+    
+                    let medianGrade = lround((Double)(assessment1.getOverallGrade() + assessment2.getOverallGrade()) / 2)
+                    subjectGrades[subjectObject] = medianGrade
                 }
+                
+                continue
             }
             
             //return the time weighted grade if that is the preference
-            if let user = AppStatus.loggedInUser {
-                if user.subjectGradeSetting == .dateWeighted {
+            if user.subjectGradeSetting == .dateWeighted {
                     
-                    //sort the subjects in terms of date
-                    let dateSortedAssessments = subjectAssessments.sorted { $0.date < $1.date }
+                //sort the subjects in terms of date
+                let dateSortedAssessments = subjectAssessments.sorted { $0.date < $1.date }
                     
-                    //get the sum of how much extra weight I will allocate
-                    let totalBonusPercentage: Int = sum(startIndex: 0, endIndex: dateSortedAssessments.count - 1, expression: { i in
-                        return i
-                    })
+                //get the sum of how much extra weight I will allocate
+                let totalBonusPercentage: Int = sum(startIndex: 0, endIndex: dateSortedAssessments.count - 1, expression: { i in
+                    return i
+                })
                     
-                    //determines the base percentage for each assessment
-                    let leftOverPercentage: Double = 1.0 - Double(totalBonusPercentage)/100.0
+                //determines the base percentage for each assessment
+                let leftOverPercentage: Double = 1.0 - Double(totalBonusPercentage)/100.0
                     
-                    var gradeWeights = [Double]()
+                var gradeWeights = [Double]()
                     
-                    //determine the weight for each grade
-                    for i in 0..<dateSortedAssessments.count {
+                //determine the weight for each grade
+                for i in 0..<dateSortedAssessments.count {
                         
-                        gradeWeights.append(leftOverPercentage/Double(dateSortedAssessments.count) + Double(i) / 100)
+                    gradeWeights.append(leftOverPercentage/Double(dateSortedAssessments.count) + Double(i) / 100)
                         
-                    }
-                    
-                    //add up the weight * grade for each assessment
-                    var gradeSum = 0.0
-                    for i in 0..<gradeWeights.count {
-                        
-                        let overallGrade = Double(dateSortedAssessments[i].getOverallGrade())
-                        gradeSum += gradeWeights[i] * overallGrade
-                        
-                    }
-                    
-                    let returnGrade = Int(round(gradeSum))
-                    subjectGrades[subjectObject] = returnGrade
-                    
-                    continue
-                    
                 }
+                    
+                //add up the weight * grade for each assessment
+                var gradeSum = 0.0
+                for i in 0..<gradeWeights.count {
+                        
+                    let overallGrade = Double(dateSortedAssessments[i].getOverallGrade())
+                    gradeSum += gradeWeights[i] * overallGrade
+                        
+                }
+                    
+                let returnGrade = Int(round(gradeSum))
+                subjectGrades[subjectObject] = returnGrade
+                    
+                continue
+                    
             }
             
-            let averagePercentage = sumPercentageMarks / Double(numberOfAssessments)
+            let averagePercentage = lround(sumPercentageMarks / Double(numberOfAssessments))
             
             typealias JSONDictionary = [String: Any]
             
@@ -354,29 +384,26 @@ class Profile: NSObject, NSCoding {
                                 for key in gradeBoundaries.keys { //iterate through the keys
                                     var value: [Int] = gradeBoundaries[key] as! [Int] //get the value of the dictionary for the current key
                                     
-                                    if let user = AppStatus.loggedInUser {
+                                    let user = AppStatus.user
                                         
-                                        //if the user's preference is "pessimist mode"
-                                        if user.subjectGradeSetting == .pessimistMode {
+                                    //if the user's preference is "pessimist mode"
+                                    if user.subjectGradeSetting == .pessimistMode {
                                             
-                                            if averagePercentage - 5.0 < Double(value[1] + 1) && averagePercentage - 5.0 >= Double(value[0]) { //if the percentage (minus five) from the assessment falls between the bounds
+                                        if averagePercentage - 5 < value[1] + 1 && averagePercentage - 5 >= value[0] { //if the percentage (minus five) from the assessment falls between the bounds
                                                 
-                                                subjectGrades[subjectObject] = Int(key) //add the subject grade to the dictionary
-                                            }
-                                            
-                                        } else { //if the user just wants a simple average done
-                                            
-                                            if averagePercentage < Double(value[1] + 1) && averagePercentage >= Double(value[0]) { //if the percentage (minus five) from the assessment falls between the bounds
-                                                
-                                                subjectGrades[subjectObject] = Int(key) //add the subject grade to the dictionary
-                                            }
-                                            
+                                            subjectGrades[subjectObject] = Int(key) //add the subject grade to the dictionary
                                         }
-                                        
+                                            
+                                    } else { //if the user just wants a simple average done
+                                            
+                                        if averagePercentage < value[1] + 1 && averagePercentage >= value[0] { //if the percentage (minus five) from the assessment falls between the bounds
+                                                
+                                            subjectGrades[subjectObject] = Int(key) //add the subject grade to the dictionary
+                                        }
+                                            
                                     }
                                     
                                 }
-                                
                                 
                             }
                             

@@ -54,19 +54,18 @@ class RecentAssessmentView: UIView {
     func updateLabels(assessment: Assessment){
         
         //update colors
-        if let user = AppStatus.loggedInUser {
-            for subjectObject in user.subjects {
-                if assessment.subjectObject == subjectObject {
-                    var color = user.colorPreferences[subjectObject]
-                    color = color?.withAlphaComponent(0.30)
-                    headerView.backgroundColor = color
-                    color = color?.withAlphaComponent(0)
-                    bodyView.backgroundColor = color
-                    color = color?.withAlphaComponent(0.8)
-                    marksLabel.textColor = color
-                    percentageLabel.textColor = color
-                    overallGradeLabel.textColor = color
-                }
+        let user = AppStatus.user
+        for subjectObject in user.subjects {
+            if assessment.subjectObject == subjectObject {
+                var color = user.colorPreferences[subjectObject]
+                color = color?.withAlphaComponent(0.30)
+                headerView.backgroundColor = color
+                color = color?.withAlphaComponent(0)
+                bodyView.backgroundColor = color
+                color = color?.withAlphaComponent(0.8)
+                marksLabel.textColor = color
+                percentageLabel.textColor = color
+                overallGradeLabel.textColor = color
             }
         }
         

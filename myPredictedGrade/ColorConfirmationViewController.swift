@@ -10,23 +10,25 @@ import UIKit
 
 class ColorConfirmationViewController: UITableViewController {
 
+    // MARK: - Properties
+    
     var subjects: [SubjectObject]!
     var colorPreferences: [SubjectObject: UIColor]!
+    
+    var name: String!
+    var yearLevel: YearLevelObject!
+    
+    // MARK: - Inherited Funcs
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
         //register XIB for usage
         self.tableView.register(UINib(nibName: "AssessmentCell", bundle: Bundle.main), forCellReuseIdentifier: "AssessmentCell")
-
         
-        // Do any additional setup after loading the view.
     }
 
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
+    // MARK: - UITableView Delegate Funcs
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return subjects.count
@@ -48,21 +50,25 @@ class ColorConfirmationViewController: UITableViewController {
         return cell
     }
     
+    // MARK: - IBActions
+    
+    @IBAction func confirmButtonPressed(_ sender: UIBarButtonItem) {
+    
+        let newProfile = Profile(name: self.name, yearLevelObject: self.yearLevel, subjects: self.subjects, colorPreferences: self.colorPreferences, assessments: [])
+        AppStatus.user = newProfile
+        AppStatus.isSignedUp = true
+        
+        AppStatus.saveData()
+        
+        //dismiss(animated: true, completion: nil)
+        performSegue(withIdentifier: "SignupFinished", sender: self)
+    
+    }
     
     @IBAction func backButtonPressed(_ sender: UIBarButtonItem) {
     
         dismiss(animated: true, completion: nil)
     
     }
-    
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
 
 }

@@ -10,7 +10,13 @@ import UIKit
 
 class SubjectSelectionTableViewController: UITableViewController {
 
-    var subjectList: [[SubjectObject.Subject]] = [[SubjectObject.Subject.ChineseALit, SubjectObject.Subject.ChineseALangLit, SubjectObject.Subject.EnglishALit, SubjectObject.Subject.EnglishALangLit], [SubjectObject.Subject.ChineseAb, SubjectObject.Subject.ChineseB, SubjectObject.Subject.FrenchAb, SubjectObject.Subject.FrenchB, SubjectObject.Subject.GermanAb, SubjectObject.Subject.GermanB, SubjectObject.Subject.SpanishAb, SubjectObject.Subject.SpanishB], [SubjectObject.Subject.BusinessManagement, SubjectObject.Subject.Economics, SubjectObject.Subject.Geography, SubjectObject.Subject.GlobalPolitics, SubjectObject.Subject.History, SubjectObject.Subject.InformationTechonologyinaGlobalSociety, SubjectObject.Subject.Philosophy, SubjectObject.Subject.Psychology, SubjectObject.Subject.SocialandCulturalAnthropology, SubjectObject.Subject.WorldReligions], [SubjectObject.Subject.Biology, SubjectObject.Subject.Chemistry, SubjectObject.Subject.ComputerScience, SubjectObject.Subject.DesignTechnology, SubjectObject.Subject.EnvironmentalSystemsandSocities, SubjectObject.Subject.Physics, SubjectObject.Subject.SportsExcerciseandHealthScience], [SubjectObject.Subject.FurtherMathematics, SubjectObject.Subject.Mathematics, SubjectObject.Subject.MathematicsStudies], [SubjectObject.Subject.Biology, SubjectObject.Subject.BusinessManagement, SubjectObject.Subject.Chemistry, SubjectObject.Subject.ComputerScience, SubjectObject.Subject.Dance, SubjectObject.Subject.DesignTechnology, SubjectObject.Subject.Economics, SubjectObject.Subject.EnvironmentalSystemsandSocities, SubjectObject.Subject.Film, SubjectObject.Subject.Geography, SubjectObject.Subject.GlobalPolitics, SubjectObject.Subject.History, SubjectObject.Subject.InformationTechonologyinaGlobalSociety, SubjectObject.Subject.Music, SubjectObject.Subject.Music, SubjectObject.Subject.MusicCreating, SubjectObject.Subject.Philosophy, SubjectObject.Subject.Physics, SubjectObject.Subject.Psychology, SubjectObject.Subject.SocialandCulturalAnthropology, SubjectObject.Subject.SportsExcerciseandHealthScience, SubjectObject.Subject.Theatre, SubjectObject.Subject.VisualArts, SubjectObject.Subject.WorldReligions]]
+    // MARK: - IBOutlets
+    
+    @IBOutlet weak var titleLabel: UILabel!
+    
+    // MARK: - Properties
+    
+    var subjectList: [[SubjectObject.Subject]] = [[SubjectObject.Subject.ChineseALit, SubjectObject.Subject.ChineseALangLit, SubjectObject.Subject.EnglishALit, SubjectObject.Subject.EnglishALangLit], [SubjectObject.Subject.ChineseAb, SubjectObject.Subject.ChineseB, SubjectObject.Subject.FrenchAb, SubjectObject.Subject.FrenchB, SubjectObject.Subject.GermanAb, SubjectObject.Subject.GermanB, SubjectObject.Subject.SpanishAb, SubjectObject.Subject.SpanishB], [SubjectObject.Subject.BusinessManagement, SubjectObject.Subject.Economics, SubjectObject.Subject.Geography, SubjectObject.Subject.GlobalPolitics, SubjectObject.Subject.History, SubjectObject.Subject.InformationTechonologyinaGlobalSociety, SubjectObject.Subject.Philosophy, SubjectObject.Subject.Psychology, SubjectObject.Subject.SocialandCulturalAnthropology, SubjectObject.Subject.WorldReligions], [SubjectObject.Subject.Biology, SubjectObject.Subject.Chemistry, SubjectObject.Subject.ComputerScience, SubjectObject.Subject.DesignTechnology, SubjectObject.Subject.EnvironmentalSystemsandSocities, SubjectObject.Subject.Physics, SubjectObject.Subject.SportsExcerciseandHealthScience], [SubjectObject.Subject.FurtherMathematics, SubjectObject.Subject.Mathematics, SubjectObject.Subject.MathematicsStudies], [SubjectObject.Subject.Biology, SubjectObject.Subject.BusinessManagement, SubjectObject.Subject.Chemistry, SubjectObject.Subject.ComputerScience, SubjectObject.Subject.Dance, SubjectObject.Subject.DesignTechnology, SubjectObject.Subject.Economics, SubjectObject.Subject.EnvironmentalSystemsandSocities, SubjectObject.Subject.Film, SubjectObject.Subject.Geography, SubjectObject.Subject.GlobalPolitics, SubjectObject.Subject.History, SubjectObject.Subject.InformationTechonologyinaGlobalSociety, SubjectObject.Subject.Music, SubjectObject.Subject.MusicCreating, SubjectObject.Subject.Philosophy, SubjectObject.Subject.Physics, SubjectObject.Subject.Psychology, SubjectObject.Subject.SocialandCulturalAnthropology, SubjectObject.Subject.SportsExcerciseandHealthScience, SubjectObject.Subject.Theatre, SubjectObject.Subject.VisualArts, SubjectObject.Subject.WorldReligions]]
     
     let groupNames = ["Group 1: Language and Literature", "Group 2: Language Acquisition", "Group 3: Individuals and Societies", "Group 4: Sciences", "Group 5: Mathematics", "Group 6: The Arts (+ Others)"]
     
@@ -18,22 +24,19 @@ class SubjectSelectionTableViewController: UITableViewController {
     var groupSubjectSelection = [SubjectObject.Subject.Default, SubjectObject.Subject.Default, SubjectObject.Subject.Default, SubjectObject.Subject.Default, SubjectObject.Subject.Default, SubjectObject.Subject.Default]
     var subjectHLList = [false, false, false, false, false, false]
 
+    var name: String!
+    var yearLevel: YearLevelObject!
+    
+    // MARK: - Inherited Funcs
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
-
-        // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-        // self.navigationItem.rightBarButtonItem = self.editButtonItem()
+        
+        titleLabel.adjustsFontSizeToFitWidth = true
+        
     }
 
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-
-    // MARK: - TableView Delegate Funcions
+    // MARK: - UITableView Delegate Funcs
 
     override func numberOfSections(in tableView: UITableView) -> Int {
         return 6
@@ -50,7 +53,17 @@ class SubjectSelectionTableViewController: UITableViewController {
         
         let subject = subjectList[indexPath.section][indexPath.row] 
 
-        subjectTitleLabel.text = subject.rawValue
+        // Shorten the name string if user is using iPhone 5, 5s
+        if UIScreen.main.bounds.height == 568 {
+            if subject.shortName != "" {
+                subjectTitleLabel.text = subject.shortName
+            } else {
+                subjectTitleLabel.text = subject.rawValue
+            }
+        } else {
+            subjectTitleLabel.text = subject.rawValue
+        }
+        
         subjectTitleLabel.adjustsFontSizeToFitWidth = true
         
         let mainSwitch = cell.viewWithTag(4) as! UISwitch
@@ -77,6 +90,8 @@ class SubjectSelectionTableViewController: UITableViewController {
         return groupNames[section]
     }
     
+    // MARK: - Navigation
+    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         
         if let navigationVC = segue.destination as? UINavigationController {
@@ -91,16 +106,10 @@ class SubjectSelectionTableViewController: UITableViewController {
                     
                 }
                 
-                /*
-                let subject1 = SubjectObject(subject: .Mathematics, isHL: true)
-                let subject2 = SubjectObject(subject: .Physics, isHL: true)
-                let subject3 = SubjectObject(subject: .Chemistry, isHL: true)
-                let subject4 = SubjectObject(subject: .Economics, isHL: true)
-                let subject5 = SubjectObject(subject: .EnglishALit, isHL: false)
-                let subject6 = SubjectObject(subject: .SpanishAb, isHL: true)
-                */
- 
                 destinationVC.subjects = subjectList
+                
+                destinationVC.name = self.name
+                destinationVC.yearLevel = self.yearLevel
                 
             }
             
@@ -108,20 +117,40 @@ class SubjectSelectionTableViewController: UITableViewController {
         
     }
     
+    // MARK: - IBActions
+    
     @IBAction func continueButtonPressed(_ sender: UIBarButtonItem) {
         
         if !groupSubjectToggle.contains(false) {
+            
+            var HLCount = 0
+            for subject in subjectHLList {
+                if subject {
+                    HLCount += 1
+                }
+            }
+            
+            if HLCount < 3 {
+                
+                let alert = Alert(message: "You have selected too few HLs, please try again.", alertType: .invalidUserResponse)
+                alert.show(source: self)
+                return
+                
+            } else if HLCount > 4 {
+                
+                let alert = Alert(message: "You have selected too many HLs, please try again.", alertType: .invalidUserResponse)
+                alert.show(source: self)
+                return
+                
+            }
             
             performSegue(withIdentifier: "Continue", sender: self)
             
         } else {
             
-            let alertController = UIAlertController(title: "Error", message: "Please select a subject from each group", preferredStyle: .alert)
-            self.present(alertController, animated: true, completion: nil)
-            
-            let alertAction = UIAlertAction(title: "Ok", style: .default, handler: nil)
-            
-            alertController.addAction(alertAction)
+            let alert = Alert(message: "Please select a subject for each group.", alertType: .invalidUserResponse)
+            alert.show(source: self)
+            return
             
         }
         
@@ -130,7 +159,7 @@ class SubjectSelectionTableViewController: UITableViewController {
     @IBAction func subjectSwitchToggled(_ sender: UISwitch) {
         
         let superview = sender.superview
-        let cell = superview?.superview as! UITableViewCell
+        let cell = superview?.superview?.superview as! UITableViewCell
         
         let indexPath = self.tableView.indexPath(for: cell)
     
@@ -139,8 +168,8 @@ class SubjectSelectionTableViewController: UITableViewController {
             return
         }
         
-        let HLLabel = superview?.viewWithTag(2) as! UILabel
-        let HLSwitch = superview?.viewWithTag(3) as! UISwitch
+        let HLLabel = superview?.superview?.viewWithTag(2) as! UILabel
+        let HLSwitch = superview?.superview?.viewWithTag(3) as! UISwitch
         
         // Have it always start off when it is toggled
         HLSwitch.isOn = false
@@ -175,10 +204,9 @@ class SubjectSelectionTableViewController: UITableViewController {
         
     }
 
-    
     @IBAction func HLSwitchToggled(_ sender: UISwitch) {
         
-        let cell = sender.superview?.superview as! UITableViewCell
+        let cell = sender.superview?.superview?.superview as! UITableViewCell
         
         let indexPath = tableView.indexPath(for: cell)
         
@@ -186,50 +214,9 @@ class SubjectSelectionTableViewController: UITableViewController {
         
     }
     
-    
-    /*
-    // Override to support conditional editing of the table view.
-    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        // Return false if you do not want the specified item to be editable.
-        return true
+    @IBAction func requestButtonPressed(_ sender: UIButton) {
+        
+        performSegue(withIdentifier: "ShowRequest", sender: self)
     }
-    */
-
-    /*
-    // Override to support editing the table view.
-    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
-        if editingStyle == .delete {
-            // Delete the row from the data source
-            tableView.deleteRows(at: [indexPath], with: .fade)
-        } else if editingStyle == .insert {
-            // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-        }    
-    }
-    */
-
-    /*
-    // Override to support rearranging the table view.
-    override func tableView(_ tableView: UITableView, moveRowAt fromIndexPath: IndexPath, to: IndexPath) {
-
-    }
-    */
-
-    /*
-    // Override to support conditional rearranging of the table view.
-    override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
-        // Return false if you do not want the item to be re-orderable.
-        return true
-    }
-    */
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
 
 }

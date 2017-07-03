@@ -15,7 +15,7 @@ class SubjectObject: NSObject, NSCoding, NSCopying {
     
     var valueDictionary: [String: Subject] =
     ["English A Literature": Subject.EnglishALit,
-     "English A Language Literature": Subject.EnglishALangLit,
+     "English A Language and Literature": Subject.EnglishALangLit,
      "Chinese A Literature": Subject.ChineseALit,
      "Chinese A Language and Literature": Subject.ChineseALangLit,
      "Spanish Ab Initio": Subject.SpanishAb,

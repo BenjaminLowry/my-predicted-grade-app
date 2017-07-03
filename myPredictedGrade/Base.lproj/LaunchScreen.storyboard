@@ -21,12 +21,19 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="untitled (1).png" translatesAutoresizingMaskIntoConstraints="NO" id="VAZ-k8-AFG">
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="untitled (1).png" translatesAutoresizingMaskIntoConstraints="NO" id="VAZ-k8-AFG">
                                 <rect key="frame" x="97" y="243" width="180" height="180"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="180" id="OM0-V5-fAC"/>
+                                    <constraint firstAttribute="width" constant="180" id="W2b-zr-8rG"/>
+                                </constraints>
                             </imageView>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                        <constraints>
+                            <constraint firstItem="VAZ-k8-AFG" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" id="27x-80-NFh"/>
+                            <constraint firstItem="VAZ-k8-AFG" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="vry-zJ-OwL"/>
+                        </constraints>
                     </view>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="iYj-Kq-Ea1" userLabel="First Responder" sceneMemberID="firstResponder"/>

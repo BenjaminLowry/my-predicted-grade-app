@@ -12,19 +12,21 @@ class PersonalInformationViewController: UIViewController, UIPickerViewDelegate,
 
     // MARK: - IBOutlets
     
+    @IBOutlet weak var titleLabel: UILabel!
+    
     @IBOutlet weak var yearLevelPickerView: UIPickerView!
     @IBOutlet weak var nameTextField: UITextField!
     
     @IBOutlet weak var continueButton: UIBarButtonItem!
     
-    // MARK: PickerView Data
+    // MARK: - Properites
     
     var data = ["Year 12", "Year 13"]
     
-    // MARK: - Data Collection Variables
-    
     var name: String?
     var yearLevel: YearLevelObject? = YearLevelObject(yearLevel: .year12)
+    
+    // MARK: - Inherited Funcs
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -32,10 +34,17 @@ class PersonalInformationViewController: UIViewController, UIPickerViewDelegate,
         nameTextField.attributedPlaceholder = NSAttributedString(string: "e.g. Jeremy Young",
                                                                attributes: [NSForegroundColorAttributeName: UIColor.lightGray])
         
+        titleLabel.adjustsFontSizeToFitWidth = true
+        
         yearLevelPickerView.delegate = self
         yearLevelPickerView.dataSource = self
         
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+        view.addGestureRecognizer(tapGesture)
+        
     }
+    
+    // MARK: - IBActions
     
     @IBAction func continueButtonPressed(_ sender: UIBarButtonItem) {
         
@@ -52,12 +61,9 @@ class PersonalInformationViewController: UIViewController, UIPickerViewDelegate,
             
         }
         
-        let alertController = UIAlertController(title: "Error", message: "Please enter a valid name", preferredStyle: .alert)
-        self.present(alertController, animated: true, completion: nil)
-        
-        let alertAction = UIAlertAction(title: "Ok", style: .default, handler: nil)
-        
-        alertController.addAction(alertAction)
+        let alert = Alert(message: "Please enter a valid name.", alertType: .invalidUserResponse)
+        alert.show(source: self)
+        return
         
     }
 
@@ -89,7 +95,12 @@ class PersonalInformationViewController: UIViewController, UIPickerViewDelegate,
             yearLevel = YearLevelObject(yearLevel: .year13)
         }
         
-        
+    }
+    
+    // MARK: - UITextField Helper Funcs
+    
+    func dismissKeyboard() {
+        view.endEditing(true)
     }
     
     // MARK: - Navigation
@@ -98,7 +109,7 @@ class PersonalInformationViewController: UIViewController, UIPickerViewDelegate,
         
         if let navVC = segue.destination as? UINavigationController {
             
-            if let destinationVC = navVC.viewControllers[0] as? SchoolSelectionViewController {
+            if let destinationVC = navVC.viewControllers[0] as? SubjectSelectionTableViewController {
                 
                 destinationVC.name = self.name
                 destinationVC.yearLevel = self.yearLevel

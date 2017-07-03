@@ -30,7 +30,7 @@ class AssessmentDetailViewController: UITableViewController, UITextFieldDelegate
     
     @IBOutlet var bodyTableView: UITableView!
     
-    // MARK: - Instance Variables
+    // MARK: - Properties
     
     var subjectPickerViewData: [SubjectObject] = [SubjectObject]()
     var subjectPickerView: UIPickerView = UIPickerView()
@@ -76,19 +76,15 @@ class AssessmentDetailViewController: UITableViewController, UITextFieldDelegate
         
         //load pickerview data
         subjectPickerViewData = [SubjectObject]() //clear array (necessary??)
-        if let user = AppStatus.loggedInUser {
-            let subjects = user.subjects
-            for subject in subjects {
-                subjectPickerViewData.append(subject)
-            }
+        let user = AppStatus.user
+        let subjects = user.subjects
+        for subject in subjects {
+            subjectPickerViewData.append(subject)
         }
         
         subjectPickerView.delegate = self
         subjectPickerView.dataSource = self
         
-        
-        
-        // Do any additional setup after loading the view.
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -100,23 +96,61 @@ class AssessmentDetailViewController: UITableViewController, UITextFieldDelegate
     @IBAction func cancelButtonPressed(_ sender: UIBarButtonItem) {
         delegate?.assessmentDetailViewControllerDidCancel(controller: self)
     }
+    
     @IBAction func doneButtonPressed(_ sender: UIBarButtonItem) {
         if let marksAvailableText = marksAvailableTextField.text, let marksReceivedText = marksReceivedTextField.text, let assessmentTitle = assessmentTitleTextField.text, let dateText = dateTextField.text, let subjectText = subjectTextField.text {
             
-            guard let marksAvailable = Int(marksAvailableText), let marksReceived = Int(marksReceivedText) else {
-                print("Input not a number") //add error here
+            if assessmentTitle.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+                
+                let alert = Alert(message: "Your assessment title cannot be empty.", alertType: .invalidUserResponse)
+                alert.show(source: self)
                 return
+                
+            }
+            
+            guard let marksAvailable = Int(marksAvailableText), let marksReceived = Int(marksReceivedText) else {
+                
+                let alert = Alert(message: "Please only input numbers for marks.", alertType: .invalidUserResponse)
+                alert.show(source: self)
+                return
+                
+            }
+            
+            if marksReceived > marksAvailable {
+                
+                let alert = Alert(message: "Your received marks cannot be larger than the marks available.", alertType: .invalidUserResponse)
+                alert.show(source: self)
+                return
+            
+            }
+            
+            if assessmentTitle.characters.count > 30 {
+                
+                let alert = Alert(message: "Assessment title must be less than 30 characters.", alertType: .invalidUserResponse)
+                alert.show(source: self)
+                return
+                
             }
             
             if marksAvailable != 0 {
                 updateAssessment()
                 
+                let dateFormatter = DateFormatter()
+                let date = dateFormatter.date(fromSpecific: dateText)
+                
+                if date > Date(timeIntervalSinceNow: 0) {
+                    
+                    let alert = Alert(message: "Please choose a date before today. You are not a fortune teller.", alertType: .invalidUserResponse)
+                    alert.show(source: self)
+                    return
+                    
+                }
+                
                 if let assessment = assessmentToEdit {
+                    
                     delegate?.assessmentDetailViewController(controller: self, didFinishEditingAssessment: assessment)
                 } else {
-                    let dateFormatter = DateFormatter()
-                    let date = dateFormatter.date(fromSpecific: dateText)
-                    
+
                     if let subjectObject = subjectValue(forString: subjectText) {
                         let assessment = Assessment(assessmentTitle: assessmentTitle, subjectObject: subjectObject, date: date, marksAvailable: marksAvailable, marksReceived: marksReceived)
                         delegate?.assessmentDetailViewController(controller: self, didFinishAddingAssessment: assessment)
@@ -124,7 +158,11 @@ class AssessmentDetailViewController: UITableViewController, UITextFieldDelegate
                     
                 }
             } else {
-                print("Marks available cannot be zero") //add error here
+                
+                let alert = Alert(message: "The marks available cannot be zero.", alertType: .invalidUserResponse)
+                alert.show(source: self)
+                return
+                
             }
             
         }
@@ -139,10 +177,7 @@ class AssessmentDetailViewController: UITableViewController, UITextFieldDelegate
             handleDatePicker(datePicker)
         } else if textField.accessibilityIdentifier == "SubjectTextField" {
             if let assessment = assessmentToEdit {
-                guard let user = AppStatus.loggedInUser else {
-                    print("error")
-                    return
-                }
+                let user = AppStatus.user
                 for subjectObject in user.subjects {
                     if assessment.subjectObject == subjectObject {
                         if let row = subjectPickerViewData.index(where: {$0 == subjectObject}) {
@@ -169,7 +204,6 @@ class AssessmentDetailViewController: UITableViewController, UITextFieldDelegate
         }
         
         return true
-        
     }
     
     // MARK: - UIPickerView Delegate Funcs
@@ -207,22 +241,23 @@ class AssessmentDetailViewController: UITableViewController, UITextFieldDelegate
     // MARK: - Date Creation Funcs
     
     func updateAssessment(){
-        print(dateTextField.text!)
         
         guard let assessmentTitle = assessmentTitleTextField.text, let subjectString = subjectTextField.text, let dateText = dateTextField.text, let marksAvailable = Int(marksAvailableTextField.text!), let marksReceived = Int(marksReceivedTextField.text!) else {
-            print("error")
+            
+            let alert = Alert(message: "Info inputted incorrectly, please try again.", alertType: .invalidUserResponse)
+            alert.show(source: self)
             return
-        }/*
-        guard let dateText = dateTextField.text else {
-            print("error")
-            return
-        }*/
-        print(dateText)
+            
+        }
         
         guard let subject = subjectValue(forString: subjectString) else {
-            print("error")
+            
+            let alert = Alert(message: "Please select a subject.", alertType: .invalidUserResponse)
+            alert.show(source: self)
             return
+            
         }
+        
         let dateFormatter = DateFormatter()
         let date = dateFormatter.date(fromSpecific: dateText)
         
@@ -252,11 +287,10 @@ class AssessmentDetailViewController: UITableViewController, UITextFieldDelegate
     }
     
     func subjectValue(forString string: String) -> SubjectObject? {
-        if let user = AppStatus.loggedInUser {
-            for subjectObject in user.subjects {
-                if subjectObject.toString() == string {
-                    return subjectObject
-                }
+        let user = AppStatus.user
+        for subjectObject in user.subjects {
+            if subjectObject.toString() == string {
+                return subjectObject
             }
         }
         return nil
@@ -287,6 +321,10 @@ class AssessmentDetailViewController: UITableViewController, UITextFieldDelegate
         dateTextField.inputAccessoryView = toolBar
         datePicker.datePickerMode = .date
         datePicker.addTarget(self, action: #selector(handleDatePicker(_:)), for: .valueChanged)
+        
+        if let assessment = assessmentToEdit {
+            datePicker.setDate(assessment.date, animated: true)
+        }
     }
     
     // MARK: - UI Setup
@@ -319,7 +357,6 @@ class AssessmentDetailViewController: UITableViewController, UITextFieldDelegate
         
         subjectTextField.inputAccessoryView = keyboardToolbar
         
-        
         assessmentTitleTextField.inputAccessoryView = keyboardToolbar
     }
     
@@ -331,5 +368,4 @@ class AssessmentDetailViewController: UITableViewController, UITextFieldDelegate
         dateTextField.placeholder = string
     }
     
-
 }

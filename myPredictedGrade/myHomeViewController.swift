@@ -43,23 +43,9 @@ class myHomeViewController: UIViewController, UITableViewDelegate, UITableViewDa
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        AppStatus.loadData()
-        print(AppStatus.loggedInUser?.assessments)
-        //where is my assessment?
-        
-        let subject1 = SubjectObject(subject: .Physics, isHL: true)
-        let subject2 = SubjectObject(subject: .Chemistry, isHL: true)
-        let subject3 = SubjectObject(subject: .Mathematics, isHL: true)
-        let subject4 = SubjectObject(subject: .Economics, isHL: true)
-        let subject5 = SubjectObject(subject: .EnglishALit, isHL: false)
-        let subject6 = SubjectObject(subject: .SpanishAb, isHL: false)
-        
-        let subjects = [subject1, subject2, subject3, subject4, subject5, subject6]
-        
-        let yearLevelObject = YearLevelObject(yearLevel: .year12)
-        
-        //temporary
-        AppStatus.loggedInUser = Profile(name: "Benthos", yearLevelObject: yearLevelObject, subjects: subjects, colorPreferences: [subject1: AppStatus.validAssessmentColors[0], subject2: AppStatus.validAssessmentColors[1], subject3: AppStatus.validAssessmentColors[2], subject4: AppStatus.validAssessmentColors[3], subject6: AppStatus.validAssessmentColors[4], subject5: AppStatus.validAssessmentColors[5]], assessments: [])
+        if AppStatus.isSignedUp != true {
+            AppStatus.loadData()
+        }
         
         bodyTableView.register(UINib(nibName: "AssessmentCell", bundle: Bundle.main), forCellReuseIdentifier: "AssessmentCell")
         
@@ -73,15 +59,23 @@ class myHomeViewController: UIViewController, UITableViewDelegate, UITableViewDa
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        //set the overall grade to the sum of the subject grades
         
-        if let overallGrade = AppStatus.loggedInUser?.getOverallGrade() {
-            overallGradeLabel.text = String(describing: overallGrade)
-        }
+        //set the overall grade to the sum of the subject grades
+        let overallGrade = AppStatus.user.getOverallGrade()
+        overallGradeLabel.text = String(describing: overallGrade)
         
         setupAssessmentTableView()
         setupStackViews()
         setupBodyView()
+        
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        
+        if AppStatus.isSignedUp != true {
+            performSegue(withIdentifier: "StartSignup", sender: self)
+        }
+        
     }
     
     // MARK: - UITableView Delegate Funcs
@@ -118,8 +112,6 @@ class myHomeViewController: UIViewController, UITableViewDelegate, UITableViewDa
     
     func setupStackViews() {
         
-        //print("number of assessments: \(AppStatus.loggedInUser?.assessments.count)")
-        
         //empty the stack view
         for view in subjectStackView.subviews {
             subjectStackView.removeArrangedSubview(view)
@@ -127,7 +119,7 @@ class myHomeViewController: UIViewController, UITableViewDelegate, UITableViewDa
         
         var subjectArray = [SubjectObject]()
         
-        for subjectObject in (AppStatus.loggedInUser?.subjects)! {
+        for subjectObject in AppStatus.user.subjects {
             
             let label = UILabel()
             if subjectObject.subject.shortName == "" {
@@ -138,7 +130,7 @@ class myHomeViewController: UIViewController, UITableViewDelegate, UITableViewDa
             label.font = UIFont(name: "AvenirNext-DemiBold", size: 17)
             label.textAlignment = .right
             label.adjustsFontSizeToFitWidth = true
-            let color = AppStatus.loggedInUser?.colorPreferences[subjectObject]
+            let color = AppStatus.user.colorPreferences[subjectObject]
             label.textColor = color?.withAlphaComponent(0.8)
             subjectStackView.addArrangedSubview(label)
             
@@ -149,13 +141,13 @@ class myHomeViewController: UIViewController, UITableViewDelegate, UITableViewDa
             gradeStackView.removeArrangedSubview(view)
         }
         
-        let subjectGrades = AppStatus.loggedInUser?.getSubjectGrades()
+        let subjectGrades = AppStatus.user.getSubjectGrades()
         
         for subject in subjectArray {
             
             let label = UILabel()
             
-            if let grade = subjectGrades?[subject] {
+            if let grade = subjectGrades[subject] {
                 label.text = "\(grade)"
             } else {
                 label.text = "?"
@@ -169,20 +161,21 @@ class myHomeViewController: UIViewController, UITableViewDelegate, UITableViewDa
         
     }
     
-    
     func setupAssessmentTableView() {
         
         bodyTableView.delegate = self
         bodyTableView.dataSource = self
         
         //get the most recent assessment
-        print(AppStatus.loggedInUser?.name)
-        if AppStatus.loggedInUser?.assessments.count == 0 { //if they haven't logged any assessments yet
+        if AppStatus.user.assessments.count == 0 { //if they haven't logged any assessments yet
             bodyScrollView.addSubview(noAssessmentsLabel)
             bodyTableView.reloadData()
         } else {
             noAssessmentsLabel.removeFromSuperview()
-            mostRecentAssessment = AppStatus.loggedInUser?.assessments[0]
+            
+            let assessmentsByDate = AppStatus.user.assessments.sorted { $0.date > $1.date }
+            
+            mostRecentAssessment = assessmentsByDate[0]
             bodyTableView.reloadData()
         }
         
@@ -193,7 +186,11 @@ class myHomeViewController: UIViewController, UITableViewDelegate, UITableViewDa
     func setupBodyView() {
         bestSubjectContentLabel.adjustsFontSizeToFitWidth = true
         
-        if AppStatus.loggedInUser?.assessments.count == 0 { //if there are no logged assessments
+        let yearLevelObject = AppStatus.user.yearLevelObject
+        let name = AppStatus.user.name
+        userLabel.text = "\(name) - \(yearLevelObject.yearLevel.rawValue) Student"
+        
+        if AppStatus.user.assessments.count == 0 { //if there are no logged assessments
             averageGradeContentLabel.text = "N/A"
             bestSubjectContentLabel.text = "N/A"
             loggedAssessmentsContentLabel.text = "0"
@@ -201,31 +198,23 @@ class myHomeViewController: UIViewController, UITableViewDelegate, UITableViewDa
             return
         }
         
-        if let yearLevelObject = AppStatus.loggedInUser?.yearLevelObject {
-            userLabel.text = "Benjamin Lowry - \(yearLevelObject.yearLevel.rawValue) Student"
-        }
+        let averageGrade = AppStatus.user.getAverageGrade()
+        let averageGradeInt: Int = Int(averageGrade * 10.0)
+        averageGradeContentLabel.text = String(describing: Double(averageGradeInt) / 10.0)
         
-        if let averageGrade = AppStatus.loggedInUser?.getAverageGrade() {
-            let averageGradeInt: Int = Int(averageGrade * 10.0)
-            averageGradeContentLabel.text = String(describing: Double(averageGradeInt) / 10.0)
-        }
+        let bestSubject = AppStatus.user.getBestSubject()
+        bestSubjectContentLabel.text = bestSubject.toString()
+        bestSubjectContentLabel.adjustsFontSizeToFitWidth = true
         
-        if let bestSubject = AppStatus.loggedInUser?.getBestSubject() {
-            bestSubjectContentLabel.text = bestSubject.toString()
-        }
+        let assessmentsCount = AppStatus.user.assessments.count
+        loggedAssessmentsContentLabel.text = String(assessmentsCount)
         
-        if let assessmentsCount = AppStatus.loggedInUser?.assessments.count {
-            loggedAssessmentsContentLabel.text = String(assessmentsCount)
-        }
-        
-        if let overallGrade = AppStatus.loggedInUser?.getOverallGrade() {
-            if overallGrade >= 24 {
-                let gradePercentile = getGradePercentile(grade: overallGrade)
-                IBPercentileContentLabel.text = String(gradePercentile)
-            } else {
-                IBPercentileContentLabel.text = "N/A"
-            }
-            
+        let overallGrade = AppStatus.user.getOverallGrade()
+        if overallGrade >= 24 {
+            let gradePercentile = getGradePercentile(grade: overallGrade)
+            IBPercentileContentLabel.text = String(gradePercentile)
+        } else {
+            IBPercentileContentLabel.text = "N/A"
         }
         
     }
@@ -255,7 +244,6 @@ class myHomeViewController: UIViewController, UITableViewDelegate, UITableViewDa
                     }
                     
                 }
-                
                 
             } catch {
                 print(error)

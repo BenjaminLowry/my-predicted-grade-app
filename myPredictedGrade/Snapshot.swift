@@ -20,7 +20,6 @@ class Snapshot: NSObject, NSCoding {
     
     required init?(coder aDecoder: NSCoder) {
         
-        print(aDecoder.decodeObject(forKey: "Date"))
         date = aDecoder.decodeObject(forKey: "Date") as! Date
         
         grade = aDecoder.decodeInteger(forKey: "Grade")

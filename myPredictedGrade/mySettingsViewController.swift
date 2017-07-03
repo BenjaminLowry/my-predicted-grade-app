@@ -10,11 +10,18 @@ import UIKit
 
 class mySettingsViewController: UITableViewController, UITextFieldDelegate, UIPickerViewDelegate, UIPickerViewDataSource {
 
+    // MARK: - IBOutlets
+    
     @IBOutlet weak var gradeCalculationTextField: UITextField!
+    @IBOutlet weak var gradeCalculationLabel: UILabel!
+    
+    // MARK - Properties
     
     var gradeCalculationData = ["Average of Grades", "Date Weighted", "Median Grade", "Pessimist Mode"]
     
     var gradeCalculationPickerView = UIPickerView()
+    
+    // MARK - Inherited Funcs
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -30,15 +37,66 @@ class mySettingsViewController: UITableViewController, UITextFieldDelegate, UIPi
         
         let doneButton = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(resignPickerViews))
         let flexSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil)
-        let cancelButton = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(resignPickerViews))
         
-        toolBar.items = [cancelButton, flexSpace, doneButton]
+        toolBar.items = [flexSpace, doneButton]
+        toolBar.tintColor = UIColor.black
         
         gradeCalculationTextField.inputAccessoryView = toolBar
         
+        gradeCalculationLabel.adjustsFontSizeToFitWidth = true
         
-        // Do any additional setup after loading the view.
+        // Update picker view for selected option
+        let currentSetting = AppStatus.user.subjectGradeSetting.rawValue
+        gradeCalculationTextField.text = currentSetting
+        gradeCalculationPickerView.selectRow(gradeCalculationData.index(of: currentSetting)!, inComponent: 0, animated: true)
+        
     }
+    
+    override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
+        // Dispose of any resources that can be recreated.
+    }
+    
+    // MARK - UIPickerView Delegate Funcs
+    
+    func numberOfComponents(in pickerView: UIPickerView) -> Int {
+        return 1
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+        return gradeCalculationData.count
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+        return gradeCalculationData[row]
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        
+        gradeCalculationTextField.text = gradeCalculationData[row]
+        
+        var subjectGradeSettings = AppStatus.user.subjectGradeSetting
+        switch row {
+        case 0:
+            subjectGradeSettings = SubjectGradeCalculation.averageOfGrades
+        case 1:
+            subjectGradeSettings = SubjectGradeCalculation.dateWeighted
+        case 2:
+            subjectGradeSettings = SubjectGradeCalculation.medianGrade
+        case 3:
+            subjectGradeSettings = SubjectGradeCalculation.pessimistMode
+        default:
+            return
+        }
+                
+        AppStatus.user.subjectGradeSetting = subjectGradeSettings
+        
+        //save changes
+        AppStatus.saveData()
+        
+    }
+    
+    // MARK: - UIPickerView Helper Funcs
     
     func resignPickerViews() {
         
@@ -46,53 +104,6 @@ class mySettingsViewController: UITableViewController, UITextFieldDelegate, UIPi
         
     }
 
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-    
-    func numberOfComponents(in pickerView: UIPickerView) -> Int {
-        return 1
-    }
-    
-    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-        
-        return gradeCalculationData.count
-        
-    }
-    
-    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-        
-        return gradeCalculationData[row]
-        
-    }
-    
-    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-        
-        gradeCalculationTextField.text = gradeCalculationData[row]
-        
-        if var subjectGradeSettings = AppStatus.loggedInUser?.subjectGradeSetting {
-            switch row {
-            case 0:
-                subjectGradeSettings = SubjectGradeCalculation.averageOfGrades
-            case 1:
-                subjectGradeSettings = SubjectGradeCalculation.dateWeighted
-            case 2:
-                subjectGradeSettings = SubjectGradeCalculation.medianGrade
-            case 3:
-                subjectGradeSettings = SubjectGradeCalculation.pessimistMode
-            default:
-                return
-            }
-            
-            AppStatus.loggedInUser?.subjectGradeSetting = subjectGradeSettings
-        }
-        
-        //save changes
-        AppStatus.saveData()
-        
-    }
-    
     
 
 }

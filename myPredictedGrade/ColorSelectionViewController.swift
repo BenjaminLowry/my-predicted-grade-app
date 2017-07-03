@@ -10,6 +10,8 @@ import UIKit
 
 class ColorSelectionViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource {
 
+    // MARK: - IBOutlets
+    
     @IBOutlet weak var previewAssessmentView: RecentAssessmentView!
     
     @IBOutlet weak var colorCollectionView: UICollectionView!
@@ -17,17 +19,29 @@ class ColorSelectionViewController: UIViewController, UICollectionViewDelegate, 
     @IBOutlet weak var nextButton: UIButton!
     
     @IBOutlet weak var subjectLabel: UILabel!
+    @IBOutlet weak var titleLabel: UILabel!
+    
+    // Constraint for space between navigation and title label; adjusted for screen-size
+    @IBOutlet weak var titleHeaderSpaceConstraint: NSLayoutConstraint!
+    @IBOutlet weak var collectionViewHeightConstraint: NSLayoutConstraint!
+
+    // MARK: - Properties
     
     var colors = [UIColor]()
     var selectedCellTag: Int!
-    
-    var subjects: [SubjectObject]!
     
     var colorPreferences: [SubjectObject: UIColor] = [SubjectObject: UIColor]()
     
     var checkImageView = UIImageView()
     
     var counter = 1
+    
+    var subjects: [SubjectObject]!
+
+    var name: String!
+    var yearLevel: YearLevelObject!
+    
+    // MARK: - Inherited Funcs
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -43,6 +57,15 @@ class ColorSelectionViewController: UIViewController, UICollectionViewDelegate, 
         previewAssessmentView.overallGradeLabel.text = "7"
         
         subjectLabel.text = "1. \(subjects[0].toString())"
+        subjectLabel.adjustsFontSizeToFitWidth = true
+        
+        titleLabel.adjustsFontSizeToFitWidth = true
+        
+        if UIScreen.main.bounds.height == 568 { // If the user has an iPhone 5, 5s
+            titleHeaderSpaceConstraint.constant = 20
+            collectionViewHeightConstraint.constant = 60
+            colorCollectionView.showsHorizontalScrollIndicator = true
+        }
         
         colors.append(UIColor(red: 178/255, green: 0, blue: 3/255, alpha: 1.0))
         colors.append(UIColor(red: 255/255, green: 89/255, blue: 0/255, alpha: 1.0))
@@ -63,10 +86,10 @@ class ColorSelectionViewController: UIViewController, UICollectionViewDelegate, 
         previewAssessmentView.updateView(for: UIColor.gray)
         
         nextButton.isHidden = true
-        
-        // Do any additional setup after loading the view.
     }
 
+    // MARK: - Navigation
+    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         
         if let navVC = segue.destination as? UINavigationController {
@@ -76,11 +99,24 @@ class ColorSelectionViewController: UIViewController, UICollectionViewDelegate, 
                 destinationVC.subjects = self.subjects
                 destinationVC.colorPreferences = self.colorPreferences
                 
+                destinationVC.name = self.name
+                destinationVC.yearLevel = self.yearLevel
+                
             }
             
         }
         
     }
+    
+    func performCustomSegue(finished: () -> Void) {
+        
+        performSegue(withIdentifier: "ColorsSelected", sender: self)
+        
+        finished()
+        
+    }
+    
+    // MARK: - IBActions
     
     //
     // Description: Called when next button pressed, updates content for next subject
@@ -123,6 +159,8 @@ class ColorSelectionViewController: UIViewController, UICollectionViewDelegate, 
         
     }
     
+    // MARK: - UICollectionView Delegate Funcs
+    
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return colors.count
     }
@@ -155,6 +193,8 @@ class ColorSelectionViewController: UIViewController, UICollectionViewDelegate, 
         return 1
     }
     
+    // MARK: - UICollectionView Helper Funcs
+    
     func colorCellPressed(sender: UITapGestureRecognizer) {
         
         let cell = sender.view as! UICollectionViewCell
@@ -167,6 +207,8 @@ class ColorSelectionViewController: UIViewController, UICollectionViewDelegate, 
         nextButton.isHidden = false
         
     }
+    
+    // MARK: - App Cycle Control Funcs
     
     func reset() {
         
@@ -203,26 +245,5 @@ class ColorSelectionViewController: UIViewController, UICollectionViewDelegate, 
         
     }
     
-    
-
-    
-    // MARK: - Navigation
-
-    func performCustomSegue(finished: () -> Void) {
-        
-        performSegue(withIdentifier: "ColorsSelected", sender: self)
-        
-        finished()
-        
-    }
-    
-    
-    /*
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
 
 }
