@@ -219,16 +219,6 @@ class SubjectObject: NSObject, NSCoding, NSCopying {
         
         super.init()
         
-        /* Problem:
-         
-         The below code is trying to turn a string like "Physics HL" back into it's enumeration value.
-         I have previously done this by comparing the string to the strings of the subjects that the user has.
-         However, this does not work upon initialization because the subjects are not known yet, and thus it is paradoxical.
-         I must find a way to convert the string back into the enum.
-         One way I know how to do this would be to create a switch that manually determines the enum, but that would be very tedious to make.
-         
-         */
-        
         let subjectString = aDecoder.decodeObject(forKey: "SubjectString") as! String
         print(subjectString)
         self.subject = (subjectValue(forString: subjectString)?.subject)!
@@ -241,9 +231,7 @@ class SubjectObject: NSObject, NSCoding, NSCopying {
 
     func encode(with aCoder: NSCoder) {
         
-        print(self.subject.rawValue)
         aCoder.encode(self.toString(), forKey: "SubjectString")
-        print(self.isHL)
         aCoder.encode(self.isHL, forKey: "isHL")
         
     }

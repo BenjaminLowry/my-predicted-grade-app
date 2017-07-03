@@ -104,7 +104,10 @@ class Assessment: NSObject, NSCoding {
                     
                 }
             } catch {
+                
+                // Can't do alert since this is not a view controller
                 print(error)
+                
             }
         }
         

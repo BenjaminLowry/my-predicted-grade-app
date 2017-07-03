@@ -13,5 +13,4 @@ enum SubjectGradeCalculation: String {
     case dateWeighted = "Date Weighted"
     case medianGrade = "Median Grade"
     case pessimistMode = "Pessimist Mode"
-    
 }

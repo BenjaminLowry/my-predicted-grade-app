@@ -16,6 +16,7 @@ class Alert {
     enum AlertType: Int {
         case invalidUserResponse = 1
         case unwrappingError = 2
+        case jsonParsingError = 3
     }
     
     init(message: String, alertType: AlertType) {

@@ -64,7 +64,10 @@ class OverallGradeSnapshot: Snapshot {
                 }
                 
             } catch {
+                
+                // Can't do alert since this is not a view controller
                 print(error)
+                
             }
             
         }

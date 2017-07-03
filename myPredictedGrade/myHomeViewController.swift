@@ -246,7 +246,9 @@ class myHomeViewController: UIViewController, UITableViewDelegate, UITableViewDa
                 }
                 
             } catch {
-                print(error)
+                
+                let alert = Alert(message: "Internal error. Please try again.", alertType: .jsonParsingError)
+                
             }
             
         }
