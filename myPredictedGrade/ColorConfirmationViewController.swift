@@ -12,11 +12,14 @@ class ColorConfirmationViewController: UITableViewController {
 
     // MARK: - Properties
     
+    var name: String!
+    var yearLevel: YearLevelObject!
+    
+    var previousAsessments: [Assessment]!
+    
     var subjects: [SubjectObject]!
     var colorPreferences: [SubjectObject: UIColor]!
     
-    var name: String!
-    var yearLevel: YearLevelObject!
     
     // MARK: - Inherited Funcs
     
@@ -54,7 +57,39 @@ class ColorConfirmationViewController: UITableViewController {
     
     @IBAction func confirmButtonPressed(_ sender: UIBarButtonItem) {
     
-        let newProfile = Profile(name: self.name, yearLevelObject: self.yearLevel, subjects: self.subjects, colorPreferences: self.colorPreferences, assessments: [])
+        // Add TOK and EE
+        let TOK = SubjectObject(subject: .TheoryOfKnowledge, isHL: false)
+        let EE = SubjectObject(subject: .ExtendedEssay, isHL: false)
+        subjects.append(TOK)
+        subjects.append(EE)
+        
+        var assessmentsToKeep = [Assessment]()
+        
+        for assessment in previousAsessments {
+            
+            for subjectObject in subjects {
+                
+                if assessment.subjectObject == subjectObject {
+                    
+                    assessmentsToKeep.append(assessment)
+                    break
+                    
+                }
+                
+            }
+            
+        }
+        
+        colorPreferences[TOK] = UIColor.init(red: 8/255, green: 32/255, blue: 56/255, alpha: 1.0)
+        colorPreferences[EE] = UIColor.init(red: 8/255, green: 32/255, blue: 56/255, alpha: 1.0)
+        
+        print(self.name)
+        print(self.yearLevel)
+        print(self.subjects)
+        print(self.colorPreferences)
+        print(assessmentsToKeep)
+        
+        let newProfile = Profile(name: self.name, yearLevelObject: self.yearLevel, subjects: self.subjects, colorPreferences: self.colorPreferences, assessments: assessmentsToKeep)
         AppStatus.user = newProfile
         AppStatus.isSignedUp = true
         
@@ -70,5 +105,5 @@ class ColorConfirmationViewController: UITableViewController {
         dismiss(animated: true, completion: nil)
     
     }
-
+    
 }

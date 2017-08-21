@@ -178,6 +178,11 @@ class Profile: NSObject, NSCoding {
         
         for subjectObject in subjects {
             
+            // Ignore TOK and EE
+            if subjectObject.subject == .TheoryOfKnowledge || subjectObject.subject == .ExtendedEssay {
+                continue
+            }
+            
             let assessmentsForSubject = assessments.filter { $0.subjectObject == subjectObject }
             
             var sum = 0
@@ -241,9 +246,18 @@ class Profile: NSObject, NSCoding {
         
         for assessment in assessments {
             
+            // Ignore TOK and EE
+            if assessment.subjectObject.subject == .TheoryOfKnowledge || assessment.subjectObject.subject == .ExtendedEssay {
+                continue
+            }
+            
             sum += assessment.getOverallGrade()
             numberOfAssessments += 1
             
+        }
+        
+        if numberOfAssessments == 0 { // If there were no assessments, or just TOK/EE
+            return 8
         }
         
         averageGrade = Double(sum)/Double(numberOfAssessments)
@@ -256,9 +270,43 @@ class Profile: NSObject, NSCoding {
         overallGrade = 0
         subjectGrades = getSubjectGrades()
         
-        for (_, grade) in subjectGrades {
+        var TOKGrade = 0
+        var EEGrade = 0
+        
+        for (subject, grade) in subjectGrades {
             
-            overallGrade += grade
+            if subject.subject == .TheoryOfKnowledge {
+                TOKGrade = grade
+            } else if subject.subject == .ExtendedEssay {
+                EEGrade = grade
+            } else {
+                overallGrade += grade
+            }
+            
+            if TOKGrade != 0 && EEGrade != 0 {
+                switch TOKGrade * EEGrade {
+                case 25: // A-A
+                    overallGrade += 3
+                case 20: // A-B | B-A
+                    overallGrade += 3
+                case 16: // B-B 
+                    overallGrade += 2
+                case 15: // A-C | C-A
+                    overallGrade += 2
+                case 12: // B-C | C-B
+                    overallGrade += 1
+                case 10: // A-D | D-A
+                    overallGrade += 2
+                case 9:  // C-C
+                    overallGrade += 1
+                case 8:  // B-D | D-B
+                    overallGrade += 1
+                case 5:  // A-E | E-A
+                    overallGrade += 1
+                default:
+                    overallGrade += 0
+                }
+            }
             
         }
         
@@ -267,8 +315,121 @@ class Profile: NSObject, NSCoding {
     
     func getSubjectGrades() -> [SubjectObject: Int] {
     
+        // Reset the subject grades
+        subjectGrades = [SubjectObject: Int]()
+        
         for subjectObject in subjects {
 
+            if subjectObject.subject == .TheoryOfKnowledge  {
+                
+                var totalEssayMarks = 0
+                var essayCount = 0
+                
+                var totalPresentationMarks = 0
+                var presentationCount = 0
+                
+                for assessment in assessments {
+                    
+                    if assessment.subjectObject == subjectObject {
+                        
+                        if let newAssessment = assessment as? TOKAssessment {
+                            
+                            if newAssessment.assessmentType == .Essay {
+                                totalEssayMarks += newAssessment.marksReceived
+                                essayCount += 1
+                            } else if newAssessment.assessmentType == .Presentation {
+                                totalPresentationMarks += newAssessment.marksReceived
+                                presentationCount += 1
+                            }
+                            
+                        }
+        
+                    }
+                    
+                }
+                
+                if essayCount == 0 && presentationCount == 0 {
+                    continue
+                } else if essayCount == 0 || presentationCount == 0 {
+                    var averageMarks = 0
+                    if essayCount == 0 { // If there are only presentations
+                        averageMarks = Int(round(Double(totalPresentationMarks) / Double(presentationCount)))
+                    } else { // If there are only essays
+                        averageMarks = Int(round(Double(totalEssayMarks) / Double(essayCount)))
+                    }
+                    
+                    switch averageMarks {
+                    case let x where x >= 8:
+                        subjectGrades[subjectObject] = 5 // A
+                    case let x where x >= 6:
+                        subjectGrades[subjectObject] = 4 // B
+                    case let x where x >= 4:
+                        subjectGrades[subjectObject] = 3 // C
+                    case let x where x >= 2:
+                        subjectGrades[subjectObject] = 5 // D
+                    default:
+                        subjectGrades[subjectObject] = 1 // E
+                    }
+                    continue
+                }
+                
+                let averageEssayMarks = Int(round(Double(totalEssayMarks) / Double(essayCount)))
+                let averagePresentationMarks = Int(round(Double(totalPresentationMarks) / Double(presentationCount)))
+            
+                let totalMarks = averageEssayMarks * 2 + averagePresentationMarks
+                
+                switch totalMarks {
+                case let x where x >= 22:
+                    subjectGrades[subjectObject] = 5 // A
+                case let x where x >= 16:
+                    subjectGrades[subjectObject] = 4 // B
+                case let x where x >= 10:
+                    subjectGrades[subjectObject] = 3 // C
+                case let x where x >= 4:
+                    subjectGrades[subjectObject] = 2 // D
+                default:
+                    subjectGrades[subjectObject] = 1 // E
+                }
+                
+            } else if subjectObject.subject == .ExtendedEssay {
+                
+                var totalMarks = 0
+                var count = 0
+                
+                for assessment in assessments {
+                    
+                    if assessment.subjectObject == subjectObject {
+                        
+                        totalMarks += assessment.marksReceived
+                        count += 1
+                        
+                    }
+                    
+                }
+                
+                if count == 0 {
+                    continue
+                }
+                
+                let averageMarks = Int(round(Double(totalMarks) / Double(count)))
+                
+                switch averageMarks {
+                case let x where x >= 29:
+                    subjectGrades[subjectObject] = 5 // A
+                case let x where x >= 23:
+                    subjectGrades[subjectObject] = 4 // B
+                case let x where x >= 16:
+                    subjectGrades[subjectObject] = 3 // C
+                case let x where x >= 8:
+                    subjectGrades[subjectObject] = 2 // D
+                default:
+                    subjectGrades[subjectObject] = 1 // E
+                }
+                
+                
+            }
+            
+            
             var sumPercentageMarks = 0.0
             var numberOfAssessments = 0
             
@@ -396,7 +557,7 @@ class Profile: NSObject, NSCoding {
                                             
                                     } else { //if the user just wants a simple average done
                                             
-                                        if averagePercentage < value[1] + 1 && averagePercentage >= value[0] { //if the percentage (minus five) from the assessment falls between the bounds
+                                        if averagePercentage < value[1] + 1 && averagePercentage >= value[0] { //if the percentage from the assessment falls between the bounds
                                                 
                                             subjectGrades[subjectObject] = Int(key) //add the subject grade to the dictionary
                                         }
@@ -421,6 +582,111 @@ class Profile: NSObject, NSCoding {
         }
         
         return subjectGrades
+    }
+    
+    func getAveragePercentageMarks() -> [SubjectObject: Int] {
+        
+        var averagePercentageMarks = [SubjectObject: Int]()
+        
+        for subject in subjects {
+            
+            if subject.subject == .TheoryOfKnowledge  {
+                
+                var totalEssayMarks = 0
+                var essayCount = 0
+                
+                var totalPresentationMarks = 0
+                var presentationCount = 0
+                
+                for assessment in assessments {
+                    
+                    if assessment.subjectObject == subject {
+                        
+                        if let newAssessment = assessment as? TOKAssessment {
+                            
+                            if newAssessment.assessmentType == .Essay {
+                                totalEssayMarks += newAssessment.marksReceived
+                                essayCount += 1
+                            } else if newAssessment.assessmentType == .Presentation {
+                                totalPresentationMarks += newAssessment.marksReceived
+                                presentationCount += 1
+                            }
+                            
+                        }
+                        
+                    }
+                    
+                }
+                
+                if essayCount == 0 && presentationCount == 0 {
+                    continue
+                } else if essayCount == 0 || presentationCount == 0 {
+                    var averageMarks = 0
+                    if essayCount == 0 { // If there are only presentations
+                        averageMarks = Int(round(Double(totalPresentationMarks) / Double(presentationCount)))
+                    } else { // If there are only essays
+                        averageMarks = Int(round(Double(totalEssayMarks) / Double(essayCount)))
+                    }
+                    
+                    averagePercentageMarks[subject] = averageMarks * 3
+                    continue
+                }
+                
+                let averageEssayMarks = Int(round(Double(totalEssayMarks) / Double(essayCount)))
+                let averagePresentationMarks = Int(round(Double(totalPresentationMarks) / Double(presentationCount)))
+                
+                let totalMarks = averageEssayMarks * 2 + averagePresentationMarks
+                
+                averagePercentageMarks[subject] = totalMarks
+                continue
+                
+            } else if subject.subject == .ExtendedEssay {
+                
+                var totalMarks = 0
+                var count = 0
+                
+                for assessment in assessments {
+                    
+                    if assessment.subjectObject == subject {
+                        
+                        totalMarks += assessment.marksReceived
+                        count += 1
+                        
+                    }
+                    
+                }
+                
+                if count == 0 {
+                    continue
+                }
+                
+                let averageMarks = Int(round(Double(totalMarks) / Double(count)))
+            
+                averagePercentageMarks[subject] = averageMarks
+                continue
+                
+            }
+            
+            
+            let subjectAssessments = assessments.filter { $0.subjectObject == subject }
+            
+            var totalMarks = 0.0
+            var count = 0
+            
+            for assessment in subjectAssessments {
+                
+                totalMarks += assessment.percentageMarksObtained
+                count += 1
+                
+            }
+            
+            if subjectAssessments.count > 0 {
+                averagePercentageMarks[subject] = Int(lround(totalMarks / Double(count)))
+            }
+            
+        }
+        
+        return averagePercentageMarks
     }
     
     func subjectGradeSettingEnum(from string: String) -> SubjectGradeCalculation{

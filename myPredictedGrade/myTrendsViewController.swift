@@ -9,14 +9,32 @@
 import UIKit
 import Charts
 
-class myTrendsViewController: UIViewController {
+class myTrendsViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource {
     
-    @IBOutlet weak var scrollView: UIScrollView!
+    @IBOutlet weak var overallTimeframeTextField: UITextField!
+    
+    @IBOutlet weak var subjectTextField: UITextField!
+    @IBOutlet weak var subjectTimeframeTextField: UITextField!
+    
+    var overallTimeframePickerView = UIPickerView()
+    
+    var subjectPickerView = UIPickerView()
+    var subjectTimeframePickerView = UIPickerView()
+    
+    var timeframePickerData = ["Daily", "Monthly"]
+    
+    var subjectPickerData = [String]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        // Do any additional setup after loading the view.
+        // Populate subject picker data
+        for subject in AppStatus.user.subjects {
+            subjectPickerData.append(subject.toString())
+        }
+        
+        updateOverallGraph(gradeData: [34, 25, 34, 45, 26, 29, 43, 25, 24, 34], timeData: ["15/6", "18/6", "31/6", "2/7", "4/7", "5/7", "7/7", "10/7", "12/7", "15/7"])
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -138,12 +156,300 @@ class myTrendsViewController: UIViewController {
         self.view.addSubview(imageView)
         */
     }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+    
+    // MARK: - UIPickerView Delegate Funcs
+    
+    func numberOfComponents(in pickerView: UIPickerView) -> Int {
+        return 1
     }
     
+    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+    
+        if pickerView == subjectPickerView {
+            return subjectPickerData.count
+        } else {
+            return timeframePickerData.count
+        }
+    
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+        
+        if pickerView == subjectPickerView {
+            return subjectPickerData[row]
+        } else {
+            return timeframePickerData[row]
+        }
+        
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        
+        if pickerView == overallTimeframePickerView {
+            
+            var overallGradeData = [Int]()
+            var timeData = [String]()
+            
+            if timeframePickerData[row] == "Monthly" {
+                let data = createOverallDataList(timeframe: .monthly)
+                overallGradeData = data.0
+                timeData = data.1
+            } else if timeframePickerData[row] == "Daily" {
+                let data = createOverallDataList(timeframe: .daily)
+                overallGradeData = data.0
+                timeData = data.1
+            }
+            
+            updateOverallGraph(gradeData: overallGradeData, timeData: timeData)
+            
+        } else {
+            
+            if subjectTextField.text != "" && subjectTimeframeTextField.text != "" {
+                
+                var subject = SubjectObject(subject: .Default, isHL: false)
+                
+                for userSubject in AppStatus.user.subjects {
+                    
+                    if userSubject.toString() == subjectTextField.text {
+                        subject = userSubject
+                    }
+                    
+                }
+                
+                var subjectGradeData = [Int]()
+                var averagePercentageData = [Int]()
+                var timeData = [String]()
+                
+                if timeframePickerData[row] == "Monthly" {
+                    let data = createSubjectDataList(timeframe: .monthly, subject: subject)
+                    subjectGradeData = data.0[0]
+                    averagePercentageData = data.0[1]
+                    timeData = data.1
+                } else if timeframePickerData[row] == "Daily" {
+                    let data = createSubjectDataList(timeframe: .daily, subject: subject)
+                    subjectGradeData = data.0[0]
+                    averagePercentageData = data.0[1]
+                    timeData = data.1
+                }
+                
+                // TODO: - Update graph function
+                // updateGraph()
+                
+            }
+            
+        }
+        
+    }
+    
+    func updateOverallGraph(gradeData: [Int], timeData: [String]) {
+        
+        let barChart = BarChartView()
+        barChart.legend.enabled = false
+        barChart.chartDescription?.enabled = false
+        barChart.drawGridBackgroundEnabled = false
+        barChart.highlightPerTapEnabled = false
+        barChart.highlightPerDragEnabled = false
+        
+        let axisFormatter = MyAxisFormatter()
+        axisFormatter.changeAxisValues(to: timeData)
+        
+        barChart.xAxis.drawGridLinesEnabled = false
+        barChart.xAxis.valueFormatter = axisFormatter
+        
+        barChart.leftAxis.axisMaximum = 46.0
+        barChart.leftAxis.axisMinimum = 22.0
+        barChart.rightYAxisRenderer.axis?.drawLabelsEnabled = false
+        barChart.rightYAxisRenderer.axis?.drawGridLinesEnabled = false
+        barChart.leftYAxisRenderer.axis?.drawGridLinesEnabled = false
+        barChart.scaleXEnabled = false
+        barChart.scaleYEnabled = false
+        barChart.frame = CGRect(x: 10, y: 120, width: self.view.frame.width - 20, height: 200)
+        let xAxis = barChart.xAxis
+        xAxis.labelPosition = .bottom
+        xAxis.setLabelCount(10, force: false)
+        
+        var entries = [BarChartDataEntry]()
+        
+        for i in 0..<gradeData.count {
+            let chartDataEntry = BarChartDataEntry(x: Double(i), y: Double(gradeData[i]))
+            entries.append(chartDataEntry)
+        }
+        
+        let dataSet = BarChartDataSet(values: entries, label: "Set 1")
+        let color = UIColor(red: 230/255, green: 0, blue: 4/255, alpha: 0.75)
+        dataSet.setColor(NSUIColor(cgColor: color.cgColor))
+        //dataSet.drawCirclesEnabled = false
+        
+        let data = BarChartData(dataSet: dataSet)
+        data.setValueFont(NSUIFont(name: "AvenirNext", size: 14))
+        let formatter = MyValueFormatter()
+        data.setValueFormatter(formatter)
+        barChart.data = data
+        
+        self.view.addSubview(barChart)
+
+    }
+    
+    func updateSubjectGraph() {
+        
+        
+        
+        
+    }
+    
+    enum DataTimeframe {
+        case daily
+        case monthly
+    }
+    
+    func createSubjectDataList(timeframe: DataTimeframe, subject: SubjectObject) -> ([[Int]], [String]) {
+        
+        let subjectSnapshots = AppStatus.user.getSubjectSnapshots()
+        
+        var subjectGradeData = [Int]()
+        var subjectPercentageData = [Int]()
+        
+        var timeData = [String]()
+        
+        if timeframe == .monthly {
+            
+            var months = [String]()
+            
+            let snapshotsForSubject = subjectSnapshots.filter { $0.subjectObject == subject }
+            
+            let sortedSnapshots = snapshotsForSubject.sorted { $0.date > $1.date }
+            
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "MMM YY"
+            
+            for snapshot in sortedSnapshots {
+                
+                let monthString = dateFormatter.string(from: snapshot.date)
+                
+                if !months.contains(monthString) {
+                    months.append(monthString)
+                    
+                    subjectGradeData.append(snapshot.grade)
+                    subjectPercentageData.append(snapshot.averagePercentageMarks)
+                }
+                
+                // For the scale of the graph (adjust?)
+                if months.count == 10 {
+                    break
+                }
+                
+            }
+            
+            timeData = months
+            
+        } else if timeframe == .daily {
+            
+            var days = [String]()
+            
+            let snapshotsForSubject = subjectSnapshots.filter { $0.subjectObject == subject }
+            
+            let sortedSnapshots = snapshotsForSubject.sorted { $0.date > $1.date }
+            
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "DD MMM"
+            
+            for snapshot in sortedSnapshots {
+                
+                let dayString = dateFormatter.string(from: snapshot.date)
+                
+                if !days.contains(dayString) {
+                    days.append(dayString)
+                    
+                    subjectGradeData.append(snapshot.grade)
+                    subjectPercentageData.append(snapshot.averagePercentageMarks)
+                }
+                
+                // For the scale of the graph (adjust?)
+                if days.count == 10 {
+                    break
+                }
+                
+            }
+            
+            timeData = days
+            
+        }
+        
+        return ([subjectGradeData, subjectPercentageData], timeData)
+        
+    }
+    
+    func createOverallDataList(timeframe: DataTimeframe) -> ([Int], [String]) {
+        
+        let overallSnapshots = AppStatus.user.getSubjectSnapshots()
+        
+        var overallGradeData = [Int]()
+        
+        var timeData = [String]()
+        
+        if timeframe == .monthly {
+            
+            var months = [String]()
+            
+            let sortedSnapshots = overallSnapshots.sorted { $0.date > $1.date }
+            
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "MMM YY"
+            
+            for snapshot in sortedSnapshots {
+                
+                let monthString = dateFormatter.string(from: snapshot.date)
+                
+                if !months.contains(monthString) {
+                    months.append(monthString)
+                    
+                    overallGradeData.append(snapshot.grade)
+                }
+                
+                // For the scale of the graph (adjust?)
+                if months.count == 10 {
+                    break
+                }
+                
+            }
+            
+            timeData = months
+            
+        } else if timeframe == .daily {
+            
+            var days = [String]()
+            
+            let sortedSnapshots = overallSnapshots.sorted { $0.date > $1.date }
+            
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "DD MMM"
+            
+            for snapshot in sortedSnapshots {
+                
+                let dayString = dateFormatter.string(from: snapshot.date)
+                
+                if !days.contains(dayString) {
+                    days.append(dayString)
+                    
+                    overallGradeData.append(snapshot.grade)
+                }
+                
+                // For the scale of the graph (adjust?)
+                if days.count == 10 {
+                    break
+                }
+                
+            }
+            
+            timeData = days
+            
+        }
+        
+        return (overallGradeData, timeData)
+        
+    }
+    
+
     /*
     // MARK: - Navigation
 

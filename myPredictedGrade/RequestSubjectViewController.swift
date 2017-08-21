@@ -21,17 +21,13 @@ class RequestSubjectViewController: UIViewController {
 
         emailButton.titleLabel?.adjustsFontSizeToFitWidth = true
         
-        
-        
-        //TODO - Make button open gmail or safari
-        
-        // Do any additional setup after loading the view.
     }
     
     // MARK: - IBActions
     
     @IBAction func emailButtonPressed(_ sender: UIButton) {
         
+        // Opens a new draft email to me in mail app
         let email = "benjaminpaullowry.appdev@gmail.com"
         if let url = URL(string: "mailto:\(email)") {
             UIApplication.shared.open(url)

@@ -15,6 +15,7 @@ protocol AssessmentDetailViewControllerDelegate: class {
     func assessmentDetailViewControllerDidCancel(controller: AssessmentDetailViewController)
     func assessmentDetailViewController(controller: AssessmentDetailViewController, didFinishAddingAssessment assessment: Assessment)
     func assessmentDetailViewController(controller: AssessmentDetailViewController, didFinishEditingAssessment assessment: Assessment)
+    func assessmentDetailViewController(controller: AssessmentDetailViewController, didFinishDeletingAssessment assessment: Assessment)
 }
 
 class AssessmentDetailViewController: UITableViewController, UITextFieldDelegate, UIPickerViewDelegate, UIPickerViewDataSource {
@@ -88,7 +89,14 @@ class AssessmentDetailViewController: UITableViewController, UITextFieldDelegate
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 50 //ubiquitous among cells
+        return (indexPath.section == 2 && assessmentToEdit == nil) ? 0 : 50
+    }
+    
+    override func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
+        if section == 2 && assessmentToEdit == nil {
+            let headerView = view as! UITableViewHeaderFooterView
+            headerView.textLabel!.textColor = UIColor.clear
+        }
     }
     
     // MARK: - IBActions
@@ -124,6 +132,14 @@ class AssessmentDetailViewController: UITableViewController, UITextFieldDelegate
             
             }
             
+            if marksAvailable > 200 {
+                
+                let alert = Alert(message: "Marks available cannot be larger than 200. Please try again.", alertType: .invalidUserResponse)
+                alert.show(source: self)
+                return
+                
+            }
+            
             if assessmentTitle.characters.count > 30 {
                 
                 let alert = Alert(message: "Assessment title must be less than 30 characters.", alertType: .invalidUserResponse)
@@ -132,40 +148,109 @@ class AssessmentDetailViewController: UITableViewController, UITextFieldDelegate
                 
             }
             
-            if marksAvailable != 0 {
-                updateAssessment()
+            if dateText == "" {
                 
-                let dateFormatter = DateFormatter()
-                let date = dateFormatter.date(fromSpecific: dateText)
-                
-                if date > Date(timeIntervalSinceNow: 0) {
-                    
-                    let alert = Alert(message: "Please choose a date before today. You are not a fortune teller.", alertType: .invalidUserResponse)
-                    alert.show(source: self)
-                    return
-                    
-                }
-                
-                if let assessment = assessmentToEdit {
-                    
-                    delegate?.assessmentDetailViewController(controller: self, didFinishEditingAssessment: assessment)
-                } else {
-
-                    if let subjectObject = subjectValue(forString: subjectText) {
-                        let assessment = Assessment(assessmentTitle: assessmentTitle, subjectObject: subjectObject, date: date, marksAvailable: marksAvailable, marksReceived: marksReceived)
-                        delegate?.assessmentDetailViewController(controller: self, didFinishAddingAssessment: assessment)
-                    }
-                    
-                }
-            } else {
-                
-                let alert = Alert(message: "The marks available cannot be zero.", alertType: .invalidUserResponse)
+                let alert = Alert(message: "Please enter in a date.", alertType: .invalidUserResponse)
                 alert.show(source: self)
                 return
                 
             }
             
+            if subjectText == "Extended Essay" {
+                
+                if marksAvailable != 36 {
+                    
+                    let alert = Alert(message: "EE assessments must be out of 36 marks.", alertType: .invalidUserResponse)
+                    alert.show(source: self)
+                    return
+                    
+                }
+                
+            }
+            
+            if subjectText == "Theory of Knowledge" {
+                
+                if marksAvailable != 10 {
+                    
+                    let alert = Alert(message: "TOK assessments must be out of 10 marks.", alertType: .invalidUserResponse)
+                    alert.show(source: self)
+                    return
+                    
+                }
+                
+                let alert = UIAlertController(title: "TOK Assessment Details", message: "Is this assessment an essay or an presentation? This will affect how it is marked.", preferredStyle: .actionSheet)
+                
+                let essayAction = UIAlertAction(title: "Essay", style: .default, handler: { action in
+                    self.finishAssessment(marksAvailable: marksAvailable, dateText: dateText, subjectText: subjectText, assessmentTitle: assessmentTitle, marksReceived: marksReceived, assessmentType: TOKAssessment.AssessmentType.Essay)
+                })
+                let presentationAction = UIAlertAction(title: "Presentation", style: .default, handler: { action in
+                    self.finishAssessment(marksAvailable: marksAvailable, dateText: dateText, subjectText: subjectText, assessmentTitle: assessmentTitle, marksReceived: marksReceived, assessmentType: TOKAssessment.AssessmentType.Presentation)
+                })
+                
+                alert.addAction(essayAction)
+                alert.addAction(presentationAction)
+                
+                self.present(alert, animated: true, completion: nil)
+                return
+            }
+            
+            finishAssessment(marksAvailable: marksAvailable, dateText: dateText, subjectText: subjectText, assessmentTitle: assessmentTitle, marksReceived: marksReceived)
+            
         }
+        
+    }
+    
+    @IBAction func deleteAssessmentPressed(_ sender: Any) {
+    
+        delegate?.assessmentDetailViewController(controller: self, didFinishDeletingAssessment: self.assessmentToEdit!)
+    
+    }
+    
+    
+    // MARK: - Assessment Creation Helpers
+    
+    func finishAssessment(marksAvailable: Int, dateText: String, subjectText: String, assessmentTitle: String, marksReceived: Int, assessmentType: TOKAssessment.AssessmentType? = nil) {
+        
+        if marksAvailable != 0 {
+            updateAssessment()
+            
+            let dateFormatter = DateFormatter()
+            let date = dateFormatter.date(fromSpecific: dateText)
+            
+            if date > Date(timeIntervalSinceNow: 0) {
+                
+                let alert = Alert(message: "Please choose a date before today. You are not a fortune teller.", alertType: .invalidUserResponse)
+                alert.show(source: self)
+                return
+                
+            }
+            
+            if let assessment = assessmentToEdit {
+                
+                delegate?.assessmentDetailViewController(controller: self, didFinishEditingAssessment: assessment)
+            } else {
+                
+                if let subjectObject = subjectValue(forString: subjectText) {
+                    
+                    if let type = assessmentType { // If it's TOK
+                        let tokAssessment = TOKAssessment(assessmentTitle: assessmentTitle, subjectObject: subjectObject, date: date, marksAvailable: marksAvailable, marksReceived: marksReceived, assessmentType: type)
+                        delegate?.assessmentDetailViewController(controller: self, didFinishAddingAssessment: tokAssessment)
+                    } else { // If it's anything else
+                        let assessment = Assessment(assessmentTitle: assessmentTitle, subjectObject: subjectObject, date: date, marksAvailable: marksAvailable, marksReceived: marksReceived)
+                        delegate?.assessmentDetailViewController(controller: self, didFinishAddingAssessment: assessment)
+                    }
+                    
+                }
+                
+            }
+        } else {
+            
+            let alert = Alert(message: "The marks available cannot be zero.", alertType: .invalidUserResponse)
+            alert.show(source: self)
+            return
+            
+        }
+        
     }
     
     // MARK: - UITextField Delegate Funcs

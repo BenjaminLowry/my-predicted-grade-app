@@ -25,6 +25,13 @@ class ColorSelectionViewController: UIViewController, UICollectionViewDelegate, 
     @IBOutlet weak var titleHeaderSpaceConstraint: NSLayoutConstraint!
     @IBOutlet weak var collectionViewHeightConstraint: NSLayoutConstraint!
 
+    // Distance of subject label to title label
+    @IBOutlet weak var subjectTopSpaceConstraint: NSLayoutConstraint!
+    
+    @IBOutlet weak var subjectBottomSpaceConstraint: NSLayoutConstraint!
+    
+    @IBOutlet weak var previewBottomSpaceConstraint: NSLayoutConstraint!
+    
     // MARK: - Properties
     
     var colors = [UIColor]()
@@ -36,10 +43,13 @@ class ColorSelectionViewController: UIViewController, UICollectionViewDelegate, 
     
     var counter = 1
     
-    var subjects: [SubjectObject]!
-
     var name: String!
     var yearLevel: YearLevelObject!
+
+    var previousAssessments: [Assessment]!
+    
+    var subjects: [SubjectObject]!
+
     
     // MARK: - Inherited Funcs
     
@@ -65,6 +75,12 @@ class ColorSelectionViewController: UIViewController, UICollectionViewDelegate, 
             titleHeaderSpaceConstraint.constant = 20
             collectionViewHeightConstraint.constant = 60
             colorCollectionView.showsHorizontalScrollIndicator = true
+        } else if UIDevice.current.model == "iPad" { // If the user is on an iPad >:(
+            titleHeaderSpaceConstraint.constant = 5
+            subjectTopSpaceConstraint.constant = 8
+            subjectBottomSpaceConstraint.constant = 5
+            collectionViewHeightConstraint.constant = 60
+            previewBottomSpaceConstraint.constant = 5
         }
         
         colors.append(UIColor(red: 178/255, green: 0, blue: 3/255, alpha: 1.0))
@@ -86,6 +102,7 @@ class ColorSelectionViewController: UIViewController, UICollectionViewDelegate, 
         previewAssessmentView.updateView(for: UIColor.gray)
         
         nextButton.isHidden = true
+        
     }
 
     // MARK: - Navigation
@@ -101,6 +118,8 @@ class ColorSelectionViewController: UIViewController, UICollectionViewDelegate, 
                 
                 destinationVC.name = self.name
                 destinationVC.yearLevel = self.yearLevel
+                
+                destinationVC.previousAsessments = self.previousAssessments
                 
             }
             

@@ -14,6 +14,8 @@ class SubjectSelectionTableViewController: UITableViewController {
     
     @IBOutlet weak var titleLabel: UILabel!
     
+    @IBOutlet weak var backButton: UIBarButtonItem!
+    
     // MARK: - Properties
     
     var subjectList: [[SubjectObject.Subject]] = [[SubjectObject.Subject.ChineseALit, SubjectObject.Subject.ChineseALangLit, SubjectObject.Subject.EnglishALit, SubjectObject.Subject.EnglishALangLit], [SubjectObject.Subject.ChineseAb, SubjectObject.Subject.ChineseB, SubjectObject.Subject.FrenchAb, SubjectObject.Subject.FrenchB, SubjectObject.Subject.GermanAb, SubjectObject.Subject.GermanB, SubjectObject.Subject.SpanishAb, SubjectObject.Subject.SpanishB], [SubjectObject.Subject.BusinessManagement, SubjectObject.Subject.Economics, SubjectObject.Subject.Geography, SubjectObject.Subject.GlobalPolitics, SubjectObject.Subject.History, SubjectObject.Subject.InformationTechonologyinaGlobalSociety, SubjectObject.Subject.Philosophy, SubjectObject.Subject.Psychology, SubjectObject.Subject.SocialandCulturalAnthropology, SubjectObject.Subject.WorldReligions], [SubjectObject.Subject.Biology, SubjectObject.Subject.Chemistry, SubjectObject.Subject.ComputerScience, SubjectObject.Subject.DesignTechnology, SubjectObject.Subject.EnvironmentalSystemsandSocities, SubjectObject.Subject.Physics, SubjectObject.Subject.SportsExcerciseandHealthScience], [SubjectObject.Subject.FurtherMathematics, SubjectObject.Subject.Mathematics, SubjectObject.Subject.MathematicsStudies], [SubjectObject.Subject.Biology, SubjectObject.Subject.BusinessManagement, SubjectObject.Subject.Chemistry, SubjectObject.Subject.ComputerScience, SubjectObject.Subject.Dance, SubjectObject.Subject.DesignTechnology, SubjectObject.Subject.Economics, SubjectObject.Subject.EnvironmentalSystemsandSocities, SubjectObject.Subject.Film, SubjectObject.Subject.Geography, SubjectObject.Subject.GlobalPolitics, SubjectObject.Subject.History, SubjectObject.Subject.InformationTechonologyinaGlobalSociety, SubjectObject.Subject.Music, SubjectObject.Subject.MusicCreating, SubjectObject.Subject.Philosophy, SubjectObject.Subject.Physics, SubjectObject.Subject.Psychology, SubjectObject.Subject.SocialandCulturalAnthropology, SubjectObject.Subject.SportsExcerciseandHealthScience, SubjectObject.Subject.Theatre, SubjectObject.Subject.VisualArts, SubjectObject.Subject.WorldReligions]]
@@ -27,12 +29,22 @@ class SubjectSelectionTableViewController: UITableViewController {
     var name: String!
     var yearLevel: YearLevelObject!
     
+    var previousAssessments: [Assessment]?
+    
     // MARK: - Inherited Funcs
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         titleLabel.adjustsFontSizeToFitWidth = true
+        
+        if previousAssessments != nil {
+            backButton.title = ""
+            backButton.isEnabled = false
+        } else {
+            backButton.title = "Back"
+            backButton.isEnabled = true
+        }
         
     }
 
@@ -51,8 +63,8 @@ class SubjectSelectionTableViewController: UITableViewController {
 
         let subjectTitleLabel = cell.viewWithTag(1) as! UILabel
         
-        let subject = subjectList[indexPath.section][indexPath.row] 
-
+        let subject = subjectList[indexPath.section][indexPath.row]
+        
         // Shorten the name string if user is using iPhone 5, 5s
         if UIScreen.main.bounds.height == 568 {
             if subject.shortName != "" {
@@ -70,8 +82,7 @@ class SubjectSelectionTableViewController: UITableViewController {
         let HLLabel = cell.viewWithTag(2) as! UILabel
         let HLSwitch = cell.viewWithTag(3) as! UISwitch
         
-        // Makes sure the switches stay off if they are supposed to be off
-        if groupSubjectSelection[indexPath.section] == subjectList[indexPath.section][indexPath.row] {
+        if groupSubjectSelection[indexPath.section] == subjectList[indexPath.section][indexPath.row] { // Makes sure the switches stay off if they are supposed to be off
             mainSwitch.isOn = true
             HLLabel.isHidden = false
             HLSwitch.isHidden = false
@@ -111,6 +122,12 @@ class SubjectSelectionTableViewController: UITableViewController {
                 destinationVC.name = self.name
                 destinationVC.yearLevel = self.yearLevel
                 
+                if let prevAssessments = previousAssessments {
+                    destinationVC.previousAssessments = prevAssessments
+                } else {
+                    destinationVC.previousAssessments = []
+                }
+                
             }
             
         }
@@ -121,7 +138,44 @@ class SubjectSelectionTableViewController: UITableViewController {
     
     @IBAction func continueButtonPressed(_ sender: UIBarButtonItem) {
         
+        var invalidSubjects = [SubjectObject]()
+        invalidSubjects.append(SubjectObject(subject: .SpanishAb, isHL: true))
+        invalidSubjects.append(SubjectObject(subject: .GermanAb, isHL: true))
+        invalidSubjects.append(SubjectObject(subject: .FrenchAb, isHL: true))
+        invalidSubjects.append(SubjectObject(subject: .ChineseAb, isHL: true))
+        invalidSubjects.append(SubjectObject(subject: .FurtherMathematics, isHL: false))
+        invalidSubjects.append(SubjectObject(subject: .MathematicsStudies, isHL: true))
+        
         if !groupSubjectToggle.contains(false) {
+            
+            for i in 0..<groupSubjectSelection.count {
+                
+                let subject = SubjectObject(subject: groupSubjectSelection[i], isHL: subjectHLList[i])
+
+                for invalidSubject in invalidSubjects {
+                    
+                    if invalidSubject == subject {
+                        
+                        let alert = Alert(message: "\(subject.toString()) is an invalid subject choice. Please try again.", alertType: .invalidUserResponse)
+                        alert.show(source: self)
+                        return
+                        
+                    }
+                    
+                }
+                
+                for j in 0..<groupSubjectSelection.count {
+                    
+                    if groupSubjectSelection[i] == groupSubjectSelection[j] && i != j {
+                        
+                        let alert = Alert(message: "You have selected the same subject twice, please try again.", alertType: .invalidUserResponse)
+                        alert.show(source: self)
+                        return
+                        
+                    }
+                    
+                }
+            }
             
             var HLCount = 0
             for subject in subjectHLList {
@@ -215,7 +269,6 @@ class SubjectSelectionTableViewController: UITableViewController {
     }
     
     @IBAction func requestButtonPressed(_ sender: UIButton) {
-        
         performSegue(withIdentifier: "ShowRequest", sender: self)
     }
 

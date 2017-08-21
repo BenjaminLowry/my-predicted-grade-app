@@ -155,25 +155,10 @@ class myAssessmentsViewController: UIViewController, UISearchBarDelegate, UITabl
         updateContent()
         bodyTableView.reloadData()
     
-        let user = AppStatus.user
-            
-        //** Take snapshots of data **//
-            
-        user.assessments = allAssessments
-            
-        let subjectGrades = user.getSubjectGrades()
-            
-        for (subjectObject, grade) in subjectGrades {
-                
-            let subjectSnapshot = SubjectSnapshot(grade: grade, subjectObject: subjectObject)
-            user.addSubjectSnapshot(snapshot: subjectSnapshot)
-                
-        }
-            
-        let overallGradeSnapshot = OverallGradeSnapshot(grade: user.getOverallGrade())
-        user.addOverallGradeSnapshot(snapshot: overallGradeSnapshot)
+        // Take snapshots of data
+        takeSnapshots()
           
-        //save changes
+        // Save changes
         AppStatus.saveData()
         controller.dismiss(animated: true, completion: nil)
         
@@ -194,27 +179,73 @@ class myAssessmentsViewController: UIViewController, UISearchBarDelegate, UITabl
             
         }
         
+        // Take snapshots of data
+        takeSnapshots()
+        
+        // Save changes
+        AppStatus.saveData()
+        controller.dismiss(animated: true, completion: nil)
+    }
+    
+    func assessmentDetailViewController(controller: AssessmentDetailViewController, didFinishDeletingAssessment assessment: Assessment) {
+        
+        if let index = allAssessments.index(of: assessment) {
+            
+            allAssessments.remove(at: index)
+            
+            currentScope = nil
+            contentSelectionTextField.text = "All"
+            updateContent()
+            bodyTableView.reloadData()
+            
+        }
+        
+        // Take snapshots of data
+        takeSnapshots()
+        
+        // Save changes
+        AppStatus.saveData()
+        controller.dismiss(animated: true, completion: nil)
+        
+    }
+    
+    // MARK: - Snapshot Data Funcs
+    
+    func takeSnapshots() {
+        
         let user = AppStatus.user
-            
-        //** Take snapshots of data **//
-            
+        
         user.assessments = allAssessments
-            
+        
         let subjectGrades = user.getSubjectGrades()
-            
+        
         for (subjectObject, grade) in subjectGrades {
             
-            let subjectSnapshot = SubjectSnapshot(grade: grade, subjectObject: subjectObject)
-            user.addSubjectSnapshot(snapshot: subjectSnapshot)
-                
-        }
+            let assessmentsForSubject = AppStatus.user.assessments.filter { $0.subjectObject == subjectObject }
             
+            var totalPercentageMarks = 0.0
+            var count = 0
+            
+            for assessment in assessmentsForSubject {
+                totalPercentageMarks += assessment.percentageMarksObtained
+                count += 1
+            }
+            
+            if count == 0 { // If there are no assessments for that subject
+                continue
+            }
+            
+            let averagePercentageMarks = Int(totalPercentageMarks / Double(count))
+            
+            let subjectSnapshot = SubjectSnapshot(grade: grade, subjectObject: subjectObject, averagePercentageMarks: averagePercentageMarks)
+            user.addSubjectSnapshot(snapshot: subjectSnapshot)
+            
+        }
+        
         let overallGradeSnapshot = OverallGradeSnapshot(grade: user.getOverallGrade())
         user.addOverallGradeSnapshot(snapshot: overallGradeSnapshot)
         
-        //save changes
-        AppStatus.saveData()
-        controller.dismiss(animated: true, completion: nil)
+        
     }
     
     // MARK: - UITableView Helper Funcs

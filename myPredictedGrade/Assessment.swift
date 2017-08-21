@@ -32,21 +32,6 @@ class Assessment: NSObject, NSCoding {
         percentageMarksObtained = Double(marksReceived) / Double(marksAvailable) * 100
     }
     
-    init (assessmentTitle: String, subjectObject: SubjectObject, date: Date, marksAvailable: Int, marksReceived: Int, criteriaA: Int, criteriaB: Int, criteriaC: Int, criteriaD: Int){
-        self.assessmentTitle = assessmentTitle
-        self.subjectObject = subjectObject
-        self.date = date
-        
-        self.marksAvailable = marksAvailable
-        self.marksReceived = marksReceived
-        
-        percentageMarksObtained = Double(marksReceived) / Double(marksAvailable) * 100
-        
-        super.init()
-        
-        overallGrade = getOverallGrade()
-    }
-    
     required init?(coder aDecoder: NSCoder) {
         assessmentTitle = aDecoder.decodeObject(forKey: "AssessmentTitle") as! String
         subjectObject = aDecoder.decodeObject(forKey: "SubjectObject") as! SubjectObject
@@ -62,6 +47,40 @@ class Assessment: NSObject, NSCoding {
     }
     
     func getOverallGrade() -> Int {
+        
+        if self.subjectObject.subject == .TheoryOfKnowledge {
+            
+            switch marksReceived {
+            case let x where x >= 8:
+                self.overallGrade = 5 // A
+            case let x where x >= 6:
+                self.overallGrade = 4 // B
+            case let x where x >= 4:
+                self.overallGrade = 3 // C
+            case let x where x >= 2:
+                self.overallGrade = 5 // D
+            default:
+                self.overallGrade = 1 // E
+            }
+            
+            return self.overallGrade
+        } else if self.subjectObject.subject == .ExtendedEssay {
+            
+            switch marksReceived {
+            case let x where x >= 29:
+                self.overallGrade = 5 // A
+            case let x where x >= 23:
+                self.overallGrade = 4 // B
+            case let x where x >= 16:
+                self.overallGrade = 3 // C
+            case let x where x >= 8:
+                self.overallGrade = 2 // D
+            default:
+                self.overallGrade = 1 // E
+            }
+            
+            return self.overallGrade
+        }
         
         percentageMarksObtained = Double(marksReceived) / Double(marksAvailable) * 100
         
@@ -97,10 +116,6 @@ class Assessment: NSObject, NSCoding {
                         }
                         
                     }
-                    
-                    
-                    
-                    
                     
                 }
             } catch {

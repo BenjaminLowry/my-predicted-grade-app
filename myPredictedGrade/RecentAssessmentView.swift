@@ -45,15 +45,18 @@ class RecentAssessmentView: UIView {
         mainView.layer.borderWidth = 0.5
         subjectDateLabel.adjustsFontSizeToFitWidth = true
         asssessmentTitleLabel.adjustsFontSizeToFitWidth = true
-        self.addSubview(self.mainView)
         
+        // Make sure the width of the view is correct
+        mainView.frame = CGRect(x: 0, y: 0, width: self.frame.width, height: mainView.frame.height)
+        self.addSubview(self.mainView)
+    
     }
     
     // MARK: - UI Update Funcs
     
     func updateLabels(assessment: Assessment){
         
-        //update colors
+        // Update colors
         let user = AppStatus.user
         for subjectObject in user.subjects {
             if assessment.subjectObject == subjectObject {
@@ -70,7 +73,7 @@ class RecentAssessmentView: UIView {
         }
         
         asssessmentTitleLabel.text = assessment.assessmentTitle
-        let subjectText = assessment.subjectObject.toString()
+        let subjectText = assessment.subjectObject.toShortString()
         
         //converting date to appropriate format
         let dateFormatter = DateFormatter()
@@ -92,29 +95,27 @@ class RecentAssessmentView: UIView {
         let numberDouble: Double = Double(assessment.marksReceived) / Double(assessment.marksAvailable)
         let number = NSDecimalNumber(decimal: Decimal(numberDouble))
         percentageLabel.text = numberFormatter.string(from: number)
+      
+        if assessment.subjectObject.subject == .TheoryOfKnowledge || assessment.subjectObject.subject == .ExtendedEssay {
+            
+            switch assessment.getOverallGrade() {
+            case 5:
+                overallGradeLabel.text = "A"
+            case 4:
+                overallGradeLabel.text = "B"
+            case 3:
+                overallGradeLabel.text = "C"
+            case 2:
+                overallGradeLabel.text = "D"
+            case 1:
+                overallGradeLabel.text = "E"
+            default:
+                overallGradeLabel.text = "?"
+            }
+            
+            return
+        }
         
-        /*
-        if let criteriaA = assessment.criteriaA {
-            criterionAMarkLabel.text = String(criteriaA)
-        } else {
-            criterionAMarkLabel.text = "~"
-        }
-        if let criteriaB = assessment.criteriaB {
-            criterionBMarkLabel.text = String(criteriaB)
-        } else {
-            criterionBMarkLabel.text = "~"
-        }
-        if let criteriaC = assessment.criteriaC {
-            criterionCMarkLabel.text = String(criteriaC)
-        } else {
-            criterionCMarkLabel.text = "~"
-        }
-        if let criteriaD = assessment.criteriaD {
-            criterionDMarkLabel.text = String(criteriaD)
-        } else {
-            criterionDMarkLabel.text = "~"
-        }
-        */
         overallGradeLabel.text = String(assessment.getOverallGrade())
         
     }

@@ -57,6 +57,22 @@ class mySettingsViewController: UITableViewController, UITextFieldDelegate, UIPi
         // Dispose of any resources that can be recreated.
     }
     
+    @IBAction func changeSubjects(_ sender: Any) {
+        
+        let alertController = UIAlertController(title: "Are you sure?", message: "Any assessments from subjects you get rid of will be deleted.", preferredStyle: .alert)
+        
+        let confirmAction = UIAlertAction(title: "Yes", style: .default, handler: { alert in
+            self.performSegue(withIdentifier: "Change Subjects", sender: self)
+        })
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+        
+        alertController.addAction(confirmAction)
+        alertController.addAction(cancelAction)
+        
+        self.present(alertController, animated: true, completion: nil)
+        
+    }
+    
     // MARK - UIPickerView Delegate Funcs
     
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
@@ -101,6 +117,26 @@ class mySettingsViewController: UITableViewController, UITextFieldDelegate, UIPi
     func resignPickerViews() {
         
         gradeCalculationTextField.resignFirstResponder()
+        
+    }
+    
+    // MARK: - Navigation
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        
+        if let navController = segue.destination as? UINavigationController {
+            
+            if let vc = navController.viewControllers[0] as? SubjectSelectionTableViewController {
+                
+                vc.name = AppStatus.user.name
+                vc.yearLevel = AppStatus.user.yearLevelObject
+                
+                vc.previousAssessments = AppStatus.user.assessments
+                
+            }
+            
+        }
+        
         
     }
 

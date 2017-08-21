@@ -42,6 +42,10 @@ class PersonalInformationViewController: UIViewController, UIPickerViewDelegate,
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
         view.addGestureRecognizer(tapGesture)
         
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(sender:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(sender:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+        
     }
     
     // MARK: - IBActions
@@ -52,11 +56,9 @@ class PersonalInformationViewController: UIViewController, UIPickerViewDelegate,
             
             // If the text contains something other than whitespaces and newlines
             if !text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
-                
                 name = text
                 performSegue(withIdentifier: "Continue", sender: self)
                 return
-                
             }
             
         }
@@ -101,6 +103,14 @@ class PersonalInformationViewController: UIViewController, UIPickerViewDelegate,
     
     func dismissKeyboard() {
         view.endEditing(true)
+    }
+    
+    func keyboardWillShow(sender: NSNotification) {
+        self.view.frame.origin.y = -100 // Move view 150 points upward
+    }
+    
+    func keyboardWillHide(sender: NSNotification) {
+        self.view.frame.origin.y = 0 // Move view to original position
     }
     
     // MARK: - Navigation

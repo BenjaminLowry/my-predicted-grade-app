@@ -51,7 +51,9 @@ class SubjectObject: NSObject, NSCoding, NSCopying {
      "Music": Subject.Music,
      "Music Creating": Subject.MusicCreating,
      "Theatre": Subject.Theatre,
-     "Visual Arts": Subject.VisualArts]
+     "Visual Arts": Subject.VisualArts,
+     "Theory of Knowledge": Subject.TheoryOfKnowledge,
+     "Extended Essay": Subject.ExtendedEssay]
     
     enum Subject: String {
         //start of group 1: language and literature
@@ -104,6 +106,10 @@ class SubjectObject: NSObject, NSCoding, NSCopying {
         case Theatre = "Theatre"
         case VisualArts = "Visual Arts"
         
+        //others
+        case TheoryOfKnowledge = "Theory of Knowledge"
+        case ExtendedEssay = "Extended Essay"
+        
         //for void values of subject
         case Default = "Default"
         
@@ -127,6 +133,9 @@ class SubjectObject: NSObject, NSCoding, NSCopying {
             //start of group 6: arts
             case .Dance, .Film, .Music, .MusicCreating, .Theatre, .VisualArts:
                 return 6
+            //others
+            case .TheoryOfKnowledge, .ExtendedEssay:
+                return 7
             case .Default:
                 return 666
             }
@@ -151,6 +160,10 @@ class SubjectObject: NSObject, NSCoding, NSCopying {
                 return "French Ab"
             case .GermanAb:
                 return "German Ab"
+            case .BusinessManagement:
+                return "Business"
+            case .DesignTechnology:
+                return "DT"
             case .InformationTechonologyinaGlobalSociety:
                 return "ITGS"
             case .SocialandCulturalAnthropology:
@@ -165,14 +178,19 @@ class SubjectObject: NSObject, NSCoding, NSCopying {
                 return "Math"
             case .FurtherMathematics:
                 return "Fur. Math"
+            case .ComputerScience:
+                return "CompSci"
+            case .TheoryOfKnowledge:
+                return "TOK"
+            case .ExtendedEssay:
+                return "EE"
             default:
-                return ""
+                return self.rawValue
             }
             
         }
         
     }
-    
     
     init(subject: Subject, isHL: Bool) {
         
@@ -182,10 +200,16 @@ class SubjectObject: NSObject, NSCoding, NSCopying {
     }
     
     func toString() -> String {
+        if subject == .TheoryOfKnowledge || subject == .ExtendedEssay {
+            return subject.rawValue
+        }
         return subject.rawValue + (isHL ? " HL" : " SL")
     }
     
     func toShortString() -> String {
+        if subject == .TheoryOfKnowledge || subject == .ExtendedEssay {
+            return subject.shortName
+        }
         return subject.shortName + (isHL ? " HL" : " SL")
     }
     
@@ -195,7 +219,7 @@ class SubjectObject: NSObject, NSCoding, NSCopying {
         if subjectString.contains("HL") {
             subjectString.removeSubrange(subjectString.range(of: " HL")!)
             isHL = true
-        } else {
+        } else if subjectString.contains("SL") { // TOK and EE have neither, so must check
             subjectString.removeSubrange(subjectString.range(of: " SL")!)
         }
         
@@ -213,17 +237,15 @@ class SubjectObject: NSObject, NSCoding, NSCopying {
     
     required init?(coder aDecoder: NSCoder) {
         
-        //random initialization to shut compiler up
+        // Random initialization to shut compiler up
         self.subject = .GermanB
         self.isHL = false
         
         super.init()
         
         let subjectString = aDecoder.decodeObject(forKey: "SubjectString") as! String
-        print(subjectString)
+        
         self.subject = (subjectValue(forString: subjectString)?.subject)!
-        print(self.subject.rawValue)
-        print(aDecoder.decodeBool(forKey: "isHL"))
         
         self.isHL = aDecoder.decodeBool(forKey: "isHL")
         
