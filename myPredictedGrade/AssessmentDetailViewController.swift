@@ -75,8 +75,8 @@ class AssessmentDetailViewController: UITableViewController, UITextFieldDelegate
         
         addResponderButtons()
         
-        //load pickerview data
-        subjectPickerViewData = [SubjectObject]() //clear array (necessary??)
+        // Load pickerview data
+        subjectPickerViewData.removeAll() // Clear array
         let user = AppStatus.user
         let subjects = user.subjects
         for subject in subjects {
@@ -384,7 +384,8 @@ class AssessmentDetailViewController: UITableViewController, UITextFieldDelegate
     // MARK: - DatePicker Helper Funcs
     
     func handleDatePicker(_ sender: UIDatePicker){
-        //converting date to appropriate format
+        
+        // Converting date to appropriate format
         let dateFormatter = DateFormatter()
         let string = dateFormatter.string(fromSpecific: sender.date)
         
@@ -446,7 +447,7 @@ class AssessmentDetailViewController: UITableViewController, UITextFieldDelegate
     }
     
     func setupDateTextField() {
-        //converting date to appropriate format
+        // Converting date to appropriate format
         let dateFormatter = DateFormatter()
         let date = Date(timeIntervalSinceNow: 0)
         let string = dateFormatter.string(fromSpecific: date)

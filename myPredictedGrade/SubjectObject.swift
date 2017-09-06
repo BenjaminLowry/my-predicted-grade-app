@@ -245,6 +245,8 @@ class SubjectObject: NSObject, NSCoding, NSCopying {
         
         let subjectString = aDecoder.decodeObject(forKey: "SubjectString") as! String
         
+        print(subjectString)
+        
         self.subject = (subjectValue(forString: subjectString)?.subject)!
         
         self.isHL = aDecoder.decodeBool(forKey: "isHL")

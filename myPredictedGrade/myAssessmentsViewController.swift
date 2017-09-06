@@ -29,7 +29,7 @@ class myAssessmentsViewController: UIViewController, UISearchBarDelegate, UITabl
     var contentOrderingPickerView: UIPickerView = UIPickerView()
     
     var contentSelectionOptions: [String] = ["All", "Physics HL", "Chemistry HL", "Spanish Ab SL"]
-    var contentOrderingOptions: [String] = ["Most Recent", "Oldest", "Subject", "Overall Grade", "Percentage Marks", "Title"] //DEVELOPMENT: hide "Subject" when a specific subject is selected (?)
+    var contentOrderingOptions: [String] = ["Most Recent", "Oldest", "Subject", "Overall Grade", "Percentage Marks", "Title"]
     
     var allAssessments: [Assessment] = [Assessment]()
     var sortedContentList: [Assessment] = [Assessment]()
@@ -59,6 +59,8 @@ class myAssessmentsViewController: UIViewController, UISearchBarDelegate, UITabl
         setupPickerViews()
         setupSearchBar()
         setupHeaderViews()
+        
+        noResultsLabel = UILabel()
         
         allAssessments = AppStatus.user.assessments
         
@@ -97,7 +99,7 @@ class myAssessmentsViewController: UIViewController, UISearchBarDelegate, UITabl
                     
                     let index = bodyTableView.indexPath(for: cell)
                     
-                    //set the assessment to edit as the sorted content list since sorted content list will always be the data source
+                    // Set the assessment to edit as the sorted content list since sorted content list will always be the data source
                     let assessment = sortedContentList[index!.row]
                     viewController.assessmentToEdit = assessment
                     
@@ -110,12 +112,12 @@ class myAssessmentsViewController: UIViewController, UISearchBarDelegate, UITabl
     // MARK: - UITableView Delegate Funcs
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        return 1 //will I be creating sections for each subject? (when ordered by subject)
+        return 1
     }
     
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return sortedContentList.count //temporary, will change if multiple sections are added
+        return sortedContentList.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -166,11 +168,11 @@ class myAssessmentsViewController: UIViewController, UISearchBarDelegate, UITabl
     
     func assessmentDetailViewController(controller: AssessmentDetailViewController, didFinishEditingAssessment assessment: Assessment) {
         if let index = allAssessments.index(of: assessment) {
-            allAssessments[index] = assessment //update the assessment
+            allAssessments[index] = assessment // Update the assessment
             let indexPath = IndexPath(row: index, section: 0)
             
             if let cell = tableView(bodyTableView, cellForRowAt: indexPath) as? AssessmentCell {
-                configureCell(cell: cell, assessment: assessment) //update the labels
+                configureCell(cell: cell, assessment: assessment) // Update the labels
                 currentScope = nil
                 contentSelectionTextField.text = "All"
                 updateContent()
@@ -325,10 +327,11 @@ class myAssessmentsViewController: UIViewController, UISearchBarDelegate, UITabl
             if contentSelectionTextField.text! == "All" {
                 currentScope = nil
             }
-            //if the pickerview subject does not match any subjects
+            
+            // If the pickerview subject does not match any subjects
             currentScope = nil
             updateContent()
-        } else if pickerView.tag == 2 { //Ordering pickerview
+        } else if pickerView.tag == 2 { // Ordering pickerview
             contentOrderingTextField.text = contentOrderingOptions[row]
             
             updateContent()
@@ -340,7 +343,7 @@ class myAssessmentsViewController: UIViewController, UISearchBarDelegate, UITabl
     
     func updateContent() {
         
-        if let scope = currentScope { //if there is content selection
+        if let scope = currentScope { // If there is content selection
             let content = allAssessments.filter { assessment in {
                 return assessment.subjectObject == scope
                 }()
@@ -362,7 +365,7 @@ class myAssessmentsViewController: UIViewController, UISearchBarDelegate, UITabl
             bodyTableView.addSubview(noResultsLabel)
             sortedContentList.removeAll()
             bodyTableView.reloadData()
-        } else if searchBar.text == nil || searchBar.text == "" { //if no search
+        } else if searchBar.text == nil || searchBar.text == "" { // If no search
             noResultsLabel.removeFromSuperview()
             sortByHeaderPreference(content: content)
         } else { //if search is in progress
@@ -371,7 +374,7 @@ class myAssessmentsViewController: UIViewController, UISearchBarDelegate, UITabl
                 return assessment.assessmentTitle.lowercased().contains(searchBar.text!.lowercased())
                 }()
             }
-            if searchContent.count == 0 { //if no results match the string
+            if searchContent.count == 0 { // If no results match the string
                 bodyTableView.addSubview(noResultsLabel)
             } else {
                 noResultsLabel.removeFromSuperview()
@@ -382,7 +385,8 @@ class myAssessmentsViewController: UIViewController, UISearchBarDelegate, UITabl
         
     }
     
-    //takes a custom list of assessments and sorts them according to user preference (from the header view)
+    /* DESCRIPTION:
+        Takes a custom list of assessments and sorts them according to user preference (from the header view) */
     func sortByHeaderPreference(content: [Assessment]){
         if contentOrderingTextField.text == "Most Recent" {
             sortedContentList = content.sorted { $0.date > $1.date }
@@ -391,7 +395,8 @@ class myAssessmentsViewController: UIViewController, UISearchBarDelegate, UITabl
             sortedContentList = content.sorted { $0.date < $1.date }
             bodyTableView.reloadSections(NSIndexSet(index: 0) as IndexSet, with: UITableViewRowAnimation.none)
         } else if contentOrderingTextField.text == "Subject" {
-            sortedContentList = content.sorted { $0.subjectObject.subject.sortIndex > $1.subjectObject.subject.sortIndex }
+            // Using hashes as the "sorting index" is insufficient due to double science/humanity combos
+            sortedContentList = content.sorted { $0.subjectObject.toString().hash > $1.subjectObject.toString().hash }
             bodyTableView.reloadSections(NSIndexSet(index: 0) as IndexSet, with: UITableViewRowAnimation.none)
         } else if contentOrderingTextField.text == "Overall Grade" {
             sortedContentList = content.sorted { $0.getOverallGrade() > $1.getOverallGrade() }
@@ -437,12 +442,11 @@ class myAssessmentsViewController: UIViewController, UISearchBarDelegate, UITabl
     // MARK: - UI Setup
     
     func setupPickerViews() {
-        contentSelectionPickerView.tag = 1 //for the delegate methods
-        //contentSelectionPickerView.isHidden = true
+        contentSelectionPickerView.tag = 1 // For the delegate methods
         contentSelectionPickerView.delegate = self
         contentSelectionPickerView.dataSource = self
         
-        contentSelectionTextField.inputView = contentSelectionPickerView //set pickerView as responder
+        contentSelectionTextField.inputView = contentSelectionPickerView // Set pickerView as responder
         contentSelectionTextField.delegate = self
         
         contentSelectionOptions = []
@@ -451,12 +455,11 @@ class myAssessmentsViewController: UIViewController, UISearchBarDelegate, UITabl
             contentSelectionOptions.append(subject.toString())
         }
         
-        contentOrderingPickerView.tag = 2 //for the delegate methods
-        //contentOrderingPickerView.isHidden = true
+        contentOrderingPickerView.tag = 2 // For the delegate methods
         contentOrderingPickerView.delegate = self
         contentOrderingPickerView.dataSource = self
         
-        contentOrderingTextField.inputView = contentOrderingPickerView //set pickerView as responder
+        contentOrderingTextField.inputView = contentOrderingPickerView // Set pickerView as responder
         contentOrderingTextField.delegate = self
         
         initializePickerViewToolBar()
@@ -464,8 +467,8 @@ class myAssessmentsViewController: UIViewController, UISearchBarDelegate, UITabl
     
     func setupNoResultsLabel() {
         
-        noResultsLabel = UILabel(frame: CGRect(x: bodyTableView.center.x - 50, y: bodyTableView.center.y - 10, width: 100, height: 20))
-        noResultsLabel.font = UIFont(name: "AvenirNext-UltraLight", size: 16)
+        noResultsLabel.frame = CGRect(x: bodyTableView.center.x - 50, y: bodyTableView.center.y - 10, width: 100, height: 20)
+        noResultsLabel.font = UIFont(name: "Avenir Next", size: 16)
         noResultsLabel.text = "No Results"
         noResultsLabel.textAlignment = .center
         
@@ -475,7 +478,7 @@ class myAssessmentsViewController: UIViewController, UISearchBarDelegate, UITabl
         if let textFieldInsideSearchBar = self.searchBar.value(forKey: "searchField") as? UITextField,
             let glassIconView = textFieldInsideSearchBar.leftView as? UIImageView {
             
-            //Magnifying glass
+            // Magnifying glass
             glassIconView.image = glassIconView.image?.withRenderingMode(UIImageRenderingMode.alwaysTemplate)
             glassIconView.tintColor = UIColor.red
             
@@ -485,7 +488,7 @@ class myAssessmentsViewController: UIViewController, UISearchBarDelegate, UITabl
     func setupHeaderViews() {
         filterView.drawBorder(orientation: .Bottom, color: .black, thickness: 0.5)
         
-        //create underline graphic for header text fields
+        // Create underline graphic for header text fields
         contentSelectionTextField.underlined()
         contentOrderingTextField.underlined()
     }
@@ -495,7 +498,6 @@ class myAssessmentsViewController: UIViewController, UISearchBarDelegate, UITabl
         let toolBar = UIToolbar()
         toolBar.sizeToFit()
         toolBar.barStyle = .default
-        //toolBar.tintColor = UIColor.black
         
         let cancelButton = UIBarButtonItem(title: "Cancel", style: .plain, target: view, action: #selector(UIView.endEditing(_:)))
         let doneButton = UIBarButtonItem(barButtonSystemItem: .done, target: view, action: #selector(UIView.endEditing(_:)))

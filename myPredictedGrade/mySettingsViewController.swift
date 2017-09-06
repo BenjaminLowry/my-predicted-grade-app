@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SafariServices
 
 class mySettingsViewController: UITableViewController, UITextFieldDelegate, UIPickerViewDelegate, UIPickerViewDataSource {
 
@@ -52,11 +53,6 @@ class mySettingsViewController: UITableViewController, UITextFieldDelegate, UIPi
         
     }
     
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-    
     @IBAction func changeSubjects(_ sender: Any) {
         
         let alertController = UIAlertController(title: "Are you sure?", message: "Any assessments from subjects you get rid of will be deleted.", preferredStyle: .alert)
@@ -70,6 +66,24 @@ class mySettingsViewController: UITableViewController, UITextFieldDelegate, UIPi
         alertController.addAction(cancelAction)
         
         self.present(alertController, animated: true, completion: nil)
+        
+    }
+    
+    @IBAction func contactDeveloper(_ sender: Any) {
+        
+        // Opens a new draft email to me in mail app
+        let email = "benjaminpaullowry.appdev@gmail.com"
+        if let url = URL(string: "mailto:\(email)") {
+            UIApplication.shared.open(url)
+        }
+        
+    }
+    
+    @IBAction func watchDemoVideo(_ sender: Any) {
+        
+        let url = URL(string: "https://youtu.be/CD30wwjPQys")!
+        let controller = SFSafariViewController(url: url)
+        self.present(controller, animated: true, completion: nil)
         
     }
     
@@ -107,8 +121,48 @@ class mySettingsViewController: UITableViewController, UITextFieldDelegate, UIPi
                 
         AppStatus.user.subjectGradeSetting = subjectGradeSettings
         
-        //save changes
+        // Snapshot data
+        takeSnapshots()
+        
+        // Save changes
         AppStatus.saveData()
+        
+    }
+    
+    // Snapshot data helper funcs
+    
+    func takeSnapshots() {
+        
+        let user = AppStatus.user
+        
+        let subjectGrades = user.getSubjectGrades()
+        
+        for (subjectObject, grade) in subjectGrades {
+            
+            let assessmentsForSubject = AppStatus.user.assessments.filter { $0.subjectObject == subjectObject }
+            
+            var totalPercentageMarks = 0.0
+            var count = 0
+            
+            for assessment in assessmentsForSubject {
+                totalPercentageMarks += assessment.percentageMarksObtained
+                count += 1
+            }
+            
+            if count == 0 { // If there are no assessments for that subject
+                continue
+            }
+            
+            let averagePercentageMarks = Int(totalPercentageMarks / Double(count))
+            
+            let subjectSnapshot = SubjectSnapshot(grade: grade, subjectObject: subjectObject, averagePercentageMarks: averagePercentageMarks)
+            user.addSubjectSnapshot(snapshot: subjectSnapshot)
+            
+        }
+        
+        let overallGradeSnapshot = OverallGradeSnapshot(grade: user.getOverallGrade())
+        user.addOverallGradeSnapshot(snapshot: overallGradeSnapshot)
+        
         
     }
     
@@ -137,9 +191,6 @@ class mySettingsViewController: UITableViewController, UITextFieldDelegate, UIPi
             
         }
         
-        
     }
-
     
-
 }

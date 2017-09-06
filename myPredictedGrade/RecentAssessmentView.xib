@@ -48,6 +48,9 @@
                         </label>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="infoLight" reversesTitleShadowWhenHighlighted="YES" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4ld-wX-jHW">
                             <rect key="frame" x="345" y="28" width="22" height="22"/>
+                            <constraints>
+                                <constraint firstAttribute="width" constant="22" id="KC0-eI-rOD"/>
+                            </constraints>
                             <color key="tintColor" red="0.13068404789999999" green="0.2321828604" blue="0.3089588284" alpha="0.97989198830000002" colorSpace="custom" customColorSpace="sRGB"/>
                             <state key="highlighted">
                                 <color key="titleColor" red="0.76208978890000001" green="0.1025723144" blue="0.001206409303" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

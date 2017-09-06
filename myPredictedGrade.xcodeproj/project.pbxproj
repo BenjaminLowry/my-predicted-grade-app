@@ -16,6 +16,7 @@
 		5F10BBBE1F0A7480001E3A4F /* Alert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F10BBBD1F0A7480001E3A4F /* Alert.swift */; };
 		5F1BACA71E0D776800CFDD6D /* BorderedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F1BACA61E0D776800CFDD6D /* BorderedView.swift */; };
 		5F2B3FFC1E47272500FAAA74 /* UnderlinedLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F2B3FFB1E47272500FAAA74 /* UnderlinedLabel.swift */; };
+		5F54AC151F5ED6B700A54E4E /* untitled (1) 20-51-17-209.png in Resources */ = {isa = PBXBuildFile; fileRef = 5F54AC141F5ED6B700A54E4E /* untitled (1) 20-51-17-209.png */; };
 		5F5969731E2B51BD001EA42A /* Date.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F5969721E2B51BD001EA42A /* Date.swift */; };
 		5F6032E81E05E6150097639E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F6032E71E05E6150097639E /* AppDelegate.swift */; };
 		5F6032EF1E05E6150097639E /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5F6032ED1E05E6150097639E /* Main.storyboard */; };
@@ -31,7 +32,7 @@
 		5F63D3571E20C428005FB875 /* UISearchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F63D3561E20C428005FB875 /* UISearchBar.swift */; };
 		5F63D3791E225BBB005FB875 /* AssessmentDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F63D3781E225BBB005FB875 /* AssessmentDetailViewController.swift */; };
 		5F644A361F065333002D7EB3 /* ColorConfirmationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F644A351F065333002D7EB3 /* ColorConfirmationViewController.swift */; };
-		5F6C57541F404F6D003AEF89 /* FAQViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F6C57531F404F6D003AEF89 /* FAQViewController.swift */; };
+		5F6C57541F404F6D003AEF89 /* SettingsFAQViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F6C57531F404F6D003AEF89 /* SettingsFAQViewController.swift */; };
 		5F6F6D561E601EDF0035B196 /* Snapshot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F6F6D551E601EDF0035B196 /* Snapshot.swift */; };
 		5F6F6D581E601F6B0035B196 /* SubjectSnapshot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F6F6D571E601F6B0035B196 /* SubjectSnapshot.swift */; };
 		5F6FF6811E5DD4F20004CAEF /* MyValueFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F6FF6801E5DD4F20004CAEF /* MyValueFormatter.swift */; };
@@ -43,19 +44,34 @@
 		5F8C8F381E4D327A003A14E3 /* SubjectGradeCalculation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F8C8F371E4D327A003A14E3 /* SubjectGradeCalculation.swift */; };
 		5F9235221F49C86A00D56908 /* DisclaimerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F9235211F49C86A00D56908 /* DisclaimerViewController.swift */; };
 		5F9235241F49CA0400D56908 /* untitled.png in Resources */ = {isa = PBXBuildFile; fileRef = 5F9235231F49CA0400D56908 /* untitled.png */; };
-		5F9235261F49CA3700D56908 /* untitled (1).png in Resources */ = {isa = PBXBuildFile; fileRef = 5F9235251F49CA3700D56908 /* untitled (1).png */; };
 		5F9680E21E266ED1001CF7B4 /* UINavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F9680E11E266ED1001CF7B4 /* UINavigationController.swift */; };
 		5F9A31331EE99C4100996D1A /* PersonalInformationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F9A31321EE99C4100996D1A /* PersonalInformationViewController.swift */; };
 		5F9CF5FE1E553B9500FC40C3 /* IndexedSum.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F9CF5FD1E553B9500FC40C3 /* IndexedSum.swift */; };
 		5F9CF6001E58816E00FC40C3 /* gradeBoundaries.json in Resources */ = {isa = PBXBuildFile; fileRef = 5F9CF5FF1E58816E00FC40C3 /* gradeBoundaries.json */; };
+		5F9E64D61F5BF81E00AD6F89 /* Charts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5F2F14181F517978001517C8 /* Charts.framework */; };
+		5F9E64D71F5BF81E00AD6F89 /* Charts.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 5F2F14181F517978001517C8 /* Charts.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		5FA448401F4D789900C88878 /* TrendsFAQViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FA4483F1F4D789900C88878 /* TrendsFAQViewController.swift */; };
 		5FA5095A1EEED99300684565 /* ColorSelectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FA509591EEED99300684565 /* ColorSelectionViewController.swift */; };
 		5FBC4BBD1E38E63D004E64A6 /* myTrendsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FBC4BBC1E38E63D004E64A6 /* myTrendsViewController.swift */; };
 		5FC1EF6C1E1FC90F00CF379A /* UITextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FC1EF6B1E1FC90F00CF379A /* UITextField.swift */; };
 		5FCC00991E17B90B005201C2 /* Profile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FCC00981E17B90B005201C2 /* Profile.swift */; };
 		5FCC009B1E17BC36005201C2 /* AppStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FCC009A1E17BC36005201C2 /* AppStatus.swift */; };
 		5FCE9FE91F4481BE00FD341C /* TOKAssessment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FCE9FE81F4481BE00FD341C /* TOKAssessment.swift */; };
-		A864B6D9095C8FA7626B4254 /* Pods_myPredictedGrade.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E8D3FAA413698C633D49FE5A /* Pods_myPredictedGrade.framework */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		5F9E64D81F5BF81E00AD6F89 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				5F9E64D71F5BF81E00AD6F89 /* Charts.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		33F212EFA0A4DC55FFE2FE4E /* Pods-myPredictedGrade.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-myPredictedGrade.debug.xcconfig"; path = "Pods/Target Support Files/Pods-myPredictedGrade/Pods-myPredictedGrade.debug.xcconfig"; sourceTree = "<group>"; };
@@ -68,6 +84,8 @@
 		5F10BBBD1F0A7480001E3A4F /* Alert.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Alert.swift; sourceTree = "<group>"; };
 		5F1BACA61E0D776800CFDD6D /* BorderedView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BorderedView.swift; sourceTree = "<group>"; };
 		5F2B3FFB1E47272500FAAA74 /* UnderlinedLabel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UnderlinedLabel.swift; sourceTree = "<group>"; };
+		5F2F14181F517978001517C8 /* Charts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Charts.framework; path = "../../../../../../Library/Developer/Xcode/DerivedData/myPredictedGrade-dzicivgxgutzupczscesmlsxkbfo/Build/Products/Debug-iphoneos/Charts/Charts.framework"; sourceTree = "<group>"; };
+		5F54AC141F5ED6B700A54E4E /* untitled (1) 20-51-17-209.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "untitled (1) 20-51-17-209.png"; path = "../../../../../../.Trash/untitled (1) 20-51-17-209.png"; sourceTree = "<group>"; };
 		5F5969721E2B51BD001EA42A /* Date.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Date.swift; sourceTree = "<group>"; };
 		5F6032E41E05E6150097639E /* myPredictedGrade.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = myPredictedGrade.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5F6032E71E05E6150097639E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -85,7 +103,7 @@
 		5F63D3561E20C428005FB875 /* UISearchBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UISearchBar.swift; sourceTree = "<group>"; };
 		5F63D3781E225BBB005FB875 /* AssessmentDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AssessmentDetailViewController.swift; sourceTree = "<group>"; };
 		5F644A351F065333002D7EB3 /* ColorConfirmationViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ColorConfirmationViewController.swift; sourceTree = "<group>"; };
-		5F6C57531F404F6D003AEF89 /* FAQViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FAQViewController.swift; sourceTree = "<group>"; };
+		5F6C57531F404F6D003AEF89 /* SettingsFAQViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsFAQViewController.swift; sourceTree = "<group>"; };
 		5F6F6D551E601EDF0035B196 /* Snapshot.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Snapshot.swift; sourceTree = "<group>"; };
 		5F6F6D571E601F6B0035B196 /* SubjectSnapshot.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SubjectSnapshot.swift; sourceTree = "<group>"; };
 		5F6FF6801E5DD4F20004CAEF /* MyValueFormatter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyValueFormatter.swift; sourceTree = "<group>"; };
@@ -97,11 +115,11 @@
 		5F8C8F371E4D327A003A14E3 /* SubjectGradeCalculation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SubjectGradeCalculation.swift; sourceTree = "<group>"; };
 		5F9235211F49C86A00D56908 /* DisclaimerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DisclaimerViewController.swift; sourceTree = "<group>"; };
 		5F9235231F49CA0400D56908 /* untitled.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = untitled.png; sourceTree = "<group>"; };
-		5F9235251F49CA3700D56908 /* untitled (1).png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "untitled (1).png"; sourceTree = "<group>"; };
 		5F9680E11E266ED1001CF7B4 /* UINavigationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UINavigationController.swift; sourceTree = "<group>"; };
 		5F9A31321EE99C4100996D1A /* PersonalInformationViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PersonalInformationViewController.swift; sourceTree = "<group>"; };
 		5F9CF5FD1E553B9500FC40C3 /* IndexedSum.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IndexedSum.swift; sourceTree = "<group>"; };
 		5F9CF5FF1E58816E00FC40C3 /* gradeBoundaries.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = gradeBoundaries.json; sourceTree = "<group>"; };
+		5FA4483F1F4D789900C88878 /* TrendsFAQViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TrendsFAQViewController.swift; sourceTree = "<group>"; };
 		5FA509591EEED99300684565 /* ColorSelectionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ColorSelectionViewController.swift; sourceTree = "<group>"; };
 		5FBC4BBC1E38E63D004E64A6 /* myTrendsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = myTrendsViewController.swift; sourceTree = "<group>"; };
 		5FC1EF6B1E1FC90F00CF379A /* UITextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UITextField.swift; sourceTree = "<group>"; };
@@ -109,7 +127,6 @@
 		5FCC009A1E17BC36005201C2 /* AppStatus.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppStatus.swift; sourceTree = "<group>"; };
 		5FCE9FE81F4481BE00FD341C /* TOKAssessment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TOKAssessment.swift; sourceTree = "<group>"; };
 		8EFCFA22CCF058202AA5409A /* Pods-myPredictedGrade.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-myPredictedGrade.release.xcconfig"; path = "Pods/Target Support Files/Pods-myPredictedGrade/Pods-myPredictedGrade.release.xcconfig"; sourceTree = "<group>"; };
-		E8D3FAA413698C633D49FE5A /* Pods_myPredictedGrade.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_myPredictedGrade.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -117,7 +134,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A864B6D9095C8FA7626B4254 /* Pods_myPredictedGrade.framework in Frameworks */,
+				5F9E64D61F5BF81E00AD6F89 /* Charts.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -127,7 +144,7 @@
 		02C77B6FB0D4D4D40B3FE007 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				E8D3FAA413698C633D49FE5A /* Pods_myPredictedGrade.framework */,
+				5F2F14181F517978001517C8 /* Charts.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -141,7 +158,8 @@
 				5FBC4BBC1E38E63D004E64A6 /* myTrendsViewController.swift */,
 				5F8C8F351E4C4B0F003A14E3 /* mySettingsViewController.swift */,
 				5F63D3781E225BBB005FB875 /* AssessmentDetailViewController.swift */,
-				5F6C57531F404F6D003AEF89 /* FAQViewController.swift */,
+				5F6C57531F404F6D003AEF89 /* SettingsFAQViewController.swift */,
+				5FA4483F1F4D789900C88878 /* TrendsFAQViewController.swift */,
 				5F9235211F49C86A00D56908 /* DisclaimerViewController.swift */,
 			);
 			name = ViewControllers;
@@ -229,7 +247,6 @@
 				5F8C8F311E4C2B0A003A14E3 /* gradePercentiles.json */,
 				5F9CF5FF1E58816E00FC40C3 /* gradeBoundaries.json */,
 				5F9235231F49CA0400D56908 /* untitled.png */,
-				5F9235251F49CA3700D56908 /* untitled (1).png */,
 			);
 			path = myPredictedGrade;
 			sourceTree = "<group>";
@@ -237,6 +254,7 @@
 		5F6032FD1E05EB480097639E /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				5F54AC141F5ED6B700A54E4E /* untitled (1) 20-51-17-209.png */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -275,6 +293,7 @@
 				5F6032E21E05E6150097639E /* Resources */,
 				E2E75B8D620C82D6C43BE2D3 /* [CP] Embed Pods Frameworks */,
 				07D6811011AB55179BDD35DB /* [CP] Copy Pods Resources */,
+				5F9E64D81F5BF81E00AD6F89 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -327,13 +346,13 @@
 			files = (
 				5F8C8F321E4C2B0A003A14E3 /* gradePercentiles.json in Resources */,
 				5F6032F41E05E6150097639E /* LaunchScreen.storyboard in Resources */,
-				5F9235261F49CA3700D56908 /* untitled (1).png in Resources */,
 				5F02F6CF1E0DCC4A0030F54E /* RecentAssessmentView.xib in Resources */,
 				5F6032F11E05E6150097639E /* Assets.xcassets in Resources */,
 				5F6142851E14DD1D004DC079 /* AssessmentCell.xib in Resources */,
 				5F6032EF1E05E6150097639E /* Main.storyboard in Resources */,
 				5F9CF6001E58816E00FC40C3 /* gradeBoundaries.json in Resources */,
 				5F9235241F49CA0400D56908 /* untitled.png in Resources */,
+				5F54AC151F5ED6B700A54E4E /* untitled (1) 20-51-17-209.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -413,13 +432,14 @@
 				5F02F6D71E1136B30030F54E /* String.swift in Sources */,
 				5F10BBBE1F0A7480001E3A4F /* Alert.swift in Sources */,
 				5F5969731E2B51BD001EA42A /* Date.swift in Sources */,
-				5F6C57541F404F6D003AEF89 /* FAQViewController.swift in Sources */,
+				5F6C57541F404F6D003AEF89 /* SettingsFAQViewController.swift in Sources */,
 				5F63D3791E225BBB005FB875 /* AssessmentDetailViewController.swift in Sources */,
 				5F6142791E12D781004DC079 /* myAssessmentsViewController.swift in Sources */,
 				5F9680E21E266ED1001CF7B4 /* UINavigationController.swift in Sources */,
 				5F6FF6831E5DD8720004CAEF /* MyAxisFormatter.swift in Sources */,
 				5F60C32A1EB46DBA0062DFC5 /* YearLevelObject.swift in Sources */,
 				5F9A31331EE99C4100996D1A /* PersonalInformationViewController.swift in Sources */,
+				5FA448401F4D789900C88878 /* TrendsFAQViewController.swift in Sources */,
 				5F61427B1E13DC3D004DC079 /* SubjectObject.swift in Sources */,
 				5F2B3FFC1E47272500FAAA74 /* UnderlinedLabel.swift in Sources */,
 				5FC1EF6C1E1FC90F00CF379A /* UITextField.swift in Sources */,
@@ -552,12 +572,16 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEVELOPMENT_TEAM = NC6Q6DD92R;
+				ENABLE_BITCODE = NO;
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = myPredictedGrade/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = myPredictedGrade;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 3.0;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
@@ -569,12 +593,16 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEVELOPMENT_TEAM = NC6Q6DD92R;
+				ENABLE_BITCODE = NO;
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = myPredictedGrade/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = myPredictedGrade;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 3.0;
 				TARGETED_DEVICE_FAMILY = 1;
 			};

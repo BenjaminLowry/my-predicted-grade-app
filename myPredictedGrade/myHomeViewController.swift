@@ -115,15 +115,17 @@ class myHomeViewController: UIViewController, UITableViewDelegate, UITableViewDa
             
             let confirmAction = UIAlertAction(title: "Yes", style: .default, handler: { alert in
                 
-                let url = URL(string: "https://youtu.be/HKiwBpYfgCc")!
+                let url = URL(string: "https://youtu.be/CD30wwjPQys")!
                 let controller = SFSafariViewController(url: url)
                 self.present(controller, animated: true, completion: {
                     AppStatus.isFirstLoad = false
+                    AppStatus.saveData()
                 })
                 
             })
             let denyAction = UIAlertAction(title: "No, I'll figure it out", style: .default, handler: { alert in
                 AppStatus.isFirstLoad = false
+                AppStatus.saveData()
             })
             
             alertController.addAction(confirmAction)
@@ -611,8 +613,8 @@ class myHomeViewController: UIViewController, UITableViewDelegate, UITableViewDa
         bodyTableView.delegate = self
         bodyTableView.dataSource = self
         
-        //get the most recent assessment
-        if AppStatus.user.assessments.count == 0 { //if they haven't logged any assessments yet
+        // Get the most recent assessment
+        if AppStatus.user.assessments.count == 0 { // If they haven't logged any assessments yet
             bodyScrollView.addSubview(noAssessmentsLabel)
             bodyTableView.reloadData()
         } else {
@@ -624,7 +626,7 @@ class myHomeViewController: UIViewController, UITableViewDelegate, UITableViewDa
             bodyTableView.reloadData()
         }
         
-        //can't scroll because only one item
+        // Can't scroll because only one item
         bodyTableView.isScrollEnabled = false
     }
     
@@ -635,7 +637,7 @@ class myHomeViewController: UIViewController, UITableViewDelegate, UITableViewDa
         let name = AppStatus.user.name
         userLabel.text = "\(name) - \(yearLevelObject.yearLevel.rawValue) Student"
         
-        if AppStatus.user.assessments.count == 0 { //if there are no logged assessments
+        if AppStatus.user.assessments.count == 0 { // If there are no logged assessments
             averageGradeContentLabel.text = "N/A"
             bestSubjectContentLabel.text = "N/A"
             loggedAssessmentsContentLabel.text = "0"
@@ -782,19 +784,19 @@ class myHomeViewController: UIViewController, UITableViewDelegate, UITableViewDa
         
         noAssessmentsLabel = UILabel(frame: CGRect(x: self.bodyTableView.frame.origin.x, y: self.bodyTableView.frame.origin.y, width: UIScreen.main.bounds.width, height: self.bodyTableView.frame.height))
         noAssessmentsLabel.text = "No Assessments Yet!"
-        noAssessmentsLabel.font = UIFont(name: "AvenirNext-UltraLight", size: 16)
+        noAssessmentsLabel.font = UIFont(name: "Avenir Next", size: 16)
         noAssessmentsLabel.textAlignment = .center
         
     }
     
     func setupHeaderView() {
         
-        //set-up headerView shadow
+        // Set-up headerView shadow
         headerView.layer.shadowOpacity = 1.0
         headerView.layer.shadowRadius = 4
         headerView.layer.shadowColor = UIColor.black.cgColor
         
-        //draw borders for custom "BorderedViews"
+        // Draw borders for custom "BorderedViews"
         leftHeaderView.drawBorder(orientation: .Right, color: UIColor.black, thickness: 0.5)
     }
 

@@ -26,7 +26,7 @@ class ColorConfirmationViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        //register XIB for usage
+        // Register XIB for usage
         self.tableView.register(UINib(nibName: "AssessmentCell", bundle: Bundle.main), forCellReuseIdentifier: "AssessmentCell")
         
     }
@@ -83,19 +83,12 @@ class ColorConfirmationViewController: UITableViewController {
         colorPreferences[TOK] = UIColor.init(red: 8/255, green: 32/255, blue: 56/255, alpha: 1.0)
         colorPreferences[EE] = UIColor.init(red: 8/255, green: 32/255, blue: 56/255, alpha: 1.0)
         
-        print(self.name)
-        print(self.yearLevel)
-        print(self.subjects)
-        print(self.colorPreferences)
-        print(assessmentsToKeep)
-        
         let newProfile = Profile(name: self.name, yearLevelObject: self.yearLevel, subjects: self.subjects, colorPreferences: self.colorPreferences, assessments: assessmentsToKeep)
         AppStatus.user = newProfile
         AppStatus.isSignedUp = true
         
         AppStatus.saveData()
         
-        //dismiss(animated: true, completion: nil)
         performSegue(withIdentifier: "SignupFinished", sender: self)
     
     }

@@ -46,9 +46,22 @@ struct AppStatus {
                 
                 let unarchiver = NSKeyedUnarchiver(forReadingWith: data)
                 AppStatus.user = unarchiver.decodeObject(forKey: "User") as! Profile
-                AppStatus.isSignedUp = unarchiver.decodeBool(forKey: "Signed Up")
-                AppStatus.isFirstLoad = unarchiver.decodeBool(forKey: "First Load")
-                AppStatus.disclaimerSigned = unarchiver.decodeBool(forKey: "Disclaimer Signed")
+                
+                if unarchiver.containsValue(forKey: "Signed Up") {
+                    AppStatus.isSignedUp = unarchiver.decodeBool(forKey: "Signed Up")
+                } else {
+                    AppStatus.isSignedUp = false
+                }
+                if unarchiver.containsValue(forKey: "First Load") {
+                    AppStatus.isFirstLoad = unarchiver.decodeBool(forKey: "First Load")
+                } else {
+                    AppStatus.isFirstLoad = true
+                }
+                if unarchiver.containsValue(forKey: "Disclaimer Signed") {
+                    AppStatus.disclaimerSigned = unarchiver.decodeBool(forKey: "Disclaimer Signed")
+                } else {
+                    AppStatus.disclaimerSigned = false
+                }
                 
                 unarchiver.finishDecoding()
             }

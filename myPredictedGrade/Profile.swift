@@ -281,6 +281,7 @@ class Profile: NSObject, NSCoding {
                 EEGrade = grade
             } else {
                 overallGrade += grade
+                continue // If TOK/EE aren't the last subjects, make sure they don't get added again
             }
             
             if TOKGrade != 0 && EEGrade != 0 {
@@ -366,7 +367,7 @@ class Profile: NSObject, NSCoding {
                     case let x where x >= 4:
                         subjectGrades[subjectObject] = 3 // C
                     case let x where x >= 2:
-                        subjectGrades[subjectObject] = 5 // D
+                        subjectGrades[subjectObject] = 2 // D
                     default:
                         subjectGrades[subjectObject] = 1 // E
                     }
@@ -525,41 +526,41 @@ class Profile: NSObject, NSCoding {
             
             typealias JSONDictionary = [String: Any]
             
-            if let url = Bundle.main.url(forResource: "gradeBoundaries", withExtension: "json") { //find the url of the JSON
+            if let url = Bundle.main.url(forResource: "gradeBoundaries", withExtension: "json") { // Find the url of the JSON
                 do {
                     
-                    let jsonData = try Data(contentsOf: url) //get the data for the JSON
+                    let jsonData = try Data(contentsOf: url) // Get the data for the JSON
                     
-                    if let jsonResult: JSONDictionary = try JSONSerialization.jsonObject(with: jsonData, options: []) as? JSONDictionary { //the whole JSON
+                    if let jsonResult: JSONDictionary = try JSONSerialization.jsonObject(with: jsonData, options: []) as? JSONDictionary { // The whole JSON
                         
-                        let subjects: [JSONDictionary] = jsonResult["Subjects"] as! [JSONDictionary] //list of subjects (which are dictionaries)
+                        let subjects: [JSONDictionary] = jsonResult["Subjects"] as! [JSONDictionary] // List of subjects (which are dictionaries)
                         
-                        for aSubject in subjects { //iterate through the subjects
+                        for aSubject in subjects { // Iterate through the subjects
                             
-                            let title: String = aSubject["Title"] as! String //get subject title
+                            let title: String = aSubject["Title"] as! String // Get subject title
                             
-                            if title == subjectObject.toString() { //see if the subject title matches the subject of the assessment
+                            if title == subjectObject.toString() { // See if the subject title matches the subject of the assessment
                                 
-                                let gradeBoundaries: JSONDictionary = aSubject["Boundaries"] as! JSONDictionary //get dictionary of grade boundaries
+                                let gradeBoundaries: JSONDictionary = aSubject["Boundaries"] as! JSONDictionary // Get dictionary of grade boundaries
                                 
-                                for key in gradeBoundaries.keys { //iterate through the keys
-                                    var value: [Int] = gradeBoundaries[key] as! [Int] //get the value of the dictionary for the current key
+                                for key in gradeBoundaries.keys { // Iterate through the keys
+                                    var value: [Int] = gradeBoundaries[key] as! [Int] // Get the value of the dictionary for the current key
                                     
                                     let user = AppStatus.user
                                         
-                                    //if the user's preference is "pessimist mode"
+                                    // If the user's preference is "pessimist mode"
                                     if user.subjectGradeSetting == .pessimistMode {
                                             
-                                        if averagePercentage - 5 < value[1] + 1 && averagePercentage - 5 >= value[0] { //if the percentage (minus five) from the assessment falls between the bounds
+                                        if averagePercentage - 5 < value[1] + 1 && averagePercentage - 5 >= value[0] { // If the percentage (minus five) from the assessment falls between the bounds
                                                 
-                                            subjectGrades[subjectObject] = Int(key) //add the subject grade to the dictionary
+                                            subjectGrades[subjectObject] = Int(key) // Add the subject grade to the dictionary
                                         }
                                             
-                                    } else { //if the user just wants a simple average done
+                                    } else { // If the user just wants a simple average done
                                             
-                                        if averagePercentage < value[1] + 1 && averagePercentage >= value[0] { //if the percentage from the assessment falls between the bounds
+                                        if averagePercentage < value[1] + 1 && averagePercentage >= value[0] { // If the percentage from the assessment falls between the bounds
                                                 
-                                            subjectGrades[subjectObject] = Int(key) //add the subject grade to the dictionary
+                                            subjectGrades[subjectObject] = Int(key) // Add the subject grade to the dictionary
                                         }
                                             
                                     }
@@ -699,7 +700,7 @@ class Profile: NSObject, NSCoding {
             return SubjectGradeCalculation.pessimistMode
         } else if string == "Date Weighted" {
             return SubjectGradeCalculation.dateWeighted
-        } else { //to shut the compiler up
+        } else { // To shut the compiler up
             return SubjectGradeCalculation.averageOfGrades
         }
         

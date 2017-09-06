@@ -217,8 +217,8 @@ class SubjectSelectionTableViewController: UITableViewController {
         
         let indexPath = self.tableView.indexPath(for: cell)
     
-        if groupSubjectToggle[(indexPath?.section)!] == true && subjectList[(indexPath?.section)!][(indexPath?.row)!] != groupSubjectSelection[(indexPath?.section)!] { // if a subject has already been selected from this group, and the user isn't trying to deselect their selected subjection
-            sender.setOn(false, animated: true) // prevent the toggle, by setting the button as false
+        if groupSubjectToggle[(indexPath?.section)!] == true && subjectList[(indexPath?.section)!][(indexPath?.row)!] != groupSubjectSelection[(indexPath?.section)!] { // If a subject has already been selected from this group, and the user isn't trying to deselect their selected subjection
+            sender.setOn(false, animated: true) // Prevent the toggle, by setting the button as false
             return
         }
         
@@ -229,29 +229,29 @@ class SubjectSelectionTableViewController: UITableViewController {
         HLSwitch.isOn = false
         subjectHLList[(indexPath?.section)!] = false
         
-        if sender.isOn { // if the switch has been turned on
+        if sender.isOn { // If the switch has been turned on
             
             HLLabel.isHidden = false
             HLSwitch.isHidden = false
             
-            // a subject has now been selected for that group
+            // A subject has now been selected for that group
             groupSubjectToggle[(indexPath?.section)!] = true
             
-            // set the selected subject in the array
+            // Set the selected subject in the array
             groupSubjectSelection[(indexPath?.section)!] = subjectList[(indexPath?.section)!][(indexPath?.row)!]
             
-        } else { // if the switch has been turned off
+        } else { // If the switch has been turned off
             
             HLLabel.isHidden = true
             HLSwitch.isHidden = true
             
-            // reset the hl switch
+            // Reset the hl switch
             HLSwitch.isOn = false
             
-            // a subject now has not been selected for that group
+            // A subject now has not been selected for that group
             groupSubjectToggle[(indexPath?.section)!] = false
             
-            // set the value to "nil"
+            // Set the value to "nil"
             groupSubjectSelection[(indexPath?.section)!] = SubjectObject.Subject.Default
             
         }

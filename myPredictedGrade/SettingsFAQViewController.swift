@@ -8,7 +8,7 @@
 
 import UIKit
 
-class FAQViewController: UIViewController {
+class SettingsFAQViewController: UIViewController {
 
     @IBOutlet weak var scrollView: UIScrollView!
     @IBOutlet weak var contentView: UIView!

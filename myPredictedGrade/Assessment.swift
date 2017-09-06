@@ -88,27 +88,27 @@ class Assessment: NSObject, NSCoding {
         
         typealias JSONDictionary = [String: Any]
         
-        if let url = Bundle.main.url(forResource: "gradeBoundaries", withExtension: "json") { //find the url of the JSON
+        if let url = Bundle.main.url(forResource: "gradeBoundaries", withExtension: "json") { // Find the url of the JSON
             do {
                 
-                let jsonData = try Data(contentsOf: url) //get the data for the JSON
+                let jsonData = try Data(contentsOf: url) // Get the data for the JSON
                 
-                if let jsonResult: JSONDictionary = try JSONSerialization.jsonObject(with: jsonData, options: []) as? JSONDictionary { //the whole JSON
+                if let jsonResult: JSONDictionary = try JSONSerialization.jsonObject(with: jsonData, options: []) as? JSONDictionary { // The whole JSON
                     
-                    let subjects: [JSONDictionary] = jsonResult["Subjects"] as! [JSONDictionary] //list of subjects (which are dictionaries)
+                    let subjects: [JSONDictionary] = jsonResult["Subjects"] as! [JSONDictionary] // List of subjects (which are dictionaries)
                     
-                    for subject in subjects { //iterate through the subjects
+                    for subject in subjects { // Iterate through the subjects
                         
-                        let title: String = subject["Title"] as! String //get subject title
+                        let title: String = subject["Title"] as! String // Get subject title
                         
-                        if title == self.subjectObject.toString() { //see if the subject title matches the subject of the assessment
+                        if title == self.subjectObject.toString() { // See if the subject title matches the subject of the assessment
                             
-                            let gradeBoundaries: JSONDictionary = subject["Boundaries"] as! JSONDictionary //get dictionary of grade boundaries
+                            let gradeBoundaries: JSONDictionary = subject["Boundaries"] as! JSONDictionary // Get dictionary of grade boundaries
                             
-                            for key in gradeBoundaries.keys { //iterate through the keys
-                                var value: [Int] = gradeBoundaries[key] as! [Int] //get the value of the dictionary for the current key
-                                if percent < value[1] + 1 && percent >= value[0] { //if the percentage from the assessment falls between the bounds
-                                    self.overallGrade = Int(key)! //set the overall grade to the current key
+                            for key in gradeBoundaries.keys { // Iterate through the keys
+                                var value: [Int] = gradeBoundaries[key] as! [Int] // Get the value of the dictionary for the current key
+                                if percent < value[1] + 1 && percent >= value[0] { // If the percentage from the assessment falls between the bounds
+                                    self.overallGrade = Int(key)! // Set the overall grade to the current key
                                 }
                             }
                             
