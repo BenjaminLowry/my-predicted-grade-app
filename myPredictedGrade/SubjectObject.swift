@@ -18,14 +18,62 @@ class SubjectObject: NSObject, NSCoding, NSCopying {
      "English A Language and Literature": Subject.EnglishALangLit,
      "Chinese A Literature": Subject.ChineseALit,
      "Chinese A Language and Literature": Subject.ChineseALangLit,
+     "Spanish A Literature": Subject.SpanishALit,
+     "Spanish A Language and Literature": Subject.SpanishALangLit,
+     "Arabic A Language and Literature": Subject.ArabicALangLit,
+     "Arabic A Literature": Subject.ArabicALit,
+     "Catalan A Literature": Subject.CatalanALit,
+     "Danish A Literature": Subject.DanishALit,
+     "Dutch A Language and Literature": Subject.DutchALangLit,
+     "Dutch A Literature": Subject.DutchALit,
+     "Finnish A Literature": Subject.FinnishALit,
+     "French A Language and Literature": Subject.FrenchALangLit,
+     "French A Literature": Subject.FrenchALit,
+     "German A Language and Literature": Subject.GermanALangLit,
+     "German A Literature": Subject.GermanALit,
+     "Indonesian A Language and Literature": Subject.IndonesianALangLit,
+     "Indonesian A Literature": Subject.IndonesianALit,
+     "Italian A Literature": Subject.ItalianALit,
+     "Japanese A Language and Literature": Subject.JapaneseALangLit,
+     "Japanese A Literature": Subject.JapaneseALit,
+     "Korean A Literature": Subject.KoreanALit,
+     "Literature and Performance": Subject.LiteraturePerformance,
+     "Malay A Literature": Subject.MalayALit,
+     "Modern Greek A Literature": Subject.ModernGreekALit,
+     "Norwegian A Literature": Subject.NorwegianALit,
+     "Polish A Literature": Subject.PolishALit,
+     "Portuguese A Language and Literature": Subject.PortugueseALangLit,
+     "Russian A Literature": Subject.RussianALit,
+     "Swedish A Language and Literature": Subject.SwedishALangLit,
+     "Swedish A Literature": Subject.SwedishALit,
+     "Thai A Language and Literature": Subject.ThaiALangLit,
+     "Turkish A Literature": Subject.TurkishALit,
      "Spanish Ab Initio": Subject.SpanishAb,
      "Spanish B": Subject.SpanishB,
-     "Chinese Ab Initio": Subject.ChineseAb,
-     "Chinese B": Subject.ChineseB,
+     "Mandarin Ab Initio": Subject.MandarinAb,
+     "Mandarin B": Subject.MandarinB,
      "French Ab Initio": Subject.FrenchAb,
      "French B": Subject.FrenchB,
      "German Ab Initio": Subject.GermanAb,
      "German B": Subject.GermanB,
+     "English Ab Initio": Subject.EnglishAb,
+     "English B": Subject.EnglishB,
+     "Arabic Ab Initio": Subject.ArabicAb,
+     "Arabic B": Subject.ArabicB,
+     "Cantonese B": Subject.CantoneseB,
+     "Danish B": Subject.DanishB,
+     "Dutch B": Subject.DutchB,
+     "Hindi B": Subject.HindiB,
+     "Indonesian B": Subject.IndonesianB,
+     "Italian Ab Initio": Subject.ItalianAb,
+     "Italian B": Subject.ItalianB,
+     "Japanese Ab Initio": Subject.JapaneseAb,
+     "Japanese B": Subject.JapaneseB,
+     "Latin": Subject.Latin,
+     "Norwegian B": Subject.NorwegianB,
+     "Russian Ab Initio": Subject.RussianAb,
+     "Russian B": Subject.RussianB,
+     "Swedish B": Subject.SwedishB,
      "Business Management": Subject.BusinessManagement,
      "Economics": Subject.Economics,
      "Geography": Subject.Geography,
@@ -33,9 +81,11 @@ class SubjectObject: NSObject, NSCoding, NSCopying {
      "Information Technology in a Global Society": Subject.InformationTechonologyinaGlobalSociety,
      "Philosophy": Subject.Philosophy,
      "Psychology": Subject.Psychology,
-     "Social and Cultural Anthropology": Subject.SocialandCulturalAnthropology,
+     "Social and Cultural Anthropology": Subject.SocialCulturalAnthropology,
      "World Relgions": Subject.WorldReligions,
      "Global Politics": Subject.GlobalPolitics,
+     "Brazilian Social Studies": Subject.BrazSocStud,
+     "Turkey in the 20th Century": Subject.Turkey20thCentury,
      "Biology": Subject.Biology,
      "Chemistry": Subject.Chemistry,
      "Computer Science": Subject.ComputerScience,
@@ -43,6 +93,7 @@ class SubjectObject: NSObject, NSCoding, NSCopying {
      "Environmental Systems and Societies": Subject.EnvironmentalSystemsandSocities,
      "Physics": Subject.Physics,
      "Sports Excercise and Health Science": Subject.SportsExcerciseandHealthScience,
+     "Marine Science": Subject.MarineScience,
      "Mathematics Studies": Subject.MathematicsStudies,
      "Mathematics": Subject.Mathematics,
      "Further Mathematics": Subject.FurtherMathematics,
@@ -50,29 +101,79 @@ class SubjectObject: NSObject, NSCoding, NSCopying {
      "Film": Subject.Film,
      "Music": Subject.Music,
      "Music Creating": Subject.MusicCreating,
+     "Music Group Performance": Subject.MusicGroupPerformance,
+     "Music Solo Performance": Subject.MusicSoloPerformance,
      "Theatre": Subject.Theatre,
      "Visual Arts": Subject.VisualArts,
      "Theory of Knowledge": Subject.TheoryOfKnowledge,
      "Extended Essay": Subject.ExtendedEssay]
     
     enum Subject: String {
-        //start of group 1: language and literature
+        // Start of group 1: Language and Literature
         case EnglishALit = "English A Literature"
         case EnglishALangLit = "English A Language and Literature"
         case ChineseALit = "Chinese A Literature"
         case ChineseALangLit = "Chinese A Language and Literature"
+        case SpanishALit = "Spanish A Literature"
+        case SpanishALangLit = "Spanish A Language and Literature"
+        case ArabicALangLit = "Arabic A Language and Literature"
+        case ArabicALit = "Arabic A Literature"
+        case CatalanALit = "Catalan A Literature"
+        case DanishALit = "Danish A Literature"
+        case DutchALangLit = "Dutch A Language and Literature"
+        case DutchALit = "Dutch A Literature"
+        case FinnishALit = "Finnish A Literature"
+        case FrenchALangLit = "French A Language and Literature"
+        case FrenchALit = "French A Literature"
+        case GermanALangLit = "German A Language and Literature"
+        case GermanALit = "German A Literature"
+        case IndonesianALangLit = "Indonesian A Language and Literature"
+        case IndonesianALit = "Indonesian A Literature"
+        case ItalianALit = "Italian A Literature"
+        case JapaneseALangLit = "Japanese A Language and Literature"
+        case JapaneseALit = "Japanese A Literature"
+        case KoreanALit = "Korean A Literature"
+        case LiteraturePerformance = "Literature and Performance"
+        case MalayALit = "Malay A Literature"
+        case ModernGreekALit = "Modern Greek A Literature"
+        case NorwegianALit = "Norwegian A Literature"
+        case PolishALit = "Polish A Literature"
+        case PortugueseALangLit = "Portuguese A Language and Literature"
+        case RussianALit = "Russian A Literature"
+        case SwedishALangLit = "Swedish A Language and Literature"
+        case SwedishALit = "Swedish A Literature"
+        case ThaiALangLit = "Thai A Language and Literature"
+        case TurkishALit = "Turkish A Literature"
         
-        //start of group 2: language acquisition
+        // Start of group 2: Language Acquisition
         case SpanishAb = "Spanish Ab Initio"
         case SpanishB = "Spanish B"
-        case ChineseAb = "Chinese Ab Initio"
-        case ChineseB = "Chinese B"
+        case MandarinAb = "Mandarin Ab Initio"
+        case MandarinB = "Mandarin B"
         case FrenchAb = "French Ab Initio"
         case FrenchB = "French B"
         case GermanAb = "German Ab Initio"
         case GermanB = "German B"
+        case EnglishAb = "English Ab Initio"
+        case EnglishB = "English B"
+        case ArabicAb = "Arabic Ab Initio"
+        case ArabicB = "Arabic B"
+        case CantoneseB = "Cantonese B"
+        case DanishB = "Danish B"
+        case DutchB = "Dutch B"
+        case HindiB = "Hindi B"
+        case IndonesianB = "Indonesian B"
+        case ItalianAb = "Italian Ab Initio"
+        case ItalianB = "Italian B"
+        case JapaneseAb = "Japanese Ab"
+        case JapaneseB = "Japanese B"
+        case Latin = "Latin"
+        case NorwegianB = "Norwegian B"
+        case RussianAb = "Russian Ab"
+        case RussianB = "Russian B"
+        case SwedishB = "Swedish B"
         
-        //start of group 3: individuals and socities
+        // Start of group 3: Individuals and Socities
         case BusinessManagement = "Business Management"
         case Economics = "Economics"
         case Geography = "Geography"
@@ -80,11 +181,13 @@ class SubjectObject: NSObject, NSCoding, NSCopying {
         case InformationTechonologyinaGlobalSociety = "Information Technology in a Global Society"
         case Philosophy = "Philosophy"
         case Psychology = "Psychology"
-        case SocialandCulturalAnthropology = "Social and Cultural Anthropology"
+        case SocialCulturalAnthropology = "Social and Cultural Anthropology"
         case WorldReligions = "World Religions"
         case GlobalPolitics = "Global Politics"
+        case BrazSocStud = "Brazilian Social Studies"
+        case Turkey20thCentury = "Turkey in the 20th Century"
         
-        //start of group 4: science
+        // Start of group 4: Science
         case Biology = "Biology"
         case Chemistry = "Chemistry"
         case ComputerScience = "Computer Science"
@@ -92,34 +195,38 @@ class SubjectObject: NSObject, NSCoding, NSCopying {
         case EnvironmentalSystemsandSocities = "Environmental Systems and Societies"
         case Physics = "Physics"
         case SportsExcerciseandHealthScience = "Sports Excercise and Health Science"
+        case MarineScience = "Marine Science"
         
-        //start of group 5: mathematics
+        // Start of group 5: Mathematics
         case MathematicsStudies = "Mathematics Studies"
         case Mathematics = "Mathematics"
         case FurtherMathematics = "Further Mathematics"
         
-        //start of group 6: arts
+        // Start of group 6: Arts
         case Dance = "Dance"
         case Film = "Film"
         case Music = "Music"
         case MusicCreating = "Music Creating"
+        case MusicGroupPerformance = "Music Group Performance"
+        case MusicSoloPerformance = "Music Solo Performance"
         case Theatre = "Theatre"
         case VisualArts = "Visual Arts"
         
-        //others
+        // Others
         case TheoryOfKnowledge = "Theory of Knowledge"
         case ExtendedEssay = "Extended Essay"
         
-        //for void values of subject
+        // For void values of subject
         case Default = "Default"
         
-        var sortIndex: Int {
+        // TODO: - Should deprecate due to use of hash values to sort
+        /*var sortIndex: Int {
             switch self {
             //start of group 1: language and literature
-            case .EnglishALit, .EnglishALangLit, .ChineseALit, .ChineseALangLit:
+            case .EnglishALit, .EnglishALangLit, .ChineseALit, .ChineseALangLit, .SpanishALit, .SpanishALangLit:
                 return 1
             //start of group 2: language acquisition
-            case .SpanishAb, .SpanishB, .ChineseAb, .ChineseB, .FrenchAb, .FrenchB, .GermanAb, .GermanB:
+            case .SpanishAb, .SpanishB, .ChineseAb, .ChineseB, .FrenchAb, .FrenchB, .GermanAb, .GermanB, .EnglishAb, .EnglishB:
                 return 2
             //start of group 3: individuals and socities
             case .BusinessManagement, .Economics, .Geography, .History, .InformationTechonologyinaGlobalSociety, .Philosophy, .Psychology, .SocialandCulturalAnthropology, .WorldReligions, .GlobalPolitics:
@@ -140,7 +247,7 @@ class SubjectObject: NSObject, NSCoding, NSCopying {
                 return 666
             }
             
-        }
+        }*/
         
         var shortName: String {
             switch self {
@@ -152,24 +259,98 @@ class SubjectObject: NSObject, NSCoding, NSCopying {
                 return "Chin A Lit"
             case .ChineseALangLit:
                 return "Chin A LangLit"
+            case .SpanishALit:
+                return "Span A Lit"
+            case .SpanishALangLit:
+                return "Span A LangLit"
+            case .ArabicALit:
+                return "Arab A Lit"
+            case .ArabicALangLit:
+                return "Arab A LangLit"
+            case .CatalanALit:
+                return "Catalan A Lit"
+            case .DanishALit:
+                return "Danish A Lit"
+            case .DutchALit:
+                return "Dtch A Lit"
+            case .DutchALangLit:
+                return "Dtch A LangLit"
+            case .FinnishALit:
+                return "Finnish A Lit"
+            case .FrenchALit:
+                return "Fren A Lit"
+            case .FrenchALangLit:
+                return "Fren A LangLit"
+            case .GermanALit:
+                return "Germ A Lit"
+            case .GermanALangLit:
+                return "Germ A LangLit"
+            case .IndonesianALit:
+                return "Indo A Lit"
+            case .IndonesianALangLit:
+                return "Indo A LangLit"
+            case .ItalianALit:
+                return "Italian A Lit"
+            case .JapaneseALit:
+                return "Japn A Lit"
+            case .JapaneseALangLit:
+                return "Japn A LangLit"
+            case .KoreanALit:
+                return "Korean A Lit"
+            case .LiteraturePerformance:
+                return "Lit & Perf"
+            case .MalayALit:
+                return "Malay A Lit"
+            case .ModernGreekALit:
+                return "Mdn Grk A Lit"
+            case .NorwegianALit:
+                return "Norw A Lit"
+            case .PolishALit:
+                return "Polish A Lit"
+            case .PortugueseALangLit:
+                return "Port A LangLit"
+            case .RussianALit:
+                return "Russian A Lit"
+            case .SwedishALit:
+                return "Swed A Lit"
+            case .SwedishALangLit:
+                return "Swed A LangLit"
+            case .ThaiALangLit:
+                return "Thai A LangLit"
+            case .TurkishALit:
+                return "Turkish A Lit"
             case .SpanishAb:
                 return "Spanish Ab"
-            case .ChineseAb:
-                return "Chinese Ab"
+            case .MandarinAb:
+                return "Mandarin Ab"
             case .FrenchAb:
                 return "French Ab"
             case .GermanAb:
                 return "German Ab"
+            case .EnglishAb:
+                return "English Ab"
+            case .ArabicAb:
+                return "Arabic Ab"
+            case .ItalianAb:
+                return "Italian Ab"
+            case .JapaneseAb:
+                return "Japanese Ab"
+            case .RussianAb:
+                return "Russian Ab"
             case .BusinessManagement:
                 return "Business"
             case .DesignTechnology:
                 return "DT"
             case .InformationTechonologyinaGlobalSociety:
                 return "ITGS"
-            case .SocialandCulturalAnthropology:
+            case .SocialCulturalAnthropology:
                 return "S&CA"
             case .EnvironmentalSystemsandSocities:
                 return "ESS"
+            case .BrazSocStud:
+                return "Brz Soc Stud"
+            case .Turkey20thCentury:
+                return "Turk 20th"
             case .SportsExcerciseandHealthScience:
                 return "SE&HS"
             case .MathematicsStudies:
@@ -180,6 +361,10 @@ class SubjectObject: NSObject, NSCoding, NSCopying {
                 return "Fur. Math"
             case .ComputerScience:
                 return "CompSci"
+            case .MusicGroupPerformance:
+                return "Music Grp Perf"
+            case .MusicSoloPerformance:
+                return "Music Sol Perf"
             case .TheoryOfKnowledge:
                 return "TOK"
             case .ExtendedEssay:
@@ -223,6 +408,13 @@ class SubjectObject: NSObject, NSCoding, NSCopying {
             subjectString.removeSubrange(subjectString.range(of: " SL")!)
         }
         
+        // Safety conversion for old names of Mandarin Ab/B
+        if subjectString == "Chinese Ab Initio" {
+            return SubjectObject(subject: .MandarinAb, isHL: false)
+        } else if subjectString == "Chinese B" {
+            return SubjectObject(subject: .MandarinB, isHL: isHL)
+        }
+        
         if let subject = valueDictionary[subjectString] {
             return SubjectObject(subject: subject, isHL: isHL)
         } else {
@@ -230,7 +422,7 @@ class SubjectObject: NSObject, NSCoding, NSCopying {
         }
     }
     
-    //for comparing subjectObjects
+    // For comparing SubjectObjects
     static func == (lhs: SubjectObject, rhs: SubjectObject) -> Bool {
         return (lhs.subject == rhs.subject) && (lhs.isHL == rhs.isHL)
     }
@@ -244,8 +436,6 @@ class SubjectObject: NSObject, NSCoding, NSCopying {
         super.init()
         
         let subjectString = aDecoder.decodeObject(forKey: "SubjectString") as! String
-        
-        print(subjectString)
         
         self.subject = (subjectValue(forString: subjectString)?.subject)!
         

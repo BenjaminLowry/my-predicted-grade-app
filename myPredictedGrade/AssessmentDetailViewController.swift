@@ -59,7 +59,8 @@ class AssessmentDetailViewController: UITableViewController, UITextFieldDelegate
         marksReceivedTextField.delegate = self
         
         assessmentTitleTextField.delegate = self
-        
+        assessmentTitleTextField.autocapitalizationType = .words
+            
         setupDatePicker()
         dateTextField.inputView = datePicker
         dateTextField.delegate = self
@@ -168,7 +169,8 @@ class AssessmentDetailViewController: UITableViewController, UITextFieldDelegate
                 
             }
             
-            if subjectText == "Theory of Knowledge" {
+            // Has to be TOK and a newly-created assessment for the dialogue to appear
+            if subjectText == "Theory of Knowledge" && assessmentToEdit == nil {
                 
                 if marksAvailable != 10 {
                     
@@ -261,21 +263,39 @@ class AssessmentDetailViewController: UITableViewController, UITextFieldDelegate
         if textField.accessibilityIdentifier == "DateTextField" {
             handleDatePicker(datePicker)
         } else if textField.accessibilityIdentifier == "SubjectTextField" {
-            if let assessment = assessmentToEdit {
-                let user = AppStatus.user
-                for subjectObject in user.subjects {
-                    if assessment.subjectObject == subjectObject {
-                        if let row = subjectPickerViewData.index(where: {$0 == subjectObject}) {
-                            textField.text = subjectString(forSubjectAtRow: row)
+            
+            // If it doesn't already have text
+            if textField.text == "" {
+                if let assessment = assessmentToEdit {
+                    let user = AppStatus.user
+                    for subjectObject in user.subjects {
+                        if assessment.subjectObject == subjectObject {
+                            if let row = subjectPickerViewData.index(where: {$0 == subjectObject}) {
+                                textField.text = subjectString(forSubjectAtRow: row)
+                            }
+                        } else {
+                            textField.text = subjectString(forSubjectAtRow: 0)
                         }
-                    } else {
-                        textField.text = subjectString(forSubjectAtRow: 0)
                     }
+                } else {
+                    textField.text = subjectString(forSubjectAtRow: 0)
                 }
             } else {
-                textField.text = subjectString(forSubjectAtRow: 0)
+                
+                for subject in AppStatus.user.subjects {
+                    
+                    if subject.toString() == textField.text {
+                        subjectPickerView.selectRow(subjectPickerViewData.index(of: subject)!, inComponent: 0, animated: true)
+                    }
+                    
+                }
+                
             }
+            
+            
+            
         }
+        
     }
     
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {

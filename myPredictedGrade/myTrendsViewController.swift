@@ -91,6 +91,24 @@ class myTrendsViewController: UIViewController, UIPickerViewDelegate, UIPickerVi
         
         // Fit the content to the screen
         scrollView.contentSize = CGSize(width: UIScreen.main.bounds.width, height: 1200)
+        bodyView.frame.size.width = UIScreen.main.bounds.width
+        
+        // Update graphs upon reappear
+        if subjectTextField.text != "" && subjectTimeframeTextField.text != "" {
+            
+            let (subjectGradeData, averagePercentageData, timeData, subject) = sendSubjectInfoToGraphs()
+            
+            updateSubjectGraph(subjectGradeData: subjectGradeData, averagePercentageData: averagePercentageData, timeData: timeData, subject: subject)
+            
+        }
+        
+        if overallTimeframeTextField.text != "" {
+            
+            let (overallGradeData, timeData) = sendOverallInfoToGraph(fromRow: 0)
+            
+            updateOverallGraph(gradeData: overallGradeData, timeData: timeData)
+            
+        }
         
     }
     
@@ -158,15 +176,33 @@ class myTrendsViewController: UIViewController, UIPickerViewDelegate, UIPickerVi
     // MARK: - UITextField Delegate Funcs
     
     func textFieldDidBeginEditing(_ textField: UITextField) {
+        
         if textField == overallTimeframeTextField {
-            textField.text = timeframePickerData[0]
+            if textField.text != "" {
+                if textField.text == "Daily" {
+                    overallTimeframePickerView.selectRow(0, inComponent: 0, animated: true)
+                } else if textField.text == "Monthly" {
+                    overallTimeframePickerView.selectRow(1, inComponent: 0, animated: true)
+                }
+            } else {
+                textField.text = timeframePickerData[0]
+            }
             
             let (overallGradeData, timeData) = sendOverallInfoToGraph(fromRow: 0)
             
             updateOverallGraph(gradeData: overallGradeData, timeData: timeData)
             
         } else if textField == subjectTimeframeTextField {
-            textField.text = timeframePickerData[0]
+            
+            if textField.text != "" {
+                if textField.text == "Daily" {
+                    subjectTimeframePickerView.selectRow(0, inComponent: 0, animated: true)
+                } else if textField.text == "Monthly" {
+                    subjectTimeframePickerView.selectRow(1, inComponent: 0, animated: true)
+                }
+            } else {
+                textField.text = timeframePickerData[0]
+            }
             
             if subjectTextField.text != "" && subjectTimeframeTextField.text != "" {
                 
@@ -177,7 +213,18 @@ class myTrendsViewController: UIViewController, UIPickerViewDelegate, UIPickerVi
             }
             
         } else { // Subject text field
-            textField.text = subjectPickerData[0]
+            
+            if textField.text == "" {
+                textField.text = subjectPickerData[0]
+            } else {
+                for subject in AppStatus.user.subjects {
+                    
+                    if subject.toString() == textField.text {
+                        subjectPickerView.selectRow(subjectPickerData.index(of: textField.text!)!, inComponent: 0, animated: true)
+                    }
+                    
+                }
+            }
             
             if subjectTextField.text != "" && subjectTimeframeTextField.text != "" {
                 
@@ -187,6 +234,7 @@ class myTrendsViewController: UIViewController, UIPickerViewDelegate, UIPickerVi
                 
             }
         }
+        
     }
     
     // MARK: - Graph Updating Funcs
@@ -334,8 +382,19 @@ class myTrendsViewController: UIViewController, UIPickerViewDelegate, UIPickerVi
         barChartSG.xAxis.drawGridLinesEnabled = false
         barChartSG.xAxis.valueFormatter = axisFormatter
         
-        barChartSG.leftAxis.axisMaximum = 7.5
-        barChartSG.leftAxis.axisMinimum = 0.0
+        if subject.subject == .TheoryOfKnowledge || subject.subject == .ExtendedEssay {
+            let yAxisFormatter = MyTOKEEAxisFormatter()
+            barChartSG.leftAxis.valueFormatter = yAxisFormatter
+            barChartSG.leftAxis.axisMaximum = 5.4
+            barChartSG.leftAxis.axisMinimum = 0.6
+            barChartSG.leftAxis.setLabelCount(5, force: false)
+        } else {
+            
+            barChartSG.leftAxis.axisMaximum = 7.5
+            barChartSG.leftAxis.axisMinimum = 0.0
+            
+        }
+        
         barChartSG.rightYAxisRenderer.axis?.drawLabelsEnabled = false
         barChartSG.rightYAxisRenderer.axis?.drawGridLinesEnabled = false
         barChartSG.leftYAxisRenderer.axis?.drawGridLinesEnabled = false
@@ -349,9 +408,18 @@ class myTrendsViewController: UIViewController, UIPickerViewDelegate, UIPickerVi
         var entriesSG = [BarChartDataEntry]()
         
         if insufficientDataLabel2.isHidden == true {
-            for i in 0..<subjectGradeData.count {
-                let chartDataEntry = BarChartDataEntry(x: Double(i), y: Double(subjectGradeData[i]))
-                entriesSG.append(chartDataEntry)
+            // Adjust data to work for TOK and EE
+            if subject.subject == .TheoryOfKnowledge || subject.subject == .ExtendedEssay {
+                for i in 0..<subjectGradeData.count {
+                    let chartDataEntry = BarChartDataEntry(x: Double(i), y: Double(subjectGradeData[i]))
+                    entriesSG.append(chartDataEntry)
+                }
+            } else {
+                for i in 0..<subjectGradeData.count {
+                    let chartDataEntry = BarChartDataEntry(x: Double(i), y: Double(subjectGradeData[i]))
+                    entriesSG.append(chartDataEntry)
+                }
+                
             }
         }
         
@@ -367,8 +435,15 @@ class myTrendsViewController: UIViewController, UIPickerViewDelegate, UIPickerVi
         
         let dataSG = BarChartData(dataSet: dataSetSG)
         dataSG.setValueFont(NSUIFont(name: "AvenirNext", size: 14))
-        let formatter = MyValueFormatter()
-        dataSG.setValueFormatter(formatter)
+        
+        if subject.subject == .TheoryOfKnowledge || subject.subject == .ExtendedEssay {
+            let formatter = MyTOKEEValueFormatter()
+            dataSG.setValueFormatter(formatter)
+        } else {
+            let formatter = MyValueFormatter()
+            dataSG.setValueFormatter(formatter)
+        }
+        
         barChartSG.data = dataSG
         
         subjectGradesGraph = barChartSG
@@ -418,7 +493,8 @@ class myTrendsViewController: UIViewController, UIPickerViewDelegate, UIPickerVi
         
         let dataAP = BarChartData(dataSet: dataSetAP)
         dataAP.setValueFont(NSUIFont(name: "AvenirNext", size: 14))
-        dataAP.setValueFormatter(formatter) // Formatter taken from above
+        let formatter = MyValueFormatter()
+        dataAP.setValueFormatter(formatter)
         barChartAP.data = dataAP
         
         averagePercentagesGraph = barChartAP

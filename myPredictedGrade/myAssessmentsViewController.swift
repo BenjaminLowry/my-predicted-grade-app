@@ -36,6 +36,8 @@ class myAssessmentsViewController: UIViewController, UISearchBarDelegate, UITabl
     
     var currentScope: SubjectObject?
     
+    var assessmentBeingEdited: Assessment?
+    
     var noResultsLabel: UILabel = UILabel()
     
     // MARK: - Typealiases
@@ -54,6 +56,7 @@ class myAssessmentsViewController: UIViewController, UISearchBarDelegate, UITabl
         searchBar.delegate = self
         bodyTableView.delegate = self
         bodyTableView.dataSource = self
+        
         
         // UI setup
         setupPickerViews()
@@ -133,12 +136,9 @@ class myAssessmentsViewController: UIViewController, UISearchBarDelegate, UITabl
         
     }
     
-    func tableView(_ tableView: UITableView, accessoryButtonTappedForRowWith indexPath: IndexPath) {
-        performSegue(withIdentifier: "EditAssessment", sender: tableView.cellForRow(at: indexPath))
-    }
-    
     func segueAway(_ sender: UIButton){
         let cell = bodyTableView.cellForRow(at: IndexPath(row: sender.tag, section: 0))
+        assessmentBeingEdited = sortedContentList[sender.tag]
         performSegue(withIdentifier: "EditAssessment", sender: cell)
     }
     
@@ -158,8 +158,8 @@ class myAssessmentsViewController: UIViewController, UISearchBarDelegate, UITabl
         bodyTableView.reloadData()
     
         // Take snapshots of data
-        takeSnapshots()
-          
+        takeSnapshots(forSubject: assessment.subjectObject)
+        
         // Save changes
         AppStatus.saveData()
         controller.dismiss(animated: true, completion: nil)
@@ -167,8 +167,14 @@ class myAssessmentsViewController: UIViewController, UISearchBarDelegate, UITabl
     }
     
     func assessmentDetailViewController(controller: AssessmentDetailViewController, didFinishEditingAssessment assessment: Assessment) {
-        if let index = allAssessments.index(of: assessment) {
-            allAssessments[index] = assessment // Update the assessment
+        if let index = sortedContentList.index(of: assessment) {
+            
+            // Update the assessment
+            let originalIndex = allAssessments.index(of: assessmentBeingEdited!)
+            allAssessments[originalIndex!] = assessment
+            
+            assessmentBeingEdited = nil
+            
             let indexPath = IndexPath(row: index, section: 0)
             
             if let cell = tableView(bodyTableView, cellForRowAt: indexPath) as? AssessmentCell {
@@ -182,7 +188,7 @@ class myAssessmentsViewController: UIViewController, UISearchBarDelegate, UITabl
         }
         
         // Take snapshots of data
-        takeSnapshots()
+        takeSnapshots(forSubject: assessment.subjectObject)
         
         // Save changes
         AppStatus.saveData()
@@ -191,19 +197,19 @@ class myAssessmentsViewController: UIViewController, UISearchBarDelegate, UITabl
     
     func assessmentDetailViewController(controller: AssessmentDetailViewController, didFinishDeletingAssessment assessment: Assessment) {
         
-        if let index = allAssessments.index(of: assessment) {
-            
-            allAssessments.remove(at: index)
-            
-            currentScope = nil
-            contentSelectionTextField.text = "All"
-            updateContent()
-            bodyTableView.reloadData()
-            
-        }
+        // Delete the assessment
+        let originalIndex = allAssessments.index(of: assessmentBeingEdited!)
+        allAssessments.remove(at: originalIndex!)
+        
+        assessmentBeingEdited = nil
+        
+        currentScope = nil
+        contentSelectionTextField.text = "All"
+        updateContent()
+        bodyTableView.reloadData()
         
         // Take snapshots of data
-        takeSnapshots()
+        takeSnapshots(forSubject: assessment.subjectObject)
         
         // Save changes
         AppStatus.saveData()
@@ -213,13 +219,17 @@ class myAssessmentsViewController: UIViewController, UISearchBarDelegate, UITabl
     
     // MARK: - Snapshot Data Funcs
     
-    func takeSnapshots() {
+    func takeSnapshots(forSubject subject: SubjectObject) {
         
         let user = AppStatus.user
         
         user.assessments = allAssessments
         
         let subjectGrades = user.getSubjectGrades()
+        
+        let grade = subjectGrades[subject]
+        
+        //let assessmentsForSubject = App
         
         for (subjectObject, grade) in subjectGrades {
             
@@ -282,14 +292,14 @@ class myAssessmentsViewController: UIViewController, UISearchBarDelegate, UITabl
     //MARK: - UIPickerView Delegate Funcs
     
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
-        return 1 //same for both pickers
+        return 1 // Same for both pickers
     }
     
     func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
         
-        if pickerView.tag == 1 { //contentSelectionPickerView
+        if pickerView.tag == 1 { // contentSelectionPickerView
             return contentSelectionOptions.count
-        } else if pickerView.tag == 2 { //contentOrderingPickerView
+        } else if pickerView.tag == 2 { // contentOrderingPickerView
             return contentOrderingOptions.count
         } else {
             return 1
@@ -311,7 +321,7 @@ class myAssessmentsViewController: UIViewController, UISearchBarDelegate, UITabl
     
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         
-        if pickerView.tag == 1 { //Content selection pickerview
+        if pickerView.tag == 1 { // contentSelectionPickerView
             
             contentSelectionTextField.text = contentSelectionOptions[row]
             
@@ -335,6 +345,26 @@ class myAssessmentsViewController: UIViewController, UISearchBarDelegate, UITabl
             contentOrderingTextField.text = contentOrderingOptions[row]
             
             updateContent()
+        }
+        
+    }
+    
+    // MARK: - UITextField Delegates
+    
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        
+        // Make sure textField text and picker view selection match
+        if textField == contentSelectionTextField {
+            
+            let row = contentSelectionOptions.index(of: textField.text!)
+            contentSelectionPickerView.selectRow(row!, inComponent: 0, animated: true)
+            
+            
+        } else if textField == contentOrderingTextField {
+            
+            let row = contentOrderingOptions.index(of: textField.text!)
+            contentOrderingPickerView.selectRow(row!, inComponent: 0, animated: true)
+            
         }
         
     }

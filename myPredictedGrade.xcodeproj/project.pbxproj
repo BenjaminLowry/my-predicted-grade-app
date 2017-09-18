@@ -16,8 +16,11 @@
 		5F10BBBE1F0A7480001E3A4F /* Alert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F10BBBD1F0A7480001E3A4F /* Alert.swift */; };
 		5F1BACA71E0D776800CFDD6D /* BorderedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F1BACA61E0D776800CFDD6D /* BorderedView.swift */; };
 		5F2B3FFC1E47272500FAAA74 /* UnderlinedLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F2B3FFB1E47272500FAAA74 /* UnderlinedLabel.swift */; };
-		5F54AC151F5ED6B700A54E4E /* untitled (1) 20-51-17-209.png in Resources */ = {isa = PBXBuildFile; fileRef = 5F54AC141F5ED6B700A54E4E /* untitled (1) 20-51-17-209.png */; };
 		5F5969731E2B51BD001EA42A /* Date.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F5969721E2B51BD001EA42A /* Date.swift */; };
+		5F5C2CCA1F610449002582DA /* untitled (1).png in Resources */ = {isa = PBXBuildFile; fileRef = 5F5C2CC91F610449002582DA /* untitled (1).png */; };
+		5F5C2CCC1F618655002582DA /* MyTOKEEAxisFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F5C2CCB1F618655002582DA /* MyTOKEEAxisFormatter.swift */; };
+		5F5C2CCE1F6193BA002582DA /* CustomNumberFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F5C2CCD1F6193BA002582DA /* CustomNumberFormatter.swift */; };
+		5F5C2CD01F619C01002582DA /* MyTOKEEValueFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F5C2CCF1F619C01002582DA /* MyTOKEEValueFormatter.swift */; };
 		5F6032E81E05E6150097639E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F6032E71E05E6150097639E /* AppDelegate.swift */; };
 		5F6032EF1E05E6150097639E /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5F6032ED1E05E6150097639E /* Main.storyboard */; };
 		5F6032F11E05E6150097639E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5F6032F01E05E6150097639E /* Assets.xcassets */; };
@@ -85,8 +88,11 @@
 		5F1BACA61E0D776800CFDD6D /* BorderedView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BorderedView.swift; sourceTree = "<group>"; };
 		5F2B3FFB1E47272500FAAA74 /* UnderlinedLabel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UnderlinedLabel.swift; sourceTree = "<group>"; };
 		5F2F14181F517978001517C8 /* Charts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Charts.framework; path = "../../../../../../Library/Developer/Xcode/DerivedData/myPredictedGrade-dzicivgxgutzupczscesmlsxkbfo/Build/Products/Debug-iphoneos/Charts/Charts.framework"; sourceTree = "<group>"; };
-		5F54AC141F5ED6B700A54E4E /* untitled (1) 20-51-17-209.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "untitled (1) 20-51-17-209.png"; path = "../../../../../../.Trash/untitled (1) 20-51-17-209.png"; sourceTree = "<group>"; };
 		5F5969721E2B51BD001EA42A /* Date.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Date.swift; sourceTree = "<group>"; };
+		5F5C2CC91F610449002582DA /* untitled (1).png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "untitled (1).png"; path = "myPredictedGrade/untitled (1).png"; sourceTree = "<group>"; };
+		5F5C2CCB1F618655002582DA /* MyTOKEEAxisFormatter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyTOKEEAxisFormatter.swift; sourceTree = "<group>"; };
+		5F5C2CCD1F6193BA002582DA /* CustomNumberFormatter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomNumberFormatter.swift; sourceTree = "<group>"; };
+		5F5C2CCF1F619C01002582DA /* MyTOKEEValueFormatter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyTOKEEValueFormatter.swift; sourceTree = "<group>"; };
 		5F6032E41E05E6150097639E /* myPredictedGrade.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = myPredictedGrade.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5F6032E71E05E6150097639E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		5F6032EE1E05E6150097639E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -201,7 +207,10 @@
 				5F9CF5FD1E553B9500FC40C3 /* IndexedSum.swift */,
 				5F10BBBD1F0A7480001E3A4F /* Alert.swift */,
 				5F6FF6801E5DD4F20004CAEF /* MyValueFormatter.swift */,
+				5F5C2CCF1F619C01002582DA /* MyTOKEEValueFormatter.swift */,
 				5F6FF6821E5DD8720004CAEF /* MyAxisFormatter.swift */,
+				5F5C2CCB1F618655002582DA /* MyTOKEEAxisFormatter.swift */,
+				5F5C2CCD1F6193BA002582DA /* CustomNumberFormatter.swift */,
 				5F1BACA61E0D776800CFDD6D /* BorderedView.swift */,
 				5F2B3FFB1E47272500FAAA74 /* UnderlinedLabel.swift */,
 				5F6142821E14DD1D004DC079 /* AssessmentCell.swift */,
@@ -254,7 +263,7 @@
 		5F6032FD1E05EB480097639E /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				5F54AC141F5ED6B700A54E4E /* untitled (1) 20-51-17-209.png */,
+				5F5C2CC91F610449002582DA /* untitled (1).png */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -346,13 +355,13 @@
 			files = (
 				5F8C8F321E4C2B0A003A14E3 /* gradePercentiles.json in Resources */,
 				5F6032F41E05E6150097639E /* LaunchScreen.storyboard in Resources */,
+				5F5C2CCA1F610449002582DA /* untitled (1).png in Resources */,
 				5F02F6CF1E0DCC4A0030F54E /* RecentAssessmentView.xib in Resources */,
 				5F6032F11E05E6150097639E /* Assets.xcassets in Resources */,
 				5F6142851E14DD1D004DC079 /* AssessmentCell.xib in Resources */,
 				5F6032EF1E05E6150097639E /* Main.storyboard in Resources */,
 				5F9CF6001E58816E00FC40C3 /* gradeBoundaries.json in Resources */,
 				5F9235241F49CA0400D56908 /* untitled.png in Resources */,
-				5F54AC151F5ED6B700A54E4E /* untitled (1) 20-51-17-209.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -419,8 +428,10 @@
 				5F8C8F381E4D327A003A14E3 /* SubjectGradeCalculation.swift in Sources */,
 				5F6F6D581E601F6B0035B196 /* SubjectSnapshot.swift in Sources */,
 				5FCC00991E17B90B005201C2 /* Profile.swift in Sources */,
+				5F5C2CCC1F618655002582DA /* MyTOKEEAxisFormatter.swift in Sources */,
 				5FCE9FE91F4481BE00FD341C /* TOKAssessment.swift in Sources */,
 				5F63D3571E20C428005FB875 /* UISearchBar.swift in Sources */,
+				5F5C2CCE1F6193BA002582DA /* CustomNumberFormatter.swift in Sources */,
 				5F6F6D561E601EDF0035B196 /* Snapshot.swift in Sources */,
 				5F6032E81E05E6150097639E /* AppDelegate.swift in Sources */,
 				5F8C8F361E4C4B0F003A14E3 /* mySettingsViewController.swift in Sources */,
@@ -428,6 +439,7 @@
 				5F6FF6811E5DD4F20004CAEF /* MyValueFormatter.swift in Sources */,
 				5F60330F1E05EC9E0097639E /* myHomeViewController.swift in Sources */,
 				5FBC4BBD1E38E63D004E64A6 /* myTrendsViewController.swift in Sources */,
+				5F5C2CD01F619C01002582DA /* MyTOKEEValueFormatter.swift in Sources */,
 				5F644A361F065333002D7EB3 /* ColorConfirmationViewController.swift in Sources */,
 				5F02F6D71E1136B30030F54E /* String.swift in Sources */,
 				5F10BBBE1F0A7480001E3A4F /* Alert.swift in Sources */,

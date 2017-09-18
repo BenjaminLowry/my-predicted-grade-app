@@ -48,6 +48,8 @@ class ColorConfirmationViewController: UITableViewController {
         cell.recentAssessmentView.asssessmentTitleLabel.text = "My \(subjects![indexPath.row].toString()) Assessment"
         cell.recentAssessmentView.subjectDateLabel.text = "\(subjects![indexPath.row].toString()) 18th of March 2017"
         
+        cell.recentAssessmentView.infoButton.isHidden = true
+        
         cell.recentAssessmentView.updateView(for: colorPreferences[subjects![indexPath.row]]!)
         
         return cell
@@ -56,7 +58,7 @@ class ColorConfirmationViewController: UITableViewController {
     // MARK: - IBActions
     
     @IBAction func confirmButtonPressed(_ sender: UIBarButtonItem) {
-    
+        
         // Add TOK and EE
         let TOK = SubjectObject(subject: .TheoryOfKnowledge, isHL: false)
         let EE = SubjectObject(subject: .ExtendedEssay, isHL: false)

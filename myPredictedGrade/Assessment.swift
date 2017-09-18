@@ -58,7 +58,7 @@ class Assessment: NSObject, NSCoding {
             case let x where x >= 4:
                 self.overallGrade = 3 // C
             case let x where x >= 2:
-                self.overallGrade = 5 // D
+                self.overallGrade = 2 // D
             default:
                 self.overallGrade = 1 // E
             }

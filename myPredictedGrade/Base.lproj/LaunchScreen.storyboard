@@ -21,7 +21,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView clearsContextBeforeDrawing="NO" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="untitled (1) 20-51-17-209.png" translatesAutoresizingMaskIntoConstraints="NO" id="VAZ-k8-AFG">
+                            <imageView clearsContextBeforeDrawing="NO" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="untitled (1).png" translatesAutoresizingMaskIntoConstraints="NO" id="VAZ-k8-AFG">
                                 <rect key="frame" x="97" y="243" width="180" height="180"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="180" id="OM0-V5-fAC"/>
@@ -42,6 +42,6 @@
         </scene>
     </scenes>
     <resources>
-        <image name="untitled (1) 20-51-17-209.png" width="640" height="640"/>
+        <image name="untitled (1).png" width="640" height="640"/>
     </resources>
 </document>

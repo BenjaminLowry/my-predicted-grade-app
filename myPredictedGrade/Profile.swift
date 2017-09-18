@@ -52,7 +52,7 @@ class Profile: NSObject, NSCoding {
         
         bestSubject = aDecoder.decodeObject(forKey: "Best Subject") as! SubjectObject
         
-        subjectGradeSetting = SubjectGradeCalculation.averageOfGrades //default value, can be improved?
+        subjectGradeSetting = SubjectGradeCalculation.averageOfGrades
         subjectGradeSettingString = aDecoder.decodeObject(forKey: "Subject Grade Setting String") as! String
         
         subjectGradeSnapshots = aDecoder.decodeObject(forKey: "Subject Snapshots") as! [SubjectSnapshot]
@@ -60,7 +60,7 @@ class Profile: NSObject, NSCoding {
         
         super.init()
         
-        //take the string which is encodable and then find the right enum option
+        // Take the string which is encodable and then find the right enum option
         subjectGradeSetting = subjectGradeSettingEnum(from: subjectGradeSettingString)
     }
     
@@ -85,7 +85,7 @@ class Profile: NSObject, NSCoding {
         self.bestSubject = subjects[0]
         
         self.subjectGradeSetting = SubjectGradeCalculation.averageOfGrades
-        self.subjectGradeSettingString = "Average of Grades" //default value
+        self.subjectGradeSettingString = "Average of Grades" // Default value
         
         self.subjectGradeSnapshots = [SubjectSnapshot]()
         self.overallGradeSnapshots = [OverallGradeSnapshot]()
@@ -114,7 +114,7 @@ class Profile: NSObject, NSCoding {
         self.bestSubject = SubjectObject(subject: .Default, isHL: false)
         
         self.subjectGradeSetting = SubjectGradeCalculation.averageOfGrades
-        self.subjectGradeSettingString = "Average of Grades" //default value
+        self.subjectGradeSettingString = "Average of Grades" // Default value
         
         self.subjectGradeSnapshots = [SubjectSnapshot]()
         self.overallGradeSnapshots = [OverallGradeSnapshot]()
@@ -213,7 +213,7 @@ class Profile: NSObject, NSCoding {
                     
                     bestPercentageAverage = percentageSum / Double(numberOfAssessments)
                     
-                } else if average == bestAverage { //if the average grade is the same for two subjects
+                } else if average == bestAverage { // If the average grade is the same for two subjects
                     
                     var percentageSum = 0.0
                     
@@ -223,9 +223,9 @@ class Profile: NSObject, NSCoding {
                         
                     }
                     
-                    if percentageSum / Double(numberOfAssessments) > bestPercentageAverage { //if the current subject has better percentages even with the same grade
+                    if percentageSum / Double(numberOfAssessments) > bestPercentageAverage { // If the current subject has better percentages even with the same grade
                         
-                        //no need to set best average again since it will be the same
+                        // No need to set best average again since it will be the same
                         bestSubject = subjectObject
                         bestPercentageAverage = percentageSum / Double(numberOfAssessments)
                         

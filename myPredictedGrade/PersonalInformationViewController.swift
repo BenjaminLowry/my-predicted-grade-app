@@ -21,7 +21,7 @@ class PersonalInformationViewController: UIViewController, UIPickerViewDelegate,
     
     // MARK: - Properites
     
-    var data = ["Year 12", "Year 13"]
+    var data = ["Year 12 / 11th Grade", "Year 13 / 12th Grade"]
     
     var name: String?
     var yearLevel: YearLevelObject? = YearLevelObject(yearLevel: .year12)
@@ -106,7 +106,11 @@ class PersonalInformationViewController: UIViewController, UIPickerViewDelegate,
     }
     
     func keyboardWillShow(sender: NSNotification) {
-        self.view.frame.origin.y = -100 // Move view 150 points upward
+        if UIScreen.main.bounds.height == 568 {
+            self.view.frame.origin.y = -130 // Move view 130 points upward
+        } else {
+            self.view.frame.origin.y = -100 // Move view 100 points upward
+        }
     }
     
     func keyboardWillHide(sender: NSNotification) {

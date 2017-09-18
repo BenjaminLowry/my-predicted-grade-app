@@ -71,7 +71,10 @@ class myHomeViewController: UIViewController, UITableViewDelegate, UITableViewDa
         
         bodyTableView.register(UINib(nibName: "AssessmentCell", bundle: Bundle.main), forCellReuseIdentifier: "AssessmentCell")
         
-        //UI setup
+        // Check for year level change
+        checkYearLevel()
+        
+        // UI setup
         setupNoAssessmentsLabel()
         setupHeaderView()
         setupAssessmentTableView()
@@ -371,12 +374,17 @@ class myHomeViewController: UIViewController, UITableViewDelegate, UITableViewDa
             let selectedSubject = AppStatus.user.subjects[senderLabel.tag]
             
             boundariesSubjectLabel.text = selectedSubject.toShortString()
+            boundariesSubjectLabel.textColor = AppStatus.user.colorPreferences[selectedSubject]
+            
+            boundariesAverageMarksLabel.textColor = AppStatus.user.colorPreferences[selectedSubject]
             
             let boundaries = getBoundaries(subject: selectedSubject)
             
             for i in 0..<boundaries.count {
                 
-                if let stackView = boundariesStackView.arrangedSubviews[i] as? UIStackView {
+                let index = (boundaries.count - 1) - i
+                
+                if let stackView = boundariesStackView.arrangedSubviews[index] as? UIStackView {
                     
                     if let boundariesLabel = stackView.arrangedSubviews[1] as? UILabel {
                         
@@ -483,6 +491,33 @@ class myHomeViewController: UIViewController, UITableViewDelegate, UITableViewDa
         return boundaries
         
     }
+    
+    // MARK: - User Data Update Funcs
+    
+    func checkYearLevel() {
+        
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "dd mm yyyy"
+        let switchDate = dateFormatter.date(from: "01 08 2018")
+        
+        let currentDate = Date(timeIntervalSinceNow: 0)
+        
+        if currentDate > switchDate! {
+            
+            let lastYearDate = dateFormatter.date(from: "01 07 2018")
+            
+            if AppStatus.user.getOverallGradeSnapshots()[0].date < lastYearDate! {
+                
+                if AppStatus.user.yearLevelObject.yearLevel == .year12 {
+                    AppStatus.user.yearLevelObject = YearLevelObject(yearLevel: .year13)
+                }
+                
+            }
+            
+        }
+        
+    }
+    
     
     // MARK: - UI Setup
     
