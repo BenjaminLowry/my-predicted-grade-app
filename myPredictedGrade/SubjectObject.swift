@@ -92,7 +92,7 @@ class SubjectObject: NSObject, NSCoding, NSCopying {
      "Design Technology": Subject.DesignTechnology,
      "Environmental Systems and Societies": Subject.EnvironmentalSystemsandSocities,
      "Physics": Subject.Physics,
-     "Sports Excercise and Health Science": Subject.SportsExcerciseandHealthScience,
+     "Sports Exercise and Health Science": Subject.SportsExcerciseandHealthScience,
      "Marine Science": Subject.MarineScience,
      "Mathematics Studies": Subject.MathematicsStudies,
      "Mathematics": Subject.Mathematics,
@@ -165,7 +165,7 @@ class SubjectObject: NSObject, NSCoding, NSCopying {
         case IndonesianB = "Indonesian B"
         case ItalianAb = "Italian Ab Initio"
         case ItalianB = "Italian B"
-        case JapaneseAb = "Japanese Ab"
+        case JapaneseAb = "Japanese Ab Initio"
         case JapaneseB = "Japanese B"
         case Latin = "Latin"
         case NorwegianB = "Norwegian B"
@@ -194,7 +194,7 @@ class SubjectObject: NSObject, NSCoding, NSCopying {
         case DesignTechnology = "Design Technology"
         case EnvironmentalSystemsandSocities = "Environmental Systems and Societies"
         case Physics = "Physics"
-        case SportsExcerciseandHealthScience = "Sports Excercise and Health Science"
+        case SportsExcerciseandHealthScience = "Sports Exercise and Health Science"
         case MarineScience = "Marine Science"
         
         // Start of group 5: Mathematics

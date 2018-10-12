@@ -12,7 +12,7 @@ class ColorSelectionViewController: UIViewController, UICollectionViewDelegate, 
 
     // MARK: - IBOutlets
     
-    @IBOutlet weak var previewAssessmentView: RecentAssessmentView!
+    @IBOutlet weak var previewAssessmentView: AssessmentView!
     
     @IBOutlet weak var colorCollectionView: UICollectionView!
     
@@ -61,10 +61,12 @@ class ColorSelectionViewController: UIViewController, UICollectionViewDelegate, 
         
         previewAssessmentView.awakeFromNib()
         
-        previewAssessmentView.asssessmentTitleLabel.text = "My Assessment"
+        // UI setup for preview assessment view
+        previewAssessmentView.assessmentTitleLabel.text = "My Assessment"
         previewAssessmentView.subjectDateLabel.text = "\(subjects![0].toString()) 20th of September 2016"
         previewAssessmentView.marksLabel.text = "45 / 50"
         previewAssessmentView.overallGradeLabel.text = "7"
+        previewAssessmentView.infoButton.isHidden = true
         
         subjectLabel.text = "1. \(subjects[0].toString())"
         subjectLabel.adjustsFontSizeToFitWidth = true
@@ -172,7 +174,7 @@ class ColorSelectionViewController: UIViewController, UICollectionViewDelegate, 
         // Make the preview gray color and change labels
         previewAssessmentView.updateView(for: UIColor.gray)
         previewAssessmentView.subjectDateLabel.text = "\(subjects![counter-1].toString()) 20th of September 2016"
-
+        
         // Hide the next button
         nextButton.isHidden = true
         
@@ -214,7 +216,7 @@ class ColorSelectionViewController: UIViewController, UICollectionViewDelegate, 
     
     // MARK: - UICollectionView Helper Funcs
     
-    func colorCellPressed(sender: UITapGestureRecognizer) {
+    @objc func colorCellPressed(sender: UITapGestureRecognizer) {
         
         let cell = sender.view as! UICollectionViewCell
         selectedCellTag = cell.tag

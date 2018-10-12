@@ -28,9 +28,9 @@ extension DateFormatter {
         self.dateFormat = "EEE, d MMM yyyy"
         var dateString = self.string(from: inputDate)
         
-        if dateString.characters.count == 16 {
+        if dateString.count == 16 {
             dateString = dateString.insert(string: inputDate.daySuffix(), ind: 7)
-        } else if dateString.characters.count == 15 {
+        } else if dateString.count == 15 {
             dateString = dateString.insert(string: inputDate.daySuffix(), ind: 6)
         }
         

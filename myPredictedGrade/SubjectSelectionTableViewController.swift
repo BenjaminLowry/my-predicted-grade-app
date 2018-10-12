@@ -35,7 +35,7 @@ class SubjectSelectionTableViewController: UITableViewController {
                 SubjectObject.Subject.SwedishALit, SubjectObject.Subject.SwedishALangLit,
                 SubjectObject.Subject.ThaiALangLit, SubjectObject.Subject.TurkishALit],
             // Group 2
-            [SubjectObject.Subject.ArabicAb, SubjectObject.Subject.ArabicB, SubjectObject.Subject.CantoneseB, SubjectObject.Subject.ChineseALangLit, SubjectObject.Subject.ChineseALit, SubjectObject.Subject.DanishB, SubjectObject.Subject.DutchB,  SubjectObject.Subject.EnglishAb, SubjectObject.Subject.EnglishB, SubjectObject.Subject.FrenchAb, SubjectObject.Subject.FrenchB, SubjectObject.Subject.GermanALit, SubjectObject.Subject.GermanALangLit, SubjectObject.Subject.GermanAb, SubjectObject.Subject.GermanB, SubjectObject.Subject.HindiB, SubjectObject.Subject.IndonesianALit, SubjectObject.Subject.IndonesianALangLit, SubjectObject.Subject.IndonesianB, SubjectObject.Subject.ItalianAb, SubjectObject.Subject.ItalianB, SubjectObject.Subject.JapaneseALit, SubjectObject.Subject.JapaneseALangLit, SubjectObject.Subject.JapaneseAb, SubjectObject.Subject.JapaneseB, SubjectObject.Subject.KoreanALit, SubjectObject.Subject.Latin, SubjectObject.Subject.MalayALit,  SubjectObject.Subject.MandarinAb, SubjectObject.Subject.MandarinB, SubjectObject.Subject.NorwegianB, SubjectObject.Subject.RussianAb, SubjectObject.Subject.RussianB, SubjectObject.Subject.SpanishALit, SubjectObject.Subject.SpanishALangLit, SubjectObject.Subject.SpanishAb, SubjectObject.Subject.SpanishB, SubjectObject.Subject.SwedishB],
+            [SubjectObject.Subject.ArabicAb, SubjectObject.Subject.ArabicB, SubjectObject.Subject.CantoneseB, SubjectObject.Subject.ChineseALangLit, SubjectObject.Subject.ChineseALit, SubjectObject.Subject.DanishB, SubjectObject.Subject.DutchB, SubjectObject.Subject.EnglishALangLit, SubjectObject.Subject.EnglishALit,  SubjectObject.Subject.EnglishAb, SubjectObject.Subject.EnglishB, SubjectObject.Subject.FrenchALangLit, SubjectObject.Subject.FrenchALit, SubjectObject.Subject.FrenchAb, SubjectObject.Subject.FrenchB, SubjectObject.Subject.GermanALit, SubjectObject.Subject.GermanALangLit, SubjectObject.Subject.GermanAb, SubjectObject.Subject.GermanB, SubjectObject.Subject.HindiB, SubjectObject.Subject.IndonesianALit, SubjectObject.Subject.IndonesianALangLit, SubjectObject.Subject.IndonesianB, SubjectObject.Subject.ItalianAb, SubjectObject.Subject.ItalianB, SubjectObject.Subject.JapaneseALit, SubjectObject.Subject.JapaneseALangLit, SubjectObject.Subject.JapaneseAb, SubjectObject.Subject.JapaneseB, SubjectObject.Subject.KoreanALit, SubjectObject.Subject.Latin, SubjectObject.Subject.MalayALit,  SubjectObject.Subject.MandarinAb, SubjectObject.Subject.MandarinB, SubjectObject.Subject.NorwegianB, SubjectObject.Subject.RussianAb, SubjectObject.Subject.RussianB, SubjectObject.Subject.SpanishALit, SubjectObject.Subject.SpanishALangLit, SubjectObject.Subject.SpanishAb, SubjectObject.Subject.SpanishB, SubjectObject.Subject.SwedishB],
             // Group 3
             [SubjectObject.Subject.BrazSocStud, SubjectObject.Subject.BusinessManagement, SubjectObject.Subject.Economics, SubjectObject.Subject.EnvironmentalSystemsandSocities, SubjectObject.Subject.Geography, SubjectObject.Subject.GlobalPolitics, SubjectObject.Subject.History, SubjectObject.Subject.InformationTechonologyinaGlobalSociety, SubjectObject.Subject.Philosophy, SubjectObject.Subject.Psychology, SubjectObject.Subject.SocialCulturalAnthropology, SubjectObject.Subject.Turkey20thCentury, SubjectObject.Subject.WorldReligions],
             // Group 4
@@ -178,6 +178,7 @@ class SubjectSelectionTableViewController: UITableViewController {
         invalidSubjects.append(SubjectObject(subject: .LiteraturePerformance, isHL: true))
         invalidSubjects.append(SubjectObject(subject: .MalayALit, isHL: true))
         invalidSubjects.append(SubjectObject(subject: .MarineScience, isHL: true))
+        invalidSubjects.append(SubjectObject(subject: .GlobalPolitics, isHL: false))
         invalidSubjects.append(SubjectObject(subject: .PortugueseALangLit, isHL: false))
         invalidSubjects.append(SubjectObject(subject: .ThaiALangLit, isHL: true))
         invalidSubjects.append(SubjectObject(subject: .BrazSocStud, isHL: true))
@@ -187,6 +188,7 @@ class SubjectSelectionTableViewController: UITableViewController {
         invalidSubjects.append(SubjectObject(subject: .ItalianAb, isHL: true))
         invalidSubjects.append(SubjectObject(subject: .JapaneseAb, isHL: true))
         invalidSubjects.append(SubjectObject(subject: .RussianAb, isHL: true))
+        invalidSubjects.append(SubjectObject(subject: .DanishB, isHL: false))
         
         if !groupSubjectToggle.contains(false) {
             

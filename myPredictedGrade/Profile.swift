@@ -26,6 +26,11 @@ class Profile: NSObject, NSCoding {
     fileprivate var subjectGradeSnapshots: [SubjectSnapshot]
     fileprivate var overallGradeSnapshots: [OverallGradeSnapshot]
     
+    fileprivate var subjectGradeTrendData: [SubjectObject: [Snapshot]]
+    fileprivate var overallGradeTrendData: [Snapshot]
+    
+    fileprivate var gradeBoundaries: [SubjectObject: [String: [String: [Int: [Int]]]]]
+    
     fileprivate var subjectGrades: [SubjectObject: Int]
     
     fileprivate var overallGrade: Int
@@ -58,10 +63,31 @@ class Profile: NSObject, NSCoding {
         subjectGradeSnapshots = aDecoder.decodeObject(forKey: "Subject Snapshots") as! [SubjectSnapshot]
         overallGradeSnapshots = aDecoder.decodeObject(forKey: "Overall Grade Snapshots") as! [OverallGradeSnapshot]
         
+        if let subjectData = aDecoder.decodeObject(forKey: "Subject Grade Trend Data") as? [SubjectObject: [Snapshot]] {
+            subjectGradeTrendData = subjectData
+        } else {
+            subjectGradeTrendData = [SubjectObject: [Snapshot]]()
+        }
+        
+        if let overallData = aDecoder.decodeObject(forKey: "Overall Grade Trend Data") as? [Snapshot] {
+            overallGradeTrendData = overallData
+        } else {
+            overallGradeTrendData = [Snapshot]()
+        }
+        
+        // Check if you can pull the new M17 grade boundaries
+        if let boundariesData = aDecoder.decodeObject(forKey: "Grade Boundaries") as? [SubjectObject: [String: [String: [Int: [Int]]]]] {
+            gradeBoundaries = boundariesData
+        } else {
+            // Wait for the user to try and access the grade boundaries before intializing them, so that the custom boundaries aren't overriden
+            gradeBoundaries = [SubjectObject: [String: [String: [Int: [Int]]]]]()
+        }
+
         super.init()
         
         // Take the string which is encodable and then find the right enum option
         subjectGradeSetting = subjectGradeSettingEnum(from: subjectGradeSettingString)
+
     }
     
     init(name: String, yearLevelObject: YearLevelObject, subjects: [SubjectObject], colorPreferences: [SubjectObject: UIColor], assessments: [Assessment]) {
@@ -81,7 +107,7 @@ class Profile: NSObject, NSCoding {
         
         self.averageGrade = 0
         
-        //default
+        // Default value
         self.bestSubject = subjects[0]
         
         self.subjectGradeSetting = SubjectGradeCalculation.averageOfGrades
@@ -90,7 +116,16 @@ class Profile: NSObject, NSCoding {
         self.subjectGradeSnapshots = [SubjectSnapshot]()
         self.overallGradeSnapshots = [OverallGradeSnapshot]()
         
+        self.subjectGradeTrendData = [SubjectObject: [Snapshot]]()
+        self.overallGradeTrendData = [Snapshot]()
+        
+        // Default value
+        self.gradeBoundaries = [SubjectObject: [String: [String: [Int: [Int]]]]]()
+        
         super.init()
+        
+        // Get boundaries from JSON
+        initGradeBoundaries()
         
         updateGradeSettingString()
     }
@@ -119,6 +154,11 @@ class Profile: NSObject, NSCoding {
         self.subjectGradeSnapshots = [SubjectSnapshot]()
         self.overallGradeSnapshots = [OverallGradeSnapshot]()
         
+        self.subjectGradeTrendData = [SubjectObject: [Snapshot]]()
+        self.overallGradeTrendData = [Snapshot]()
+        
+        self.gradeBoundaries = [SubjectObject: [String: [String: [Int: [Int]]]]]()
+        
         super.init()
         
     }
@@ -145,7 +185,265 @@ class Profile: NSObject, NSCoding {
         
         aCoder.encode(subjectGradeSnapshots, forKey: "Subject Snapshots")
         aCoder.encode(overallGradeSnapshots, forKey: "Overall Grade Snapshots")
+        
+        aCoder.encode(gradeBoundaries, forKey: "Grade Boundaries")
+        
+        aCoder.encode(subjectGradeTrendData, forKey: "Subject Grade Trend Data")
+        aCoder.encode(overallGradeTrendData, forKey: "Overall Grade Trend Data")
+        
     }
+    
+    // MARK: - Grade Boundaries Funcs
+    
+    func getGrade(forSubject subject: SubjectObject, withPercentage percentage: Int) -> Int {
+        
+        if subject.subject == .TheoryOfKnowledge {
+            
+            // The following switches have been converted to a percentage out of 10 marks for TOK
+            
+            switch percentage {
+            case let x where x >= 80:
+                return 5 // A
+            case let x where x >= 60:
+                return 4 // B
+            case let x where x >= 40:
+                return 3 // C
+            case let x where x >= 20:
+                return 2 // D
+            default:
+                return 1 // E
+            }
+            
+        } else if subject.subject == .ExtendedEssay {
+            
+            // The following switches have been converted to a percentage out of 36 marks for EE
+            
+            switch percentage {
+            case let x where x >= 80:
+                return 5 // A
+            case let x where x >= 63:
+                return 4 // B
+            case let x where x >= 44:
+                return 3 // C
+            case let x where x >= 22:
+                return 2 // D
+            default:
+                return 1 // E
+            }
+            
+        }
+        
+        let gradeBoundaries = getGradeBoundaries()
+        
+        if let subjectBoundaries = gradeBoundaries[subject] {
+            
+            var timezone = ""
+            if subjectBoundaries.keys.count == 1 {
+                timezone = "TZ0"
+            } else if subjectBoundaries.keys.count == 2 {
+                // Default to TZ1 (for now)
+                timezone = "TZ1"
+            }
+            
+            if let tzBoundaries = subjectBoundaries[timezone] {
+                
+                // Only get "final" boundaries
+                if let finalBoundaries = tzBoundaries["Final"] {
+                    
+                    for (key, _) in finalBoundaries {
+                        
+                        let values: [Int] = finalBoundaries[key]! // Get the value of the dictionary for the current key
+                        if percentage < values[1] + 1 && percentage >= values[0] { // If the percentage from the assessment falls between the bounds
+                            return Int(key) // Set the overall grade to the current key
+                        }
+                        
+                    }
+                    
+                }
+                
+            }
+            
+        }
+        
+        return 0
+    }
+    
+    func getGradeBoundaries() -> [SubjectObject: [String: [String: [Int: [Int]]]]] {
+        
+        // In case the grade boundaries have never been set before
+        if self.gradeBoundaries.count == 0 {
+            self.initGradeBoundaries()
+            
+            return self.gradeBoundaries
+        } else {
+            return self.gradeBoundaries
+        }
+        
+    }
+    
+    func getGradeBoundaries(forSubject subject: SubjectObject) -> [Int: [Int]] {
+        
+        let boundaries = self.getGradeBoundaries()
+        
+        var timezone = ""
+        if boundaries[subject]!.keys.count == 1 {
+            timezone = "TZ0"
+        } else if boundaries[subject]!.keys.count == 2 {
+            timezone = "TZ1"
+        }
+        
+        return boundaries[subject]![timezone]!["Final"]!
+        
+    }
+    
+    func changeGradeBoundaries(forSubject subject: SubjectObject, withBoundaries boundaries: [Int: [Int]]) {
+        
+        if self.gradeBoundaries[subject]!.keys.count == 1 {
+            self.gradeBoundaries[subject]!["TZ0"]!["Final"] = boundaries
+        } else if self.gradeBoundaries[subject]!.keys.count == 2 {
+            self.gradeBoundaries[subject]!["TZ1"]!["Final"] = boundaries
+        }
+        
+        AppStatus.saveData()
+        
+    }
+    
+    // MARK: - Boundary Data-pulling Funcs
+    
+    // Called whenever thew boundaries should be initialized
+    func initGradeBoundaries() {
+        
+        updateGradeBoundariesM17()
+        
+    }
+    
+    // Called to pull boundaries from the new M17 data
+    func updateGradeBoundariesM17() {
+        
+        var boundaries = [SubjectObject: [String: [String: [Int: [Int]]]]]()
+        
+        typealias JSONDictionary = [String: Any]
+        
+        if let url = Bundle.main.url(forResource: "May 2017 Boundaries", withExtension: ".json") {
+            
+            do {
+                
+                let jsonData = try Data(contentsOf: url)
+                
+                if let jsonResult: JSONDictionary = try JSONSerialization.jsonObject(with: jsonData, options: []) as? JSONDictionary {
+                    
+                    for subject in AppStatus.user.subjects {
+                        
+                        let subjectName = subject.toString()
+                        
+                        // If the subject can be found in the new boundaries
+                        if let subjectJSONInfo: JSONDictionary = jsonResult[subjectName] as? JSONDictionary { // Contains all data from timezones and further
+                            
+                            for (timezone_key, _) in subjectJSONInfo { // Loop through timezones
+                                
+                                if let timezoneData: JSONDictionary = subjectJSONInfo[timezone_key] as? JSONDictionary {
+                                    
+                                    for (assessment_key, _) in timezoneData { // Loop through assessments
+                                        
+                                        if let assessmentBoundaryData: JSONDictionary = timezoneData[assessment_key] as? JSONDictionary {
+                                            
+                                            for (grade_key, value) in assessmentBoundaryData {
+                                                
+                                                let boundary = value as! [Int]
+                                                
+                                                boundaries[subject]![timezone_key]![assessment_key]![Int(grade_key)!]! = boundary
+                                                
+                                            }
+                                            
+                                        }
+                                        
+                                    }
+                                    
+                                }
+                                
+                            }
+                            
+                        } else { // If the subject only exists in the previous grade boundaries
+                            
+                            let subjectBoundary = getOldSubjectGradeBoundary(subject: subject)
+                            
+                            let assessmentDict = ["Final": subjectBoundary]
+                            let timezoneDict = ["TZ0": assessmentDict]
+                            
+                            boundaries[subject] = timezoneDict
+                            
+                        }
+                        
+                        
+                        
+                    }
+                    
+                }
+                
+            } catch {
+                
+                print("JSON Error \(error)")
+                
+            }
+            
+            
+        }
+        
+        self.gradeBoundaries = boundaries
+        
+    }
+    
+    func getOldSubjectGradeBoundary(subject: SubjectObject) -> [Int: [Int]] {
+        
+        var boundariesDict = [Int: [Int]]()
+        
+        typealias JSONDictionary = [String: Any]
+        
+        if let url = Bundle.main.url(forResource: "gradeBoundaries", withExtension: "json") { //find the url of the JSON
+            do {
+                
+                let jsonData = try Data(contentsOf: url) //get the data for the JSON
+                
+                if let jsonResult: JSONDictionary = try JSONSerialization.jsonObject(with: jsonData, options: []) as? JSONDictionary { //the whole JSON
+                    
+                    let subjects: [JSONDictionary] = jsonResult["Subjects"] as! [JSONDictionary] //list of subjects (which are dictionaries)
+                    
+                    for aSubject in subjects { // Iterate through IB subjects
+                        
+                        let title: String = aSubject["Title"] as! String //get subject title
+                        
+                        if title == subject.toString() { //see if the subject title matches the subject of the assessment
+                            
+                            let gradeBoundaries: JSONDictionary = aSubject["Boundaries"] as! JSONDictionary //get dictionary of grade boundaries
+                            
+                            for key in gradeBoundaries.keys { //iterate through the keys
+                                let value: [Int] = gradeBoundaries[key] as! [Int] //get the value of the dictionary for the current key
+                                
+                                let grade = Int(key)!
+                                
+                                boundariesDict[grade] = value
+                            }
+                            
+                            return boundariesDict
+                            
+                        }
+                        
+                    }
+                    
+                }
+                
+            } catch {
+                
+                print("JSON error: \(error)")
+                
+            }
+        }
+        
+        return boundariesDict
+        
+    }
+    
+    // MARK: - Subject Snapshot Funcs
     
     func addSubjectSnapshot(snapshot: SubjectSnapshot) {
         
@@ -171,6 +469,122 @@ class Profile: NSObject, NSCoding {
         
     }
     
+    // MARK: - Subject Trend Data Funcs
+    
+    func updateTrendData(withAssessment assessment: Assessment) {
+        
+        updateOverallGradeTrendData()
+        updateSubjectGradeTrendData(forSubject: assessment.getSubjectObject())
+        
+    }
+    
+    private func updateOverallGradeTrendData() {
+        
+        var snapshots = [Snapshot]()
+        
+        // From newest to oldest
+        let dateSortedAssessments = self.assessments.sorted { $0.date > $1.date }
+        
+        var mostRecentAssessments = ArraySlice<Assessment>()
+        var olderAssessments = ArraySlice<Assessment>()
+        
+        if dateSortedAssessments.count >= 10 {
+            
+            // 10 most recent assessments
+            mostRecentAssessments = dateSortedAssessments[0...9]
+            
+            // The rest of the assessments
+            olderAssessments = dateSortedAssessments[10..<dateSortedAssessments.count]
+            
+        } else { // If the user has less than 10 assessments right now
+            
+            // Return all of the current asssesments
+            mostRecentAssessments = dateSortedAssessments[0..<dateSortedAssessments.count]
+            
+        }
+        
+        let gradeCollection = GradeCollection(assessments: convertArraySlicetoArray(arraySlice: olderAssessments))
+        
+        mostRecentAssessments.reverse() // Reverse order for appropriate simulation in next for-loop
+        
+        for assessment in mostRecentAssessments {
+            
+            let overallGrade = gradeCollection.getOverallGrade(withAssessmentAddition: assessment)
+            
+            snapshots.append(Snapshot(grade: overallGrade, withDate: assessment.date))
+            
+        }
+        
+        self.overallGradeTrendData = snapshots
+        
+    }
+    
+    private func convertArraySlicetoArray(arraySlice: ArraySlice<Assessment>) -> [Assessment] {
+        
+        var oldAssessmentList = [Assessment]()
+        
+        // Convert the array slice into a new array
+        for oldAssessment in arraySlice {
+            
+            oldAssessmentList.append(oldAssessment)
+            
+        }
+        
+        return oldAssessmentList
+        
+    }
+    
+    private func updateSubjectGradeTrendData(forSubject subject: SubjectObject) {
+        
+        var snapshots = [Snapshot]()
+        
+        // Only select assessments from this subject
+        let subjectAssessments = self.assessments.filter { $0.getSubjectObject() == subject }
+        
+        // From newest to oldest
+        let dateSortedAssessments = subjectAssessments.sorted { $0.date > $1.date }
+        
+        var mostRecentAssessments = ArraySlice<Assessment>()
+        var olderAssessments = ArraySlice<Assessment>()
+        
+        if dateSortedAssessments.count >= 10 {
+            
+            // 10 most recent assessments
+            mostRecentAssessments = dateSortedAssessments[0...9]
+            
+            // The rest of the assessments
+            olderAssessments = dateSortedAssessments[10..<dateSortedAssessments.count]
+            
+        } else { // If the user has less than 10 assessments right now
+            
+            // Return all of the current asssesments
+            mostRecentAssessments = dateSortedAssessments[0..<dateSortedAssessments.count]
+            
+        }
+
+        let gradeStack = GradeStack(withSubject: subject, andAssessments: convertArraySlicetoArray(arraySlice: olderAssessments))
+        
+        for assessment in mostRecentAssessments {
+            
+            gradeStack.addAssessment(assessment: assessment)
+            let overallGrade = gradeStack.getAverageGrade()
+            
+            snapshots.append(Snapshot(grade: overallGrade, withDate: assessment.date))
+            
+        }
+        
+        self.subjectGradeTrendData[subject] = snapshots
+        
+    }
+    
+    func getOverallGradeTrendData() -> [Snapshot] {
+        return overallGradeTrendData
+    }
+    
+    func getSubjectGradeTrendData(forSubject subject: SubjectObject) -> [Snapshot] {
+        return subjectGradeTrendData[subject]!
+    }
+    
     func getBestSubject() -> SubjectObject {
         
         var bestAverage = 0.0
@@ -183,7 +597,7 @@ class Profile: NSObject, NSCoding {
                 continue
             }
             
-            let assessmentsForSubject = assessments.filter { $0.subjectObject == subjectObject }
+            let assessmentsForSubject = assessments.filter { $0.getSubjectObject() == subjectObject }
             
             var sum = 0
             var numberOfAssessments = 0
@@ -247,7 +661,7 @@ class Profile: NSObject, NSCoding {
         for assessment in assessments {
             
             // Ignore TOK and EE
-            if assessment.subjectObject.subject == .TheoryOfKnowledge || assessment.subjectObject.subject == .ExtendedEssay {
+            if assessment.getSubjectObject().subject == .TheoryOfKnowledge || assessment.getSubjectObject().subject == .ExtendedEssay {
                 continue
             }
             
@@ -331,7 +745,7 @@ class Profile: NSObject, NSCoding {
                 
                 for assessment in assessments {
                     
-                    if assessment.subjectObject == subjectObject {
+                    if assessment.getSubjectObject() == subjectObject {
                         
                         if let newAssessment = assessment as? TOKAssessment {
                             
@@ -399,7 +813,7 @@ class Profile: NSObject, NSCoding {
                 
                 for assessment in assessments {
                     
-                    if assessment.subjectObject == subjectObject {
+                    if assessment.getSubjectObject() == subjectObject {
                         
                         totalMarks += assessment.marksReceived
                         count += 1
@@ -438,7 +852,7 @@ class Profile: NSObject, NSCoding {
             
             for assessment in assessments {
                 
-                if assessment.subjectObject == subjectObject {
+                if assessment.getSubjectObject() == subjectObject {
                     sumPercentageMarks += assessment.percentageMarksObtained
                     
                     subjectAssessments.append(assessment)
@@ -519,66 +933,11 @@ class Profile: NSObject, NSCoding {
                 subjectGrades[subjectObject] = returnGrade
                     
                 continue
-                    
             }
             
             let averagePercentage = lround(sumPercentageMarks / Double(numberOfAssessments))
             
-            typealias JSONDictionary = [String: Any]
-            
-            if let url = Bundle.main.url(forResource: "gradeBoundaries", withExtension: "json") { // Find the url of the JSON
-                do {
-                    
-                    let jsonData = try Data(contentsOf: url) // Get the data for the JSON
-                    
-                    if let jsonResult: JSONDictionary = try JSONSerialization.jsonObject(with: jsonData, options: []) as? JSONDictionary { // The whole JSON
-                        
-                        let subjects: [JSONDictionary] = jsonResult["Subjects"] as! [JSONDictionary] // List of subjects (which are dictionaries)
-                        
-                        for aSubject in subjects { // Iterate through the subjects
-                            
-                            let title: String = aSubject["Title"] as! String // Get subject title
-                            
-                            if title == subjectObject.toString() { // See if the subject title matches the subject of the assessment
-                                
-                                let gradeBoundaries: JSONDictionary = aSubject["Boundaries"] as! JSONDictionary // Get dictionary of grade boundaries
-                                
-                                for key in gradeBoundaries.keys { // Iterate through the keys
-                                    var value: [Int] = gradeBoundaries[key] as! [Int] // Get the value of the dictionary for the current key
-                                    
-                                    let user = AppStatus.user
-                                        
-                                    // If the user's preference is "pessimist mode"
-                                    if user.subjectGradeSetting == .pessimistMode {
-                                            
-                                        if averagePercentage - 5 < value[1] + 1 && averagePercentage - 5 >= value[0] { // If the percentage (minus five) from the assessment falls between the bounds
-                                                
-                                            subjectGrades[subjectObject] = Int(key) // Add the subject grade to the dictionary
-                                        }
-                                            
-                                    } else { // If the user just wants a simple average done
-                                            
-                                        if averagePercentage < value[1] + 1 && averagePercentage >= value[0] { // If the percentage from the assessment falls between the bounds
-                                                
-                                            subjectGrades[subjectObject] = Int(key) // Add the subject grade to the dictionary
-                                        }
-                                            
-                                    }
-                                    
-                                }
-                                
-                            }
-                            
-                        }
-                        
-                    }
-                } catch {
-                
-                    // Can't do alert since this is not a view controller
-                    print(error)
-                    
-                }
-            }
+            subjectGrades[subjectObject] = self.getGrade(forSubject: subjectObject, withPercentage: averagePercentage)
             
         }
         
@@ -601,7 +960,7 @@ class Profile: NSObject, NSCoding {
                 
                 for assessment in assessments {
                     
-                    if assessment.subjectObject == subject {
+                    if assessment.getSubjectObject() == subject {
                         
                         if let newAssessment = assessment as? TOKAssessment {
                             
@@ -648,7 +1007,7 @@ class Profile: NSObject, NSCoding {
                 
                 for assessment in assessments {
                     
-                    if assessment.subjectObject == subject {
+                    if assessment.getSubjectObject() == subject {
                         
                         totalMarks += assessment.marksReceived
                         count += 1
@@ -669,7 +1028,7 @@ class Profile: NSObject, NSCoding {
             }
             
             
-            let subjectAssessments = assessments.filter { $0.subjectObject == subject }
+            let subjectAssessments = assessments.filter { $0.getSubjectObject() == subject }
             
             var totalMarks = 0.0
             var count = 0
@@ -713,3 +1072,11 @@ class Profile: NSObject, NSCoding {
     }
     
 }
+
+enum EditingStyle {
+    case added
+    case edited
+    case deleted
+}
+
+

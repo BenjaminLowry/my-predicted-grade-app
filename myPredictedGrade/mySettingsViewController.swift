@@ -69,6 +69,32 @@ class mySettingsViewController: UITableViewController, UITextFieldDelegate, UIPi
         
     }
     
+    @IBAction func resetGradeBoundaries(_ sender: Any) {
+        
+        let alertController = UIAlertController(title: "Are you sure?", message: "This action cannot be undone.", preferredStyle: .alert)
+        
+        let confirmAction = UIAlertAction(title: "Yes", style: .default, handler: { alert in
+            // Reset boundaries
+            AppStatus.user.initGradeBoundaries()
+            
+            let alertController = UIAlertController(title: "Success!", message: "Boundaries reset.", preferredStyle: .alert)
+            
+            let confirmAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+            
+            alertController.addAction(confirmAction)
+            
+            self.present(alertController, animated: true, completion: nil)
+            
+        })
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+        
+        alertController.addAction(confirmAction)
+        alertController.addAction(cancelAction)
+        
+        self.present(alertController, animated: true, completion: nil)
+        
+    }
+    
     @IBAction func contactDeveloper(_ sender: Any) {
         
         // Opens a new draft email to me in mail app
@@ -139,7 +165,7 @@ class mySettingsViewController: UITableViewController, UITextFieldDelegate, UIPi
         
         for (subjectObject, grade) in subjectGrades {
             
-            let assessmentsForSubject = AppStatus.user.assessments.filter { $0.subjectObject == subjectObject }
+            let assessmentsForSubject = AppStatus.user.assessments.filter { $0.getSubjectObject() == subjectObject }
             
             var totalPercentageMarks = 0.0
             var count = 0
@@ -168,7 +194,7 @@ class mySettingsViewController: UITableViewController, UITextFieldDelegate, UIPi
     
     // MARK: - UIPickerView Helper Funcs
     
-    func resignPickerViews() {
+    @objc func resignPickerViews() {
         
         gradeCalculationTextField.resignFirstResponder()
         

@@ -23,6 +23,8 @@ class myAssessmentsViewController: UIViewController, UISearchBarDelegate, UITabl
     @IBOutlet weak var contentSelectionTextField: UITextField!
     @IBOutlet weak var contentOrderingTextField: UITextField!
     
+    @IBOutlet weak var condensedSwitch: UISwitch!
+    
     // MARK: - Properties
     
     var contentSelectionPickerView: UIPickerView = UIPickerView()
@@ -51,6 +53,7 @@ class myAssessmentsViewController: UIViewController, UISearchBarDelegate, UITabl
         
         // Register XIB for usage
         bodyTableView.register(UINib(nibName: "AssessmentCell", bundle: Bundle.main), forCellReuseIdentifier: "AssessmentCell")
+        bodyTableView.register(UINib(nibName: "CondensedAssessmentCell", bundle: Bundle.main), forCellReuseIdentifier: "CondensedAssessmentCell")
         
         // Setup delegates
         searchBar.delegate = self
@@ -112,12 +115,15 @@ class myAssessmentsViewController: UIViewController, UISearchBarDelegate, UITabl
         }
     }
     
-    // MARK: - UITableView Delegate Funcs
+    // MARK: - IBActions
     
-    func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
+    @IBAction func switchFlipped(_ sender: Any) {
+        
+        bodyTableView.reloadData()
+        
     }
     
+    // MARK: - UITableView Delegate Funcs
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return sortedContentList.count
@@ -125,18 +131,40 @@ class myAssessmentsViewController: UIViewController, UISearchBarDelegate, UITabl
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        let cell: AssessmentCell = tableView.dequeueReusableCell(withIdentifier: "AssessmentCell") as! AssessmentCell
-        
-        cell.recentAssessmentView.infoButton.addTarget(self, action: #selector(segueAway(_:)), for: .touchUpInside)
-        cell.recentAssessmentView.infoButton.tag = indexPath.row
-        
-        configureCell(cell: cell, assessment: sortedContentList[indexPath.row])
-        
-        return cell
+        if condensedSwitch.isOn == false {
+            
+            let cell: AssessmentCell = tableView.dequeueReusableCell(withIdentifier: "AssessmentCell") as! AssessmentCell
+            
+            cell.assessmentView.infoButton.addTarget(self, action: #selector(segueAway(_:)), for: .touchUpInside)
+            cell.assessmentView.infoButton.tag = indexPath.row
+            
+            configureCell(cell: cell, assessment: sortedContentList[indexPath.row])
+            
+            return cell
+            
+        } else { // If the switch is on
+            
+            let cell: CondensedAssessmentCell = tableView.dequeueReusableCell(withIdentifier: "CondensedAssessmentCell") as! CondensedAssessmentCell
+            
+            configureCell(cell: cell, assessment: sortedContentList[indexPath.row])
+            
+            return cell
+            
+        }
         
     }
     
-    func segueAway(_ sender: UIButton){
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        
+        if condensedSwitch.isOn == false {
+            return 202.5
+        } else { // If the switch is on
+            return 60
+        }
+        
+    }
+    
+    @objc func segueAway(_ sender: UIButton){
         let cell = bodyTableView.cellForRow(at: IndexPath(row: sender.tag, section: 0))
         assessmentBeingEdited = sortedContentList[sender.tag]
         performSegue(withIdentifier: "EditAssessment", sender: cell)
@@ -158,7 +186,8 @@ class myAssessmentsViewController: UIViewController, UISearchBarDelegate, UITabl
         bodyTableView.reloadData()
     
         // Take snapshots of data
-        takeSnapshots(forSubject: assessment.subjectObject)
+        takeSnapshots(forSubject: assessment.getSubjectObject())
+        AppStatus.user.updateTrendData(withAssessment: assessment)
         
         // Save changes
         AppStatus.saveData()
@@ -188,7 +217,8 @@ class myAssessmentsViewController: UIViewController, UISearchBarDelegate, UITabl
         }
         
         // Take snapshots of data
-        takeSnapshots(forSubject: assessment.subjectObject)
+        takeSnapshots(forSubject: assessment.getSubjectObject())
+        AppStatus.user.updateTrendData(withAssessment: assessment)
         
         // Save changes
         AppStatus.saveData()
@@ -196,6 +226,8 @@ class myAssessmentsViewController: UIViewController, UISearchBarDelegate, UITabl
     }
     
     func assessmentDetailViewController(controller: AssessmentDetailViewController, didFinishDeletingAssessment assessment: Assessment) {
+        
+        // TODO: Send the "true" index into the update functions
         
         // Delete the assessment
         let originalIndex = allAssessments.index(of: assessmentBeingEdited!)
@@ -209,7 +241,8 @@ class myAssessmentsViewController: UIViewController, UISearchBarDelegate, UITabl
         bodyTableView.reloadData()
         
         // Take snapshots of data
-        takeSnapshots(forSubject: assessment.subjectObject)
+        takeSnapshots(forSubject: assessment.getSubjectObject())
+        AppStatus.user.updateTrendData(withAssessment: assessment)
         
         // Save changes
         AppStatus.saveData()
@@ -227,13 +260,9 @@ class myAssessmentsViewController: UIViewController, UISearchBarDelegate, UITabl
         
         let subjectGrades = user.getSubjectGrades()
         
-        let grade = subjectGrades[subject]
-        
-        //let assessmentsForSubject = App
-        
         for (subjectObject, grade) in subjectGrades {
             
-            let assessmentsForSubject = AppStatus.user.assessments.filter { $0.subjectObject == subjectObject }
+            let assessmentsForSubject = AppStatus.user.assessments.filter { $0.getSubjectObject() == subjectObject }
             
             var totalPercentageMarks = 0.0
             var count = 0
@@ -262,11 +291,22 @@ class myAssessmentsViewController: UIViewController, UISearchBarDelegate, UITabl
     
     // MARK: - UITableView Helper Funcs
     
-    func configureCell(cell: AssessmentCell, assessment: Assessment){
+    func configureCell(cell: Any, assessment: Assessment){
         
-        let mainView = cell.recentAssessmentView
-        mainView?.awakeFromNib()
-        mainView?.updateLabels(assessment: assessment)
+        if let condensedCell = cell as? CondensedAssessmentCell {
+            
+            let mainView = condensedCell.condensedAssessmentView
+            mainView?.awakeFromNib()
+            mainView?.updateLabels(assessment: assessment)
+            
+        } else if let normalCell = cell as? AssessmentCell {
+            
+            let mainView = normalCell.assessmentView
+            mainView?.awakeFromNib()
+            mainView?.updateLabels(assessment: assessment)
+            
+        }
+        
         
     }
     
@@ -285,7 +325,7 @@ class myAssessmentsViewController: UIViewController, UISearchBarDelegate, UITabl
         view.addGestureRecognizer(tapGesture)
     }
     
-    func resignSearchResponder() {
+    @objc func resignSearchResponder() {
         searchBar.resignFirstResponder()
     }
     
@@ -375,7 +415,7 @@ class myAssessmentsViewController: UIViewController, UISearchBarDelegate, UITabl
         
         if let scope = currentScope { // If there is content selection
             let content = allAssessments.filter { assessment in {
-                return assessment.subjectObject == scope
+                return assessment.getSubjectObject() == scope
                 }()
                 
             }
@@ -426,7 +466,7 @@ class myAssessmentsViewController: UIViewController, UISearchBarDelegate, UITabl
             bodyTableView.reloadSections(NSIndexSet(index: 0) as IndexSet, with: UITableViewRowAnimation.none)
         } else if contentOrderingTextField.text == "Subject" {
             // Using hashes as the "sorting index" is insufficient due to double science/humanity combos
-            sortedContentList = content.sorted { $0.subjectObject.toString().hash > $1.subjectObject.toString().hash }
+            sortedContentList = content.sorted { $0.getSubjectObject().toString().hash > $1.getSubjectObject().toString().hash }
             bodyTableView.reloadSections(NSIndexSet(index: 0) as IndexSet, with: UITableViewRowAnimation.none)
         } else if contentOrderingTextField.text == "Overall Grade" {
             sortedContentList = content.sorted { $0.getOverallGrade() > $1.getOverallGrade() }

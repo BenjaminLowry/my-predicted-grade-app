@@ -567,7 +567,7 @@ class myTrendsViewController: UIViewController, UIPickerViewDelegate, UIPickerVi
                 
                 // If string is like "Sep02", make it "Sep2"
                 if dayString[3] == "0" {
-                    if let index = dayString.characters.index(of: "0") {
+                    if let index = dayString.index(of: "0") {
                         dayString.remove(at: index)
                     }
                 }
@@ -596,7 +596,8 @@ class myTrendsViewController: UIViewController, UIPickerViewDelegate, UIPickerVi
     
     func createOverallDataList(timeframe: DataTimeframe) -> ([Int], [String]) {
         
-        let overallSnapshots = AppStatus.user.getOverallGradeSnapshots()
+        let overallSnapshots = AppStatus.user.getOverallGradeTrendData()
+        print(overallSnapshots)
         
         var overallGradeData = [Int]()
         
@@ -606,12 +607,11 @@ class myTrendsViewController: UIViewController, UIPickerViewDelegate, UIPickerVi
             
             var months = [String]()
             
-            let sortedSnapshots = overallSnapshots.sorted { $0.date > $1.date }
-            
             let dateFormatter = DateFormatter()
             dateFormatter.dateFormat = "MMMYY"
             
-            for snapshot in sortedSnapshots {
+            // Loop through snapshots backwards (from new to old)
+            for snapshot in overallSnapshots.reversed() {
                 
                 // Data points under 24 will not be displayed
                 if snapshot.grade < 24 {
@@ -639,12 +639,11 @@ class myTrendsViewController: UIViewController, UIPickerViewDelegate, UIPickerVi
             
             var days = [String]()
             
-            let sortedSnapshots = overallSnapshots.sorted { $0.date > $1.date }
-            
             let dateFormatter = DateFormatter()
             dateFormatter.dateFormat = "MMMdd"
             
-            for snapshot in sortedSnapshots {
+            // Loop through snapshots backwards (from new to old)
+            for snapshot in overallSnapshots.reversed() {
                 
                 // Data points under 24 will not be displayed
                 if snapshot.grade < 24 {
@@ -655,7 +654,7 @@ class myTrendsViewController: UIViewController, UIPickerViewDelegate, UIPickerVi
                 
                 // If string is like "Sep02", make it "Sep2"
                 if dayString[3] == "0" {
-                    if let index = dayString.characters.index(of: "0") {
+                    if let index = dayString.index(of: "0") {
                         dayString.remove(at: index)
                     }
                 }

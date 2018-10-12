@@ -32,7 +32,7 @@ class PersonalInformationViewController: UIViewController, UIPickerViewDelegate,
         super.viewDidLoad()
 
         nameTextField.attributedPlaceholder = NSAttributedString(string: "e.g. Jeremy Young",
-                                                               attributes: [NSForegroundColorAttributeName: UIColor.lightGray])
+                                                               attributes: [NSAttributedStringKey.foregroundColor: UIColor.lightGray])
         
         titleLabel.adjustsFontSizeToFitWidth = true
         
@@ -85,7 +85,7 @@ class PersonalInformationViewController: UIViewController, UIPickerViewDelegate,
     
     func pickerView(_ pickerView: UIPickerView, attributedTitleForRow row: Int, forComponent component: Int) -> NSAttributedString? {
         let titleData = data[row]
-        let myTitle = NSAttributedString(string: titleData, attributes: [NSFontAttributeName:UIFont(name: "Avenir Next", size: 15.0)!,NSForegroundColorAttributeName:UIColor.white])
+        let myTitle = NSAttributedString(string: titleData, attributes: [NSAttributedStringKey.font:UIFont(name: "Avenir Next", size: 15.0)!,NSAttributedStringKey.foregroundColor:UIColor.white])
         return myTitle
     }
     
@@ -101,11 +101,11 @@ class PersonalInformationViewController: UIViewController, UIPickerViewDelegate,
     
     // MARK: - UITextField Helper Funcs
     
-    func dismissKeyboard() {
+    @objc func dismissKeyboard() {
         view.endEditing(true)
     }
     
-    func keyboardWillShow(sender: NSNotification) {
+    @objc func keyboardWillShow(sender: NSNotification) {
         if UIScreen.main.bounds.height == 568 {
             self.view.frame.origin.y = -130 // Move view 130 points upward
         } else {
@@ -113,7 +113,7 @@ class PersonalInformationViewController: UIViewController, UIPickerViewDelegate,
         }
     }
     
-    func keyboardWillHide(sender: NSNotification) {
+    @objc func keyboardWillHide(sender: NSNotification) {
         self.view.frame.origin.y = 0 // Move view to original position
     }
     

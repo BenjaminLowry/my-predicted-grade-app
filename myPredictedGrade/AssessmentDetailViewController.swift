@@ -141,7 +141,7 @@ class AssessmentDetailViewController: UITableViewController, UITextFieldDelegate
                 
             }
             
-            if assessmentTitle.characters.count > 30 {
+            if assessmentTitle.count > 30 {
                 
                 let alert = Alert(message: "Assessment title must be less than 30 characters.", alertType: .invalidUserResponse)
                 alert.show(source: self)
@@ -269,7 +269,7 @@ class AssessmentDetailViewController: UITableViewController, UITextFieldDelegate
                 if let assessment = assessmentToEdit {
                     let user = AppStatus.user
                     for subjectObject in user.subjects {
-                        if assessment.subjectObject == subjectObject {
+                        if assessment.getSubjectObject() == subjectObject {
                             if let row = subjectPickerViewData.index(where: {$0 == subjectObject}) {
                                 textField.text = subjectString(forSubjectAtRow: row)
                             }
@@ -300,7 +300,7 @@ class AssessmentDetailViewController: UITableViewController, UITextFieldDelegate
     
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         
-        if range.location == (textField.text?.characters.count)! && string == " " {
+        if range.location == (textField.text?.count)! && string == " " {
             
             let space: String = "\u{00a0}"
             textField.text?.append(space)
@@ -367,7 +367,7 @@ class AssessmentDetailViewController: UITableViewController, UITextFieldDelegate
         let date = dateFormatter.date(fromSpecific: dateText)
         
         assessmentToEdit?.assessmentTitle = assessmentTitle
-        assessmentToEdit?.subjectObject = subject
+        assessmentToEdit?.setSubjectObject(subject: subject)
         assessmentToEdit?.date = date
         assessmentToEdit?.marksAvailable = marksAvailable
         assessmentToEdit?.marksReceived = marksReceived
@@ -376,7 +376,7 @@ class AssessmentDetailViewController: UITableViewController, UITextFieldDelegate
     
     // MARK: - UITextField Helper Funcs
     
-    func dismissKeyboards() {
+    @objc func dismissKeyboards() {
         assessmentTitleTextField.resignFirstResponder()
         subjectTextField.resignFirstResponder()
         dateTextField.resignFirstResponder()
@@ -403,7 +403,7 @@ class AssessmentDetailViewController: UITableViewController, UITextFieldDelegate
     
     // MARK: - DatePicker Helper Funcs
     
-    func handleDatePicker(_ sender: UIDatePicker){
+    @objc func handleDatePicker(_ sender: UIDatePicker){
         
         // Converting date to appropriate format
         let dateFormatter = DateFormatter()
@@ -437,7 +437,7 @@ class AssessmentDetailViewController: UITableViewController, UITextFieldDelegate
     
     func prepareLabelsForEditing(assessment: Assessment) {
         assessmentTitleTextField.text = assessment.assessmentTitle
-        subjectTextField.text = assessment.subjectObject.toString()
+        subjectTextField.text = assessment.getSubjectObject().toString()
         
         let dateFormatter = DateFormatter()
         dateTextField.text = dateFormatter.string(fromSpecific: assessment.date)

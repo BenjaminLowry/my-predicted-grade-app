@@ -9,9 +9,9 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
-        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="RecentAssessmentView" customModule="myPredictedGrade" customModuleProvider="target">
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="AssessmentView" customModule="myPredictedGrade" customModuleProvider="target">
             <connections>
-                <outlet property="asssessmentTitleLabel" destination="q8T-dI-1n8" id="xFO-75-l3B"/>
+                <outlet property="assessmentTitleLabel" destination="q8T-dI-1n8" id="V3r-C1-G6H"/>
                 <outlet property="bodyMiddleView" destination="lSs-75-cje" id="zpZ-PX-Gvl"/>
                 <outlet property="bodyView" destination="9RJ-Ik-sMr" id="AYv-WC-vVZ"/>
                 <outlet property="headerView" destination="rHr-ir-eJ6" id="WOI-cb-0sT"/>

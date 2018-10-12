@@ -6,19 +6,35 @@
 //  Copyright © 2016 Ben LOWRY. All rights reserved.
 
 
+// Class Description - myHomeViewController
+// ***
+// Provides information, delegation for myHome tab of the main app infrastructure
+// Mostly handles UI-related tasks
+
+
 import UIKit
 import SafariServices
 
 class myHomeViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
 
+    //
     // MARK: - IBOutlets
+    //
+
+    // Grade Boundaries IBOutlets
     
     @IBOutlet var gradeBoundariesView: UIView!
     @IBOutlet weak var boundariesSubjectLabel: UILabel!
     @IBOutlet weak var boundariesStackView: UIStackView!
     @IBOutlet weak var boundariesAverageMarksLabel: UILabel!
     
+    @IBOutlet weak var changeBoundariesButton: UIButton!
+    
+    // Help View IBOutlets
+    
     @IBOutlet var helpView: UIView!
+    
+    // TOKEE IBOutlets
     
     @IBOutlet var TOKEEView: UIView!
     @IBOutlet weak var TOKAverageMarksLabel: UILabel!
@@ -31,7 +47,7 @@ class myHomeViewController: UIViewController, UITableViewDelegate, UITableViewDa
     @IBOutlet weak var overallGradeLabel: UILabel!
     
     @IBOutlet weak var subjectStackView: UIStackView!
-    @IBOutlet weak var gradeStackView: UIStackView! //full of the numbers for each subject
+    @IBOutlet weak var gradeStackView: UIStackView! // Contains subject grades
     
     @IBOutlet weak var bodyTableView: UITableView!
     
@@ -50,7 +66,9 @@ class myHomeViewController: UIViewController, UITableViewDelegate, UITableViewDa
     @IBOutlet weak var easilyImprovedSubjectContentLabel: UILabel!
     @IBOutlet weak var subjectToMonitorContentLabel: UILabel!
     
+    //
     // MARK: - Properties
+    //
     
     var mostRecentAssessment: Assessment!
     
@@ -60,15 +78,21 @@ class myHomeViewController: UIViewController, UITableViewDelegate, UITableViewDa
     
     var averagePercentageMarks = [SubjectObject: Int]()
     
+    var boundaryChangeSubject: SubjectObject?
+    
+    //
     // MARK: - Inherited Funcs
+    //
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        // Safety check for loading data
         if AppStatus.isSignedUp != true {
             AppStatus.loadData()
         }
         
+        // Register cell for "Most Recent Assessment"
         bodyTableView.register(UINib(nibName: "AssessmentCell", bundle: Bundle.main), forCellReuseIdentifier: "AssessmentCell")
         
         // Check for year level change
@@ -86,7 +110,7 @@ class myHomeViewController: UIViewController, UITableViewDelegate, UITableViewDa
     
     override func viewWillAppear(_ animated: Bool) {
         
-        //set the overall grade to the sum of the subject grades
+        // Set the overall grade to the sum of the subject grades
         let overallGrade = AppStatus.user.getOverallGrade()
         overallGradeLabel.text = String(describing: overallGrade)
         
@@ -107,6 +131,7 @@ class myHomeViewController: UIViewController, UITableViewDelegate, UITableViewDa
             return
         }
         
+        // If the user is loading for first time, show disclaimer and demo video alert
         if AppStatus.isFirstLoad == true {
             
             if AppStatus.disclaimerSigned == false {
@@ -116,6 +141,7 @@ class myHomeViewController: UIViewController, UITableViewDelegate, UITableViewDa
             
             let alertController = UIAlertController(title: "Demo", message: "Would you like to watch the demo video before starting?", preferredStyle: .alert)
             
+            // Link to YouTube if user confirms
             let confirmAction = UIAlertAction(title: "Yes", style: .default, handler: { alert in
                 
                 let url = URL(string: "https://youtu.be/CD30wwjPQys")!
@@ -140,7 +166,9 @@ class myHomeViewController: UIViewController, UITableViewDelegate, UITableViewDa
         
     }
     
+    //
     // MARK: - UITableView Delegate Funcs
+    //
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return (mostRecentAssessment != nil) ? 1 : 0
@@ -148,9 +176,10 @@ class myHomeViewController: UIViewController, UITableViewDelegate, UITableViewDa
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
+        // Setup "Most Recent Assessment" cell
         let cell: AssessmentCell = tableView.dequeueReusableCell(withIdentifier: "AssessmentCell") as! AssessmentCell
-        cell.recentAssessmentView.infoButton.isHidden = true
-        cell.recentAssessmentView.infoButton.isUserInteractionEnabled = false
+        cell.assessmentView.infoButton.isHidden = true
+        cell.assessmentView.infoButton.isUserInteractionEnabled = false
         
         if let assessment = mostRecentAssessment {
             configureCell(cell: cell, assessment: assessment)
@@ -160,8 +189,11 @@ class myHomeViewController: UIViewController, UITableViewDelegate, UITableViewDa
         
     }
     
+    //
     // MARK: - IBActions
+    //
     
+    // Function for showing the info view if the question mark button is pressed
     @IBAction func helpButtonPressed(_ sender: Any) {
         
         self.view.addSubview(helpView)
@@ -184,21 +216,58 @@ class myHomeViewController: UIViewController, UITableViewDelegate, UITableViewDa
         self.view.addGestureRecognizer(tapGesture)
         
         self.helpButton.isUserInteractionEnabled = false
+        self.bodyScrollView.isUserInteractionEnabled = false
         
     }
     
-    // MARK: - Configuration Funcs
+    @IBAction func changeBoundariesButtonPressed(_ sender: Any) {
+        
+        self.animateOut() // Dismiss the grade boundary view
+        self.performSegue(withIdentifier: "Change Grade Boundaries", sender: self)
+        
+    }
     
+    //
+    // MARK: - Navigation Funcs
+    //
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        
+        if segue.identifier == "Change Grade Boundaries" {
+            
+            if let navVC = segue.destination as? UINavigationController {
+                
+                if let destVC = navVC.viewControllers[0] as? GradeBoundaryViewController {
+                    
+                    destVC.subjectObject = self.boundaryChangeSubject!
+                    self.boundaryChangeSubject = nil
+                    
+                }
+                
+            }
+            
+        }
+        
+    }
+    
+    //
+    // MARK: - Configuration Funcs
+    //
+    
+    // For updating the "Most Recent Assessment" cell's information
     func configureCell(cell: AssessmentCell, assessment: Assessment){
         
-        let mainView = cell.recentAssessmentView
+        let mainView = cell.assessmentView
         mainView?.awakeFromNib()
         mainView?.updateLabels(assessment: assessment)
         
     }
     
+    //
     // MARK: - TOK/EE View Funcs
+    //
     
+    // Function for setting up TOK/EE grade boundaries view
     func setupTOKEEView() {
         
         let visualEffect = UIBlurEffect(style: .extraLight)
@@ -214,7 +283,8 @@ class myHomeViewController: UIViewController, UITableViewDelegate, UITableViewDa
         
     }
     
-    func animateTOKEEIn(sender: UITapGestureRecognizer) {
+    // Function for showing and updating TOK/EE grade boundaries view
+    @objc func animateTOKEEIn(sender: UITapGestureRecognizer) {
         
         if let averageTOKMarks = averagePercentageMarks[AppStatus.user.subjects[6]] {
             TOKAverageMarksLabel.text = "\(averageTOKMarks)"
@@ -288,10 +358,12 @@ class myHomeViewController: UIViewController, UITableViewDelegate, UITableViewDa
         self.view.addGestureRecognizer(tapGesture)
         
         self.helpButton.isUserInteractionEnabled = false
+        self.bodyScrollView.isUserInteractionEnabled = false
         
     }
     
-    func animateTOKEEOut() {
+    // For fading out the TOK/EE grade boundaries view
+    @objc func animateTOKEEOut() {
         
         UIView.animate(withDuration: 0.3, animations: {
             self.TOKEEView.transform = CGAffineTransform.init(scaleX: 1.3, y: 1.3)
@@ -307,12 +379,16 @@ class myHomeViewController: UIViewController, UITableViewDelegate, UITableViewDa
             }
             
             self.helpButton.isUserInteractionEnabled = true
+            self.bodyScrollView.isUserInteractionEnabled = true
         }
         
     }
     
+    //
     // MARK: - Help View Funcs
+    //
     
+    // Function for setting up the help view
     func setupHelpView() {
         
         let visualEffect = UIBlurEffect(style: .extraLight)
@@ -328,7 +404,8 @@ class myHomeViewController: UIViewController, UITableViewDelegate, UITableViewDa
         
     }
     
-    func animateHelpOut() {
+    // Function for fading out help view
+    @objc func animateHelpOut() {
         
         UIView.animate(withDuration: 0.3, animations: {
             self.helpView.transform = CGAffineTransform.init(scaleX: 1.3, y: 1.3)
@@ -344,12 +421,16 @@ class myHomeViewController: UIViewController, UITableViewDelegate, UITableViewDa
             }
             
             self.helpButton.isUserInteractionEnabled = true
+            self.bodyScrollView.isUserInteractionEnabled = true
         }
         
     }
     
+    //
     // MARK: - Boundaries View Funcs
+    //
     
+    // Function for setting up the normal grade boundaries view
     func setupBoundariesView() {
         
         let visualEffect = UIBlurEffect(style: .extraLight)
@@ -367,28 +448,32 @@ class myHomeViewController: UIViewController, UITableViewDelegate, UITableViewDa
         
     }
     
-    func animateIn(sender: UITapGestureRecognizer) {
+    // Function for showing the normal grade boundaries view
+    @objc func animateIn(sender: UITapGestureRecognizer) {
         
         if let senderLabel = sender.view as? UILabel {
             
             let selectedSubject = AppStatus.user.subjects[senderLabel.tag]
+            let subjectColor = AppStatus.user.colorPreferences[selectedSubject]
             
             boundariesSubjectLabel.text = selectedSubject.toShortString()
-            boundariesSubjectLabel.textColor = AppStatus.user.colorPreferences[selectedSubject]
+            boundariesSubjectLabel.textColor = subjectColor
             
-            boundariesAverageMarksLabel.textColor = AppStatus.user.colorPreferences[selectedSubject]
+            boundariesAverageMarksLabel.textColor = subjectColor
+            changeBoundariesButton.setTitleColor(subjectColor, for: .normal)
+            boundaryChangeSubject = selectedSubject
             
-            let boundaries = getBoundaries(subject: selectedSubject)
+            let boundaries = AppStatus.user.getGradeBoundaries(forSubject: selectedSubject)
             
             for i in 0..<boundaries.count {
                 
-                let index = (boundaries.count - 1) - i
+                let index = boundaries.count - i
                 
-                if let stackView = boundariesStackView.arrangedSubviews[index] as? UIStackView {
+                if let stackView = boundariesStackView.arrangedSubviews[i] as? UIStackView {
                     
                     if let boundariesLabel = stackView.arrangedSubviews[1] as? UILabel {
                         
-                        boundariesLabel.text = "\(boundaries[i].0) - \(boundaries[i].1)"
+                        boundariesLabel.text = "\(boundaries[index]![0]) - \(boundaries[index]![1])"
                         
                     }
                     
@@ -424,10 +509,12 @@ class myHomeViewController: UIViewController, UITableViewDelegate, UITableViewDa
         self.view.addGestureRecognizer(tapGesture)
         
         self.helpButton.isUserInteractionEnabled = false
+        self.bodyScrollView.isUserInteractionEnabled = false
         
     }
     
-    func animateOut () {
+    // Function for fading out the normal grade boundaries view
+    @objc func animateOut () {
         UIView.animate(withDuration: 0.3, animations: {
             self.gradeBoundariesView.transform = CGAffineTransform.init(scaleX: 1.3, y: 1.3)
             self.gradeBoundariesView.alpha = 0
@@ -442,62 +529,21 @@ class myHomeViewController: UIViewController, UITableViewDelegate, UITableViewDa
             }
             
             self.helpButton.isUserInteractionEnabled = true
+            self.bodyScrollView.isUserInteractionEnabled = true
         }
     }
     
-    func getBoundaries(subject: SubjectObject) -> [(Int, Int)]{
-        
-        var boundaries = [(Int, Int)]()
-        
-        typealias JSONDictionary = [String: Any]
-        
-        if let url = Bundle.main.url(forResource: "gradeBoundaries", withExtension: "json") { //find the url of the JSON
-            do {
-                
-                let jsonData = try Data(contentsOf: url) //get the data for the JSON
-                
-                if let jsonResult: JSONDictionary = try JSONSerialization.jsonObject(with: jsonData, options: []) as? JSONDictionary { //the whole JSON
-                    
-                    let subjects: [JSONDictionary] = jsonResult["Subjects"] as! [JSONDictionary] //list of subjects (which are dictionaries)
-                    
-                    for aSubject in subjects { //iterate through the subjects
-                        
-                        let title: String = aSubject["Title"] as! String //get subject title
-                        
-                        if title == subject.toString() { //see if the subject title matches the subject of the assessment
-                            
-                            let gradeBoundaries: JSONDictionary = aSubject["Boundaries"] as! JSONDictionary //get dictionary of grade boundaries
-                            
-                            for key in gradeBoundaries.keys { //iterate through the keys
-                                var value: [Int] = gradeBoundaries[key] as! [Int] //get the value of the dictionary for the current key
-                                
-                                boundaries.append((value[0], value[1]))
-                            }
-                            
-                        }
-                        
-                    }
-                    
-                }
-            } catch {
-                
-                let alert = Alert(message: "Uh-oh. Please try again.", alertType: .jsonParsingError)
-                alert.show(source: self)
-                
-            }
-        }
-        
-        boundaries = boundaries.sorted { $0.0 < $1.0 }
-        return boundaries
-        
-    }
     
+    //
     // MARK: - User Data Update Funcs
+    //
     
+    // Function for updating the user's year level property in August of next year
+    // ** Needs improvement **
     func checkYearLevel() {
         
         let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "dd mm yyyy"
+        dateFormatter.dateFormat = "dd MM yyyy"
         let switchDate = dateFormatter.date(from: "01 08 2018")
         
         let currentDate = Date(timeIntervalSinceNow: 0)
@@ -506,10 +552,16 @@ class myHomeViewController: UIViewController, UITableViewDelegate, UITableViewDa
             
             let lastYearDate = dateFormatter.date(from: "01 07 2018")
             
-            if AppStatus.user.getOverallGradeSnapshots()[0].date < lastYearDate! {
+            let snapshots = AppStatus.user.getOverallGradeSnapshots()
+            
+            if snapshots.count > 0 {
                 
-                if AppStatus.user.yearLevelObject.yearLevel == .year12 {
-                    AppStatus.user.yearLevelObject = YearLevelObject(yearLevel: .year13)
+                if AppStatus.user.getOverallGradeSnapshots()[0].date < lastYearDate! {
+                    
+                    if AppStatus.user.yearLevelObject.yearLevel == .year12 {
+                        AppStatus.user.yearLevelObject = YearLevelObject(yearLevel: .year13)
+                    }
+                    
                 }
                 
             }
@@ -518,9 +570,11 @@ class myHomeViewController: UIViewController, UITableViewDelegate, UITableViewDa
         
     }
     
-    
+    //
     // MARK: - UI Setup
+    //
     
+    // Setup the stack view for subjects and subject grades
     func setupStackViews() {
         
         //empty the stack view
@@ -643,6 +697,7 @@ class myHomeViewController: UIViewController, UITableViewDelegate, UITableViewDa
         
     }
     
+    // Setup the TableView for the "Most Recent Assessment" cell
     func setupAssessmentTableView() {
         
         bodyTableView.delegate = self
@@ -665,6 +720,7 @@ class myHomeViewController: UIViewController, UITableViewDelegate, UITableViewDa
         bodyTableView.isScrollEnabled = false
     }
     
+    // Do UI setup for the body of the VC, specifically focusing on the stats shown
     func setupBodyView() {
         bestSubjectContentLabel.adjustsFontSizeToFitWidth = true
         
@@ -738,22 +794,22 @@ class myHomeViewController: UIViewController, UITableViewDelegate, UITableViewDa
                 return
             }
             
-            let boundaries = getBoundaries(subject: subject)
+            let boundaries = AppStatus.user.getGradeBoundaries(forSubject: subject)
             
-            for boundary in boundaries {
+            for (_, value) in boundaries {
                 
-                if averagePercentage >= boundary.0 && averagePercentage <= boundary.1 {
+                if averagePercentage >= value[0] && averagePercentage <= value[1] {
                     
-                    if boundary.1 - averagePercentage < minimumDistToTop && subjectGrades[subject] != 7 {
+                    if value[1] - averagePercentage < minimumDistToTop && subjectGrades[subject] != 7 {
                         
-                        minimumDistToTop = boundary.1 - averagePercentage
+                        minimumDistToTop = value[1] - averagePercentage
                         subjectToImprove = subject
                         
                     }
                     
-                    if averagePercentage - boundary.0 < minimumDistToBottom {
+                    if averagePercentage - value[0] < minimumDistToBottom {
                         
-                        minimumDistToBottom = averagePercentage - boundary.0
+                        minimumDistToBottom = averagePercentage - value[0]
                         subjectToWatch = subject
                         
                     }
@@ -776,6 +832,7 @@ class myHomeViewController: UIViewController, UITableViewDelegate, UITableViewDa
         
     }
     
+    // Get the IB percentile stat for use in the body view
     func getGradePercentile(grade: Int) -> Double {
         
         var percentile = 0.0
@@ -815,6 +872,7 @@ class myHomeViewController: UIViewController, UITableViewDelegate, UITableViewDa
         return percentile
     }
     
+    // Setup UI for the label that shows when no assessments have been added
     func setupNoAssessmentsLabel() {
         
         noAssessmentsLabel = UILabel(frame: CGRect(x: self.bodyTableView.frame.origin.x, y: self.bodyTableView.frame.origin.y, width: UIScreen.main.bounds.width, height: self.bodyTableView.frame.height))
@@ -824,6 +882,7 @@ class myHomeViewController: UIViewController, UITableViewDelegate, UITableViewDa
         
     }
     
+    // Setup UI for header (stackviews and predicted grade)
     func setupHeaderView() {
         
         // Set-up headerView shadow

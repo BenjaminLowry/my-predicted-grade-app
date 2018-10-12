@@ -18,6 +18,11 @@ class Snapshot: NSObject, NSCoding {
         self.grade = grade
     }
     
+    init(grade: Int, withDate date: Date) {
+        self.grade = grade
+        self.date = date
+    }
+    
     required init?(coder aDecoder: NSCoder) {
         
         date = aDecoder.decodeObject(forKey: "Date") as! Date

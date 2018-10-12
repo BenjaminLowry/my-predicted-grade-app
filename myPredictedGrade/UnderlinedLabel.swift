@@ -14,9 +14,9 @@ class UnderlinedLabel: UILabel {
     override var text: String? {
         didSet {
             guard let text = text else { return }
-            let textRange = NSMakeRange(0, text.characters.count)
+            let textRange = NSMakeRange(0, text.count)
             let attributedText = NSMutableAttributedString(string: text)
-            attributedText.addAttribute(NSUnderlineStyleAttributeName , value: NSUnderlineStyle.styleSingle.rawValue, range: textRange)
+            attributedText.addAttribute(NSAttributedStringKey.underlineStyle , value: NSUnderlineStyle.styleSingle.rawValue, range: textRange)
             // Add other attributes if needed
             self.attributedText = attributedText
         }

@@ -11,7 +11,7 @@ import Foundation
 class Assessment: NSObject, NSCoding {
     
     var assessmentTitle: String
-    var subjectObject: SubjectObject
+    fileprivate var subjectObject: SubjectObject
     var date: Date
     
     var marksAvailable: Int
@@ -19,8 +19,6 @@ class Assessment: NSObject, NSCoding {
     
     var percentageMarksObtained: Double
     
-    fileprivate var overallGrade: Int = 0
-  
     init (assessmentTitle: String, subjectObject: SubjectObject, date: Date, marksAvailable: Int, marksReceived: Int){
         self.assessmentTitle = assessmentTitle
         self.subjectObject = subjectObject
@@ -42,91 +40,12 @@ class Assessment: NSObject, NSCoding {
         
         percentageMarksObtained = Double(marksReceived) / Double(marksAvailable) * 100
         
-        overallGrade = aDecoder.decodeInteger(forKey: "OverallGrade")
-        
     }
     
     func getOverallGrade() -> Int {
         
-        if self.subjectObject.subject == .TheoryOfKnowledge {
-            
-            switch marksReceived {
-            case let x where x >= 8:
-                self.overallGrade = 5 // A
-            case let x where x >= 6:
-                self.overallGrade = 4 // B
-            case let x where x >= 4:
-                self.overallGrade = 3 // C
-            case let x where x >= 2:
-                self.overallGrade = 2 // D
-            default:
-                self.overallGrade = 1 // E
-            }
-            
-            return self.overallGrade
-        } else if self.subjectObject.subject == .ExtendedEssay {
-            
-            switch marksReceived {
-            case let x where x >= 29:
-                self.overallGrade = 5 // A
-            case let x where x >= 23:
-                self.overallGrade = 4 // B
-            case let x where x >= 16:
-                self.overallGrade = 3 // C
-            case let x where x >= 8:
-                self.overallGrade = 2 // D
-            default:
-                self.overallGrade = 1 // E
-            }
-            
-            return self.overallGrade
-        }
-        
-        percentageMarksObtained = Double(marksReceived) / Double(marksAvailable) * 100
-        
-        let percent: Int = lround(self.percentageMarksObtained)
-        
-        typealias JSONDictionary = [String: Any]
-        
-        if let url = Bundle.main.url(forResource: "gradeBoundaries", withExtension: "json") { // Find the url of the JSON
-            do {
-                
-                let jsonData = try Data(contentsOf: url) // Get the data for the JSON
-                
-                if let jsonResult: JSONDictionary = try JSONSerialization.jsonObject(with: jsonData, options: []) as? JSONDictionary { // The whole JSON
-                    
-                    let subjects: [JSONDictionary] = jsonResult["Subjects"] as! [JSONDictionary] // List of subjects (which are dictionaries)
-                    
-                    for subject in subjects { // Iterate through the subjects
-                        
-                        let title: String = subject["Title"] as! String // Get subject title
-                        
-                        if title == self.subjectObject.toString() { // See if the subject title matches the subject of the assessment
-                            
-                            let gradeBoundaries: JSONDictionary = subject["Boundaries"] as! JSONDictionary // Get dictionary of grade boundaries
-                            
-                            for key in gradeBoundaries.keys { // Iterate through the keys
-                                var value: [Int] = gradeBoundaries[key] as! [Int] // Get the value of the dictionary for the current key
-                                if percent < value[1] + 1 && percent >= value[0] { // If the percentage from the assessment falls between the bounds
-                                    self.overallGrade = Int(key)! // Set the overall grade to the current key
-                                }
-                            }
-                            
-                            
-                        }
-                        
-                    }
-                    
-                }
-            } catch {
-                
-                // Can't do alert since this is not a view controller
-                print(error)
-                
-            }
-        }
-        
-        return self.overallGrade
+        return AppStatus.user.getGrade(forSubject: self.subjectObject, withPercentage: Int(self.percentageMarksObtained))
+    
     }
     
     func encode(with aCoder: NSCoder) {
@@ -136,6 +55,29 @@ class Assessment: NSObject, NSCoding {
         
         aCoder.encode(marksAvailable, forKey: "MarksAvailable")
         aCoder.encode(marksReceived, forKey: "MarksReceived")
+    }
+    
+    func getSubjectObject() -> SubjectObject {
+        updateSubject()
+        return self.subjectObject
+    }
+    
+    func setSubjectObject(subject: SubjectObject) {
+        self.subjectObject = subject
+        updateSubject()
+    }
+    
+    func updateSubject() {
+        
+        for subject in AppStatus.user.subjects {
+            
+            if subject.toString() == self.subjectObject.toString() {
+                self.subjectObject = subject
+                return
+            }
+            
+        }
+        
     }
     
 }

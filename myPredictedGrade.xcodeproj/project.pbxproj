@@ -7,15 +7,22 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		5F02F6CD1E0DC5DE0030F54E /* RecentAssessmentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F02F6CC1E0DC5DE0030F54E /* RecentAssessmentView.swift */; };
-		5F02F6CF1E0DCC4A0030F54E /* RecentAssessmentView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5F02F6CE1E0DCC4A0030F54E /* RecentAssessmentView.xib */; };
+		5F02F6CD1E0DC5DE0030F54E /* AssessmentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F02F6CC1E0DC5DE0030F54E /* AssessmentView.swift */; };
+		5F02F6CF1E0DCC4A0030F54E /* AssessmentView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5F02F6CE1E0DCC4A0030F54E /* AssessmentView.xib */; };
 		5F02F6D71E1136B30030F54E /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F02F6D61E1136B30030F54E /* String.swift */; };
 		5F02F6DD1E1183AC0030F54E /* Assessment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F02F6DC1E1183AC0030F54E /* Assessment.swift */; };
 		5F02F6DF1E1191710030F54E /* UIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F02F6DE1E1191710030F54E /* UIView.swift */; };
+		5F048FAE206E142A00985D08 /* ChooseSubjectsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F048FAD206E142A00985D08 /* ChooseSubjectsViewController.swift */; };
 		5F10BBBC1F09DAC6001E3A4F /* RequestSubjectViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F10BBBB1F09DAC6001E3A4F /* RequestSubjectViewController.swift */; };
 		5F10BBBE1F0A7480001E3A4F /* Alert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F10BBBD1F0A7480001E3A4F /* Alert.swift */; };
 		5F1BACA71E0D776800CFDD6D /* BorderedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F1BACA61E0D776800CFDD6D /* BorderedView.swift */; };
+		5F26E61D20A03E5A00F13335 /* May 2017 Boundaries copy.json in Resources */ = {isa = PBXBuildFile; fileRef = 5F26E61C20A03E5A00F13335 /* May 2017 Boundaries copy.json */; };
 		5F2B3FFC1E47272500FAAA74 /* UnderlinedLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F2B3FFB1E47272500FAAA74 /* UnderlinedLabel.swift */; };
+		5F33C882206A87E50076E557 /* Charts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5F33C881206A87E50076E557 /* Charts.framework */; };
+		5F33C883206A87E50076E557 /* Charts.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 5F33C881206A87E50076E557 /* Charts.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		5F36022C1FA7001000D30050 /* CondensedAssessmentCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5F36022B1FA7001000D30050 /* CondensedAssessmentCell.xib */; };
+		5F36022E1FA700BB00D30050 /* CondensedAssessmentCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F36022D1FA700BB00D30050 /* CondensedAssessmentCell.swift */; };
+		5F50788F1FC6BCDE0031517E /* GradeCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F50788E1FC6BCDE0031517E /* GradeCollection.swift */; };
 		5F5969731E2B51BD001EA42A /* Date.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F5969721E2B51BD001EA42A /* Date.swift */; };
 		5F5C2CCA1F610449002582DA /* untitled (1).png in Resources */ = {isa = PBXBuildFile; fileRef = 5F5C2CC91F610449002582DA /* untitled (1).png */; };
 		5F5C2CCC1F618655002582DA /* MyTOKEEAxisFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F5C2CCB1F618655002582DA /* MyTOKEEAxisFormatter.swift */; };
@@ -51,8 +58,6 @@
 		5F9A31331EE99C4100996D1A /* PersonalInformationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F9A31321EE99C4100996D1A /* PersonalInformationViewController.swift */; };
 		5F9CF5FE1E553B9500FC40C3 /* IndexedSum.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F9CF5FD1E553B9500FC40C3 /* IndexedSum.swift */; };
 		5F9CF6001E58816E00FC40C3 /* gradeBoundaries.json in Resources */ = {isa = PBXBuildFile; fileRef = 5F9CF5FF1E58816E00FC40C3 /* gradeBoundaries.json */; };
-		5F9E64D61F5BF81E00AD6F89 /* Charts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5F2F14181F517978001517C8 /* Charts.framework */; };
-		5F9E64D71F5BF81E00AD6F89 /* Charts.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 5F2F14181F517978001517C8 /* Charts.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		5FA448401F4D789900C88878 /* TrendsFAQViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FA4483F1F4D789900C88878 /* TrendsFAQViewController.swift */; };
 		5FA5095A1EEED99300684565 /* ColorSelectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FA509591EEED99300684565 /* ColorSelectionViewController.swift */; };
 		5FBC4BBD1E38E63D004E64A6 /* myTrendsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FBC4BBC1E38E63D004E64A6 /* myTrendsViewController.swift */; };
@@ -60,16 +65,19 @@
 		5FCC00991E17B90B005201C2 /* Profile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FCC00981E17B90B005201C2 /* Profile.swift */; };
 		5FCC009B1E17BC36005201C2 /* AppStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FCC009A1E17BC36005201C2 /* AppStatus.swift */; };
 		5FCE9FE91F4481BE00FD341C /* TOKAssessment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FCE9FE81F4481BE00FD341C /* TOKAssessment.swift */; };
+		5FF6755C1F700A0A009379F3 /* CondensedAssessmentView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5FF6755B1F700A0A009379F3 /* CondensedAssessmentView.xib */; };
+		5FF6755E1F700E68009379F3 /* CondensedAssessmentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FF6755D1F700E68009379F3 /* CondensedAssessmentView.swift */; };
+		5FFCE65C1FDAC3B400860481 /* GradeBoundaryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FFCE65B1FDAC3B400860481 /* GradeBoundaryViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		5F9E64D81F5BF81E00AD6F89 /* Embed Frameworks */ = {
+		5F33C880206A86E10076E557 /* Embed Frameworks */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				5F9E64D71F5BF81E00AD6F89 /* Charts.framework in Embed Frameworks */,
+				5F33C883206A87E50076E557 /* Charts.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -78,16 +86,21 @@
 
 /* Begin PBXFileReference section */
 		33F212EFA0A4DC55FFE2FE4E /* Pods-myPredictedGrade.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-myPredictedGrade.debug.xcconfig"; path = "Pods/Target Support Files/Pods-myPredictedGrade/Pods-myPredictedGrade.debug.xcconfig"; sourceTree = "<group>"; };
-		5F02F6CC1E0DC5DE0030F54E /* RecentAssessmentView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecentAssessmentView.swift; sourceTree = "<group>"; };
-		5F02F6CE1E0DCC4A0030F54E /* RecentAssessmentView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = RecentAssessmentView.xib; sourceTree = "<group>"; };
+		5F02F6CC1E0DC5DE0030F54E /* AssessmentView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AssessmentView.swift; sourceTree = "<group>"; };
+		5F02F6CE1E0DCC4A0030F54E /* AssessmentView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AssessmentView.xib; sourceTree = "<group>"; };
 		5F02F6D61E1136B30030F54E /* String.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = String.swift; sourceTree = "<group>"; };
 		5F02F6DC1E1183AC0030F54E /* Assessment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Assessment.swift; sourceTree = "<group>"; };
 		5F02F6DE1E1191710030F54E /* UIView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIView.swift; sourceTree = "<group>"; };
+		5F048FAD206E142A00985D08 /* ChooseSubjectsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChooseSubjectsViewController.swift; sourceTree = "<group>"; };
 		5F10BBBB1F09DAC6001E3A4F /* RequestSubjectViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RequestSubjectViewController.swift; sourceTree = "<group>"; };
 		5F10BBBD1F0A7480001E3A4F /* Alert.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Alert.swift; sourceTree = "<group>"; };
 		5F1BACA61E0D776800CFDD6D /* BorderedView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BorderedView.swift; sourceTree = "<group>"; };
+		5F26E61C20A03E5A00F13335 /* May 2017 Boundaries copy.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = "May 2017 Boundaries copy.json"; path = "../../../../../../../PycharmProjects/GradeBoundaries2017/May 2017 Boundaries copy.json"; sourceTree = "<group>"; };
 		5F2B3FFB1E47272500FAAA74 /* UnderlinedLabel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UnderlinedLabel.swift; sourceTree = "<group>"; };
-		5F2F14181F517978001517C8 /* Charts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Charts.framework; path = "../../../../../../Library/Developer/Xcode/DerivedData/myPredictedGrade-dzicivgxgutzupczscesmlsxkbfo/Build/Products/Debug-iphoneos/Charts/Charts.framework"; sourceTree = "<group>"; };
+		5F33C881206A87E50076E557 /* Charts.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Charts.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		5F36022B1FA7001000D30050 /* CondensedAssessmentCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CondensedAssessmentCell.xib; sourceTree = "<group>"; };
+		5F36022D1FA700BB00D30050 /* CondensedAssessmentCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CondensedAssessmentCell.swift; sourceTree = "<group>"; };
+		5F50788E1FC6BCDE0031517E /* GradeCollection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GradeCollection.swift; sourceTree = "<group>"; };
 		5F5969721E2B51BD001EA42A /* Date.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Date.swift; sourceTree = "<group>"; };
 		5F5C2CC91F610449002582DA /* untitled (1).png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "untitled (1).png"; path = "myPredictedGrade/untitled (1).png"; sourceTree = "<group>"; };
 		5F5C2CCB1F618655002582DA /* MyTOKEEAxisFormatter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyTOKEEAxisFormatter.swift; sourceTree = "<group>"; };
@@ -132,6 +145,9 @@
 		5FCC00981E17B90B005201C2 /* Profile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Profile.swift; sourceTree = "<group>"; };
 		5FCC009A1E17BC36005201C2 /* AppStatus.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppStatus.swift; sourceTree = "<group>"; };
 		5FCE9FE81F4481BE00FD341C /* TOKAssessment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TOKAssessment.swift; sourceTree = "<group>"; };
+		5FF6755B1F700A0A009379F3 /* CondensedAssessmentView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CondensedAssessmentView.xib; sourceTree = "<group>"; };
+		5FF6755D1F700E68009379F3 /* CondensedAssessmentView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CondensedAssessmentView.swift; sourceTree = "<group>"; };
+		5FFCE65B1FDAC3B400860481 /* GradeBoundaryViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GradeBoundaryViewController.swift; sourceTree = "<group>"; };
 		8EFCFA22CCF058202AA5409A /* Pods-myPredictedGrade.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-myPredictedGrade.release.xcconfig"; path = "Pods/Target Support Files/Pods-myPredictedGrade/Pods-myPredictedGrade.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -140,7 +156,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5F9E64D61F5BF81E00AD6F89 /* Charts.framework in Frameworks */,
+				5F33C882206A87E50076E557 /* Charts.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -150,7 +166,6 @@
 		02C77B6FB0D4D4D40B3FE007 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				5F2F14181F517978001517C8 /* Charts.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -167,6 +182,7 @@
 				5F6C57531F404F6D003AEF89 /* SettingsFAQViewController.swift */,
 				5FA4483F1F4D789900C88878 /* TrendsFAQViewController.swift */,
 				5F9235211F49C86A00D56908 /* DisclaimerViewController.swift */,
+				5FFCE65B1FDAC3B400860481 /* GradeBoundaryViewController.swift */,
 			);
 			name = ViewControllers;
 			sourceTree = "<group>";
@@ -177,6 +193,7 @@
 				5F02F6DC1E1183AC0030F54E /* Assessment.swift */,
 				5FCE9FE81F4481BE00FD341C /* TOKAssessment.swift */,
 				5FCC00981E17B90B005201C2 /* Profile.swift */,
+				5F50788E1FC6BCDE0031517E /* GradeCollection.swift */,
 				5F6F6D551E601EDF0035B196 /* Snapshot.swift */,
 				5F6F6D571E601F6B0035B196 /* SubjectSnapshot.swift */,
 				5F60C3271EB462B30062DFC5 /* OverallGradeSnapshot.swift */,
@@ -215,8 +232,12 @@
 				5F2B3FFB1E47272500FAAA74 /* UnderlinedLabel.swift */,
 				5F6142821E14DD1D004DC079 /* AssessmentCell.swift */,
 				5F6142831E14DD1D004DC079 /* AssessmentCell.xib */,
-				5F02F6CC1E0DC5DE0030F54E /* RecentAssessmentView.swift */,
-				5F02F6CE1E0DCC4A0030F54E /* RecentAssessmentView.xib */,
+				5F02F6CC1E0DC5DE0030F54E /* AssessmentView.swift */,
+				5F02F6CE1E0DCC4A0030F54E /* AssessmentView.xib */,
+				5F36022D1FA700BB00D30050 /* CondensedAssessmentCell.swift */,
+				5F36022B1FA7001000D30050 /* CondensedAssessmentCell.xib */,
+				5FF6755D1F700E68009379F3 /* CondensedAssessmentView.swift */,
+				5FF6755B1F700A0A009379F3 /* CondensedAssessmentView.xib */,
 			);
 			name = CustomObjects;
 			sourceTree = "<group>";
@@ -224,6 +245,7 @@
 		5F6032DB1E05E6150097639E = {
 			isa = PBXGroup;
 			children = (
+				5F33C881206A87E50076E557 /* Charts.framework */,
 				5F6032E61E05E6150097639E /* myPredictedGrade */,
 				5F6032E51E05E6150097639E /* Products */,
 				5F6032FD1E05EB480097639E /* Resources */,
@@ -255,6 +277,7 @@
 				5F6032F51E05E6150097639E /* Info.plist */,
 				5F8C8F311E4C2B0A003A14E3 /* gradePercentiles.json */,
 				5F9CF5FF1E58816E00FC40C3 /* gradeBoundaries.json */,
+				5F26E61C20A03E5A00F13335 /* May 2017 Boundaries copy.json */,
 				5F9235231F49CA0400D56908 /* untitled.png */,
 			);
 			path = myPredictedGrade;
@@ -271,6 +294,7 @@
 		5F9A31311EE99C0600996D1A /* Account Creation VCs */ = {
 			isa = PBXGroup;
 			children = (
+				5F048FAD206E142A00985D08 /* ChooseSubjectsViewController.swift */,
 				5F7AC74F1EE6EFE1008660C4 /* SubjectSelectionTableViewController.swift */,
 				5F10BBBB1F09DAC6001E3A4F /* RequestSubjectViewController.swift */,
 				5F9A31321EE99C4100996D1A /* PersonalInformationViewController.swift */,
@@ -302,7 +326,7 @@
 				5F6032E21E05E6150097639E /* Resources */,
 				E2E75B8D620C82D6C43BE2D3 /* [CP] Embed Pods Frameworks */,
 				07D6811011AB55179BDD35DB /* [CP] Copy Pods Resources */,
-				5F9E64D81F5BF81E00AD6F89 /* Embed Frameworks */,
+				5F33C880206A86E10076E557 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -320,12 +344,13 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0820;
-				LastUpgradeCheck = 0830;
+				LastUpgradeCheck = 0920;
 				ORGANIZATIONNAME = "Ben LOWRY";
 				TargetAttributes = {
 					5F6032E31E05E6150097639E = {
 						CreatedOnToolsVersion = 8.2;
 						DevelopmentTeam = NC6Q6DD92R;
+						LastSwiftMigration = 0920;
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -354,13 +379,16 @@
 			buildActionMask = 2147483647;
 			files = (
 				5F8C8F321E4C2B0A003A14E3 /* gradePercentiles.json in Resources */,
+				5F26E61D20A03E5A00F13335 /* May 2017 Boundaries copy.json in Resources */,
 				5F6032F41E05E6150097639E /* LaunchScreen.storyboard in Resources */,
 				5F5C2CCA1F610449002582DA /* untitled (1).png in Resources */,
-				5F02F6CF1E0DCC4A0030F54E /* RecentAssessmentView.xib in Resources */,
+				5F02F6CF1E0DCC4A0030F54E /* AssessmentView.xib in Resources */,
+				5F36022C1FA7001000D30050 /* CondensedAssessmentCell.xib in Resources */,
 				5F6032F11E05E6150097639E /* Assets.xcassets in Resources */,
 				5F6142851E14DD1D004DC079 /* AssessmentCell.xib in Resources */,
 				5F6032EF1E05E6150097639E /* Main.storyboard in Resources */,
 				5F9CF6001E58816E00FC40C3 /* gradeBoundaries.json in Resources */,
+				5FF6755C1F700A0A009379F3 /* CondensedAssessmentView.xib in Resources */,
 				5F9235241F49CA0400D56908 /* untitled.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -434,21 +462,25 @@
 				5F5C2CCE1F6193BA002582DA /* CustomNumberFormatter.swift in Sources */,
 				5F6F6D561E601EDF0035B196 /* Snapshot.swift in Sources */,
 				5F6032E81E05E6150097639E /* AppDelegate.swift in Sources */,
+				5FF6755E1F700E68009379F3 /* CondensedAssessmentView.swift in Sources */,
 				5F8C8F361E4C4B0F003A14E3 /* mySettingsViewController.swift in Sources */,
-				5F02F6CD1E0DC5DE0030F54E /* RecentAssessmentView.swift in Sources */,
+				5F02F6CD1E0DC5DE0030F54E /* AssessmentView.swift in Sources */,
 				5F6FF6811E5DD4F20004CAEF /* MyValueFormatter.swift in Sources */,
 				5F60330F1E05EC9E0097639E /* myHomeViewController.swift in Sources */,
 				5FBC4BBD1E38E63D004E64A6 /* myTrendsViewController.swift in Sources */,
 				5F5C2CD01F619C01002582DA /* MyTOKEEValueFormatter.swift in Sources */,
+				5F36022E1FA700BB00D30050 /* CondensedAssessmentCell.swift in Sources */,
 				5F644A361F065333002D7EB3 /* ColorConfirmationViewController.swift in Sources */,
 				5F02F6D71E1136B30030F54E /* String.swift in Sources */,
 				5F10BBBE1F0A7480001E3A4F /* Alert.swift in Sources */,
+				5F50788F1FC6BCDE0031517E /* GradeCollection.swift in Sources */,
 				5F5969731E2B51BD001EA42A /* Date.swift in Sources */,
 				5F6C57541F404F6D003AEF89 /* SettingsFAQViewController.swift in Sources */,
 				5F63D3791E225BBB005FB875 /* AssessmentDetailViewController.swift in Sources */,
 				5F6142791E12D781004DC079 /* myAssessmentsViewController.swift in Sources */,
 				5F9680E21E266ED1001CF7B4 /* UINavigationController.swift in Sources */,
 				5F6FF6831E5DD8720004CAEF /* MyAxisFormatter.swift in Sources */,
+				5FFCE65C1FDAC3B400860481 /* GradeBoundaryViewController.swift in Sources */,
 				5F60C32A1EB46DBA0062DFC5 /* YearLevelObject.swift in Sources */,
 				5F9A31331EE99C4100996D1A /* PersonalInformationViewController.swift in Sources */,
 				5FA448401F4D789900C88878 /* TrendsFAQViewController.swift in Sources */,
@@ -457,6 +489,7 @@
 				5FC1EF6C1E1FC90F00CF379A /* UITextField.swift in Sources */,
 				5FA5095A1EEED99300684565 /* ColorSelectionViewController.swift in Sources */,
 				5F1BACA71E0D776800CFDD6D /* BorderedView.swift in Sources */,
+				5F048FAE206E142A00985D08 /* ChooseSubjectsViewController.swift in Sources */,
 				5F02F6DD1E1183AC0030F54E /* Assessment.swift in Sources */,
 				5F6142841E14DD1D004DC079 /* AssessmentCell.swift in Sources */,
 				5F10BBBC1F09DAC6001E3A4F /* RequestSubjectViewController.swift in Sources */,
@@ -496,7 +529,9 @@
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
@@ -504,7 +539,11 @@
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
@@ -545,7 +584,9 @@
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
@@ -553,7 +594,11 @@
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
@@ -594,7 +639,8 @@
 				PRODUCT_BUNDLE_IDENTIFIER = myPredictedGrade;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				SWIFT_VERSION = 3.0;
+				SWIFT_SWIFT3_OBJC_INFERENCE = On;
+				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
@@ -615,7 +661,8 @@
 				PRODUCT_BUNDLE_IDENTIFIER = myPredictedGrade;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				SWIFT_VERSION = 3.0;
+				SWIFT_SWIFT3_OBJC_INFERENCE = On;
+				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;

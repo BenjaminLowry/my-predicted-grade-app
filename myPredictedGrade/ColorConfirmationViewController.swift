@@ -45,12 +45,12 @@ class ColorConfirmationViewController: UITableViewController {
         
         let cell = tableView.dequeueReusableCell(withIdentifier: "AssessmentCell") as! AssessmentCell
         
-        cell.recentAssessmentView.asssessmentTitleLabel.text = "My \(subjects![indexPath.row].toString()) Assessment"
-        cell.recentAssessmentView.subjectDateLabel.text = "\(subjects![indexPath.row].toString()) 18th of March 2017"
+        cell.assessmentView.assessmentTitleLabel.text = "My \(subjects![indexPath.row].toString()) Assessment"
+        cell.assessmentView.subjectDateLabel.text = "\(subjects![indexPath.row].toString()) 18th of March 2017"
         
-        cell.recentAssessmentView.infoButton.isHidden = true
+        cell.assessmentView.infoButton.isHidden = true
         
-        cell.recentAssessmentView.updateView(for: colorPreferences[subjects![indexPath.row]]!)
+        cell.assessmentView.updateView(for: colorPreferences[subjects![indexPath.row]]!)
         
         return cell
     }
@@ -71,7 +71,7 @@ class ColorConfirmationViewController: UITableViewController {
             
             for subjectObject in subjects {
                 
-                if assessment.subjectObject == subjectObject {
+                if assessment.getSubjectObject() == subjectObject {
                     
                     assessmentsToKeep.append(assessment)
                     break
@@ -87,6 +87,7 @@ class ColorConfirmationViewController: UITableViewController {
         
         let newProfile = Profile(name: self.name, yearLevelObject: self.yearLevel, subjects: self.subjects, colorPreferences: self.colorPreferences, assessments: assessmentsToKeep)
         AppStatus.user = newProfile
+        AppStatus.user.initGradeBoundaries()
         AppStatus.isSignedUp = true
         
         AppStatus.saveData()

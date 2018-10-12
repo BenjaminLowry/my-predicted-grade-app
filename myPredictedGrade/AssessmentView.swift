@@ -9,15 +9,15 @@
 import Foundation
 import UIKit
 
-class RecentAssessmentView: UIView {
+class AssessmentView: UIView {
     
-    @IBOutlet var mainView: RecentAssessmentView!
+    @IBOutlet var mainView: AssessmentView!
     
     // MARK: - IB Outlets
     
     @IBOutlet weak var headerView: UIView! //parent view of titleLabel, subjectLabel, and dateLabel
     
-        @IBOutlet weak var asssessmentTitleLabel: UILabel!
+        @IBOutlet weak var assessmentTitleLabel: UILabel!
         @IBOutlet weak var subjectDateLabel: UILabel!
     
         @IBOutlet weak var infoButton: UIButton!
@@ -40,11 +40,11 @@ class RecentAssessmentView: UIView {
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         
-        Bundle.main.loadNibNamed("RecentAssessmentView", owner: self, options: nil)
+        Bundle.main.loadNibNamed("AssessmentView", owner: self, options: nil)
         mainView.layer.borderColor = UIColor.black.cgColor
         mainView.layer.borderWidth = 0.5
         subjectDateLabel.adjustsFontSizeToFitWidth = true
-        asssessmentTitleLabel.adjustsFontSizeToFitWidth = true
+        assessmentTitleLabel.adjustsFontSizeToFitWidth = true
         
         // Make sure the width of the view is correct
         mainView.frame = CGRect(x: 0, y: 0, width: self.frame.width, height: mainView.frame.height)
@@ -59,7 +59,7 @@ class RecentAssessmentView: UIView {
         // Update colors
         let user = AppStatus.user
         for subjectObject in user.subjects {
-            if assessment.subjectObject == subjectObject {
+            if assessment.getSubjectObject() == subjectObject {
                 var color = user.colorPreferences[subjectObject]
                 color = color?.withAlphaComponent(0.30)
                 headerView.backgroundColor = color
@@ -72,8 +72,8 @@ class RecentAssessmentView: UIView {
             }
         }
         
-        asssessmentTitleLabel.text = assessment.assessmentTitle
-        let subjectText = assessment.subjectObject.toShortString()
+        assessmentTitleLabel.text = assessment.assessmentTitle
+        let subjectText = assessment.getSubjectObject().toShortString()
         
         //converting date to appropriate format
         let dateFormatter = DateFormatter()
@@ -82,8 +82,8 @@ class RecentAssessmentView: UIView {
         let labelString: NSString = NSString(string: subjectText + "  " + dateString) //combine the two for the label
         let range = labelString.range(of: dateString)
         
-        let attributedString = NSMutableAttributedString(string: labelString as String, attributes: [NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 17)!])
-        attributedString.setAttributes([NSFontAttributeName: UIFont(name: "Avenir Next", size: 17)! ], range: range)
+        let attributedString = NSMutableAttributedString(string: labelString as String, attributes: [NSAttributedStringKey.font: UIFont(name: "AvenirNext-Medium", size: 17)!])
+        attributedString.setAttributes([NSAttributedStringKey.font: UIFont(name: "Avenir Next", size: 17)! ], range: range)
         
         subjectDateLabel.attributedText = attributedString
         
@@ -96,7 +96,7 @@ class RecentAssessmentView: UIView {
         let number = NSDecimalNumber(decimal: Decimal(numberDouble))
         percentageLabel.text = numberFormatter.string(from: number)
       
-        if assessment.subjectObject.subject == .TheoryOfKnowledge || assessment.subjectObject.subject == .ExtendedEssay {
+        if assessment.getSubjectObject().subject == .TheoryOfKnowledge || assessment.getSubjectObject().subject == .ExtendedEssay {
             
             switch assessment.getOverallGrade() {
             case 5:
