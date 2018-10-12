@@ -1,5 +1,7 @@
 # myPredictedGrade
 
+![myPredictedGrade](https://benlowryscode.files.wordpress.com/2017/09/mypredictedgrade-site-banner.png)
+
 Welcome to the repository for 'myPredictedGrade'!
 
 myPredicted grade is an iOS app that allows IB students to record the results of their assessments, allowing for a visual record to be kept. It also provides grade estimates based on the 2016 IB grade boundaries in order to motivate students to increase grades and let them know when they are on track. 
